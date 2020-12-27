@@ -1,0 +1,26 @@
+$def with (book)
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Book</title>
+<link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<form method="post" action='add'>
+	  <div class="form-group">
+	    <label for="title">Book Name</label>
+	    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+
+  <div class="form-group">
+	    <label for="author">Author</label>
+	    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author">
+
+  </div>
+</div>
+
+	  <button type="submit" value="Add" class="btn btn-primary">Submit</button>
+</form>
+</body>
+</html>

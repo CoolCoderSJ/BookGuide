@@ -31,8 +31,8 @@ if __name__ == "__main__":
 
 urls = (
     '/', 'index',
-    '/add', 'add',
-    '/test', 'test'
+    '/new', 'new',
+    '/add', 'add'
     )
 
 
@@ -44,13 +44,13 @@ class index:
 class add:
     def POST(self):
         i = web.input()
-        n = db.insert('books', book_title=i.title)
+        n = db.insert('books', book_title=i.title, author=i.author)
         raise web.seeother('/')
 
-class test:
+class new:
     def GET(self):
-        return render.test()
-
+        book = db.select('books')
+        return render.new(book)
 
 if __name__ == "__main__":
     app = web.application(urls, globals())

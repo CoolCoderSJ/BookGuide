@@ -1,0 +1,9 @@
+$def with (book)
+<ul>
+$for books in book:
+    <li id="t$books.id">$books.book_title</li>
+</ul>
+
+<form method="post" action="add">
+<p><input type="text" name="title" /> <input type="submit" value="Add" /></p>
+</form>
