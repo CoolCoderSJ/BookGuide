@@ -3,7 +3,6 @@ $def with (book)
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catalog</title>
 <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css"> 
-<link href="static/css/style.css" rel="stylesheet" type="text/css"> 
 
 
 <script src="static/js/jquery-3.4.1.min.js"></script>
@@ -28,12 +27,9 @@ $def with (book)
 
 $for x in range(3):
 	$for books in book:
-		<!-- The 3 columns -->
 		<div class="col-xl-4">
-			<!-- Center the cards -->
 			<div class="d-flex justify-content-center">
-				<!-- Card div -->
-				<div class="card col-md-7"> 
+				<div class="card col-md-10"> 
 					<img class="card-img-top" src="static/images/card-img.png" alt="Card image cap">
 					 <div class="card-body">
 					   <h5 class="card-title">$books.book_title</h5>

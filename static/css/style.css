@@ -1,17 +1,4 @@
 * {
-	display: flex; 
 	align-items: center;
 } 
 
-.col-md-sj {
-	position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-.col-md-sj {
-	-ms-flex: 0 0 33.333333%;
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-}

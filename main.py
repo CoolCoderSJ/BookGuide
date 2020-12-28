@@ -32,7 +32,8 @@ if __name__ == "__main__":
 urls = (
     '/', 'index',
     '/new', 'new',
-    '/add', 'add'
+    '/add', 'add',
+    '/test', 'test' 
     )
 
 
@@ -47,6 +48,7 @@ class add:
         n = db.insert('books', book_title=i.title, author=i.author)
         raise web.seeother('/')
 
+
 def notfound():
     return "Sorry, the page you were looking for was not found."
 
@@ -54,6 +56,12 @@ class new:
     def GET(self):
         book = db.select('books')
         return render.new(book)
+
+class test:
+    def GET(self):
+        book = db.select('books')
+        return render.test(book)
+
 
 if __name__ == "__main__":
     app = web.application(urls, globals())

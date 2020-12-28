@@ -1,9 +1,38 @@
 $def with (book)
-<ul>
-$for books in book:
-    <li id="t$books.id">$books.book_title</li>
-</ul>
+<body style="padding-top: 70px">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalog</title>
+<link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css"> 
 
-<form method="post" action="add">
-<p><input type="text" name="title" /> <input type="submit" value="Add" /></p>
-</form>
+
+<script src="static/js/jquery-3.4.1.min.js"></script>
+<script src="static/js/popper.min.js"></script>
+<script src="static/js/bootstrap-4.4.1.js"></script>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active"> <a class="nav-link">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.<span class="sr-only">(current)</span></a> 
+      </li>
+    </ul>
+    <ul>
+ <a class="nav-link" href="new">Add your own Book Here<span class="sr-only">(current)</span></a> 
+      
+    </ul>
+  </div>
+</nav>
+
+
+$for books in book:
+		<div class="card col-md-4"> 
+			<img class="card-img-top" src="static/images/card-img.png" alt="Card image cap">
+			<div class="card-body">
+				<h5 class="card-title">$books.book_title</h5>
+				<p class="card-text">$books.author</p>
+				<p class="card-text">$books.book_description</p>
+				<a href="#" class="btn btn-primary">Read More</a> 
+			</div>
+		</div>
+	</div>
+	<br>
+

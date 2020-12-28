@@ -8,19 +8,22 @@ $def with (book)
 <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<form method="post" action='add'>
-	  <div class="form-group">
-	    <label for="title">Book Name</label>
-	    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
 
-  <div class="form-group">
-	    <label for="author">Author</label>
-	    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author">
+	<div class="d-flex justify-content-center">
+		<form method="post" action='add'>
+			  <div class="form-group">
+			    <label for="title">Book Name</label>
+			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
 
-  </div>
-</div>
+		  <div class="form-group">
+			    <label for="author">Author</label>
+			    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author">
 
-	  <button type="submit" value="Add" class="btn btn-primary">Submit</button>
-</form>
+		  </div>
+		</div>
+
+			  <button type="submit" value="Add" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
 </body>
 </html>
