@@ -47,6 +47,9 @@ class add:
         n = db.insert('books', book_title=i.title, author=i.author)
         raise web.seeother('/')
 
+def notfound():
+    return "Sorry, the page you were looking for was not found."
+
 class new:
     def GET(self):
         book = db.select('books')
@@ -54,4 +57,5 @@ class new:
 
 if __name__ == "__main__":
     app = web.application(urls, globals())
+    app.notfound = notfound()
     app.run()
