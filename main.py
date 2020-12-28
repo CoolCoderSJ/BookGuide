@@ -33,7 +33,8 @@ urls = (
     '/', 'index',
     '/new', 'new',
     '/add', 'add',
-    '/test', 'test' 
+    '/test', 'test',
+    '/book_details?id=$books.id', 'book_details'
     )
 
 
@@ -56,6 +57,11 @@ class new:
     def GET(self):
         book = db.select('books')
         return render.new(book)
+
+class book_details:
+    def GET(self):
+        book = db.select('books')
+        return render.book_details(book)
 
 class test:
     def GET(self):

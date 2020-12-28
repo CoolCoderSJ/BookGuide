@@ -1,5 +1,5 @@
 $def with (book)
-<body style="padding-top: 70px">
+<body style="padding-top: 110px">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catalog</title>
 <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css"> 
@@ -23,23 +23,23 @@ $def with (book)
 </nav>
 
 
+
 <div class="row">
 
 $for x in range(3):
 	$for books in book:
 		<div class="col-xl-4">
 			<div class="d-flex justify-content-center">
-				<div class="card col-md-10"> 
-					<img class="card-img-top" src="static/images/card-img.png" alt="Card image cap">
+				<div class="card col-md-10" id="b$books.id"> 
+					<!--<img class="card-img-top" src="static/images/card-img.png" alt="Card image cap">-->
 					 <div class="card-body">
 					   <h5 class="card-title">$books.book_title</h5>
 					   <p class="card-text">$books.author</p>
 					   <p class="card-text">$books.book_description</p>
-					   <a href="#" class="btn btn-primary">Read More</a> 
+					   <a href="book_details?id=bookid" class="btn btn-primary">Read More</a> 
 					</div>
 				</div>
 			</div>
 		</div>
-		<br>
 
-</div>
+</div>	
