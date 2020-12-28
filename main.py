@@ -34,7 +34,7 @@ urls = (
     '/new', 'new',
     '/add', 'add',
     '/test', 'test',
-    '/book_details?id=$books.id', 'book_details'
+    '/book_details', 'book_details'
     )
 
 
@@ -49,19 +49,20 @@ class add:
         n = db.insert('books', book_title=i.title, author=i.author)
         raise web.seeother('/')
 
-
-def notfound():
-    return "Sorry, the page you were looking for was not found."
-
 class new:
     def GET(self):
         book = db.select('books')
         return render.new(book)
 
 class book_details:
-    def GET(self):
+    def POST(self):
         book = db.select('books')
-        return render.book_details(book)
+        i = web.input()
+        bookId = int(i.bookId)
+        bookTitle = i.bookTitle
+        bookDesc = i.bookDesc
+        bookAuthor = i.bookAuthor
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor)
 
 class test:
     def GET(self):
@@ -71,5 +72,4 @@ class test:
 
 if __name__ == "__main__":
     app = web.application(urls, globals())
-    app.notfound = notfound()
     app.run()

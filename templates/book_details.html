@@ -1,11 +1,29 @@
-$def with (book)
+$def with (book, bookId, bookTitle, bookDesc, bookAuthor)
 
 <!DOCTYPE html>
 <html>
+<style>
+	* {
+		align-items: center;
+	}
+</style>
 <head>
-	<title>More About This Book</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>More About $bookTitle</title>
+<link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
+	<div class="d-flex justify-content-center">
+		<div class="card col-md-12"> 
+		  <div class="card-body">
+		    <h5 class="card-title">$bookTitle</h5>
+		    <h6 class="card-text">$bookAuthor</h6>
+		    <br>
+		    <p class="card-text">$bookDesc</p>
+		    <!--<a href="#" class="btn btn-primary">Go somewhere</a>--> 
+			</div>
+		</div>
+	</div>
 </body>
 </html>
