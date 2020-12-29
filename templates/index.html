@@ -10,6 +10,19 @@ $def with (book)
    .navbar { background: #343a40 !important; color: white;} 
 </style>
 
+<style type="text/css">
+	.mtop {
+		margin-top: 20px;
+	}
+	.padjust {
+		padding-top: 20px !important;
+		padding-left: 20px !important;
+	}
+	.bpadjust {
+		margin-left: 20px !important;
+	}
+
+</style>
 
 <script src="static/js/jquery-3.4.1.min.js"></script>
 <script src="static/js/popper.min.js"></script>
@@ -32,31 +45,27 @@ $def with (book)
     </ul>
   </div>
 </nav>
-
-<div class="container-fluid content-row">
+<div class="container">
 	<div class="row">
-		$for x in range(3):
-			$for books in book:
-				<div class="col-xl-4">
-					<form method="post" action='book_details'>
-						<div class="d-flex justify-content-center">
-							<div class="card-deck">
-							<div class="card col-12 text-white bg-dark mb-3" style="max-width: 18rem;"> 
+			$for x in range(3):
+				<div class="card-deck">
+				$for books in book:
+					<div class="col-md-4 col-sm-6 col-12">
+						<div class="card bg-dark mtop">
+							<form method="post" action='book_details'>
 								<input type="hidden" name="bookId" value="$books.id">
 								<input type="hidden" name="bookDesc" value="$books.book_description">
 								<input type="hidden" name="bookTitle" value="$books.book_title">
 								<input type="hidden" name="bookAuthor" value="$books.author">
-								<!--<img class="card-img-top" src="static/images/card-img.png" alt="Card image cap">-->
-								 <div class="card-body flex-fill">
-								   <h5 class="card-title">$books.book_title</h5>
-								   <p class="card-text">$books.author</p>
-								   <p class="card-text">$books.book_description</p>
-								   <button type="submit" class="btn btn-primary">Read More</button> 
-								</div>
-							</div>
+
+								 <h5 class="card-title padjust">$books.book_title</h5>
+								<p class="card-text padjust">$books.author</p>
+								<p class="card-text padjust">$books.book_description</p>
+
+								<button type="submit" class="btn btn-primary bpadjust">Read More</button> 
+							</form>
 						</div>
-						</div>
-					</form>
+					</div>
 				</div>
 	</div>
 </div>
