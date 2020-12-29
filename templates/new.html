@@ -11,20 +11,20 @@ $def with (book)
 
 	<div class="d-flex justify-content-center">
 		<fieldset>
-		<form method="post" action='add'>
+			<legend>Add a book:</legend>
+			<form method="post" action='add'>
 			  <div class="form-group">
 			    <label for="title">Book Name</label>
 			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+			  <div class="form-group">
+				    <label for="author">Author</label>
+				    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author">
 
-		  <div class="form-group">
-			    <label for="author">Author</label>
-			    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author">
+		  	</div>
+			</div>
 
-		  </div>
-		</div>
-
-			  <button type="submit" value="Add" class="btn btn-primary">Submit</button>
-		</form>
+			 <button type="submit" value="Add" class="btn btn-primary">Submit</button>
+			</form>
 		</fieldset>
 	</div>
 </body>

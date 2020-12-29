@@ -10,6 +10,7 @@ db = web.database(
     db='webpy_test',
 )
 
+
 """
 urls = (
     '/(.*)', 'hello'
