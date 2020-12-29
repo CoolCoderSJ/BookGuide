@@ -2,10 +2,22 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor)
 
 <!DOCTYPE html>
 <html>
+<body style="padding-top: 110px">
 <style>
 	* {
 		align-items: center;
 	}
+</style>
+<style type="text/css">
+   body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */ 
+   .navbar { background: #343a40 !important; color: white;} 
+   .card { background: #343a40 !important; color: white;} 
+   .card-title {
+   	color: white !important;
+   }
+   .card-text {
+   	color: white !important;
+   }
 </style>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +26,17 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor)
 <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+
+    <ul>
+ <a class="nav-link" href="index">Go home<span class="sr-only">(current)</span></a> 
+      
+    </ul>
+  </div>
+</nav>
 	<div class="d-flex justify-content-center">
 		<div class="card col-md-12"> 
 		  <div class="card-body">

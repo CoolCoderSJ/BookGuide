@@ -32,6 +32,7 @@ if __name__ == "__main__":
 
 urls = (
     '/', 'index',
+    '/index', 'index',
     '/new', 'new',
     '/add', 'add',
     '/test', 'test',
@@ -43,6 +44,11 @@ class index:
     def GET(self):
         book = db.select('books')
         return render.index(book)
+
+class welcome:
+    def GET(self):
+        return render.welcome()
+
 
 class add:
     def POST(self):

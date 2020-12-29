@@ -2,14 +2,44 @@ $def with (book)
 <!DOCTYPE html>
 <html>
 <head>
+	<style type="text/css">
+		fieldset {
+			padding: 30px !important;
+		}
+		body {
+			padding-top: 110px !important;
+		}
+	</style>
+	<style type="text/css">
+   body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */ 
+   .navbar { background: #343a40 !important; color: white;} 
+   .card { background: #343a40 !important; color: white;}
+   label {color: white !important;}
+   legend {color: white !important;} 
+   .card-title {
+   	color: white !important;
+   }
+   .card-text {
+   	color: white !important;
+   }
+</style>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Book</title>
 <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
 
-	<div class="d-flex justify-content-center">
+    <ul>
+ <a class="nav-link" href="index">Go home<span class="sr-only">(current)</span></a> 
+      
+    </ul>
+  </div>
+</nav>
+	<!--<div class="d-flex justify-content-center">-->
 		<fieldset>
 			<legend>Add a book:</legend>
 			<form method="post" action='add'>
@@ -17,15 +47,25 @@ $def with (book)
 			    <label for="title">Book Name</label>
 			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
 			  <div class="form-group">
+			  	<br>
 				    <label for="author">Author</label>
 				    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author">
-
-		  	</div>
+				   </div>
 			</div>
+			<br>
+			  <div class="custom-control custom-checkbox">
+  <input type="checkbox" class="custom-control-input" id="customCheck1">
+  <label class="custom-control-label" for="customCheck1">I want to review this book next.</label>
+</div>
+<br>
+<br>
+
+		  	
 
 			 <button type="submit" value="Add" class="btn btn-primary">Submit</button>
 			</form>
 		</fieldset>
-	</div>
+	<!--</div>-->
 </body>
 </html>
+

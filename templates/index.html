@@ -4,17 +4,28 @@ $def with (book)
 <title>Catalog</title>
 <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css"> 
 
+<style type="text/css">
+   body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+   .jumbotron { background: #343a40 !important; color: white;} 
+   .navbar { background: #343a40 !important; color: white;} 
+</style>
+
 
 <script src="static/js/jquery-3.4.1.min.js"></script>
 <script src="static/js/popper.min.js"></script>
 <script src="static/js/bootstrap-4.4.1.js"></script>
+
+<div class="jumbotron">
+  <h1 class="display-4">Hello!</h1>
+  <p class="lead">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p>
+  <hr class="my-4">
+
+</div>
+
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="#"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active"> <a class="nav-link">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.<span class="sr-only">(current)</span></a> 
-      </li>
-    </ul>
+
     <ul>
  <a class="nav-link" href="new">Add your own Book Here<span class="sr-only">(current)</span></a> 
       
@@ -23,26 +34,28 @@ $def with (book)
 </nav>
 
 
-<div class="row">
-	$for x in range(3):
-		$for books in book:
-			<div class="col-xl-4">
-				<form method="post" action='book_details'>
-					<div class="d-flex justify-content-center">
-						<div class="card col-md-12"> 
-							<input type="hidden" name="bookId" value="$books.id">
-							<input type="hidden" name="bookDesc" value="$books.book_description">
-							<input type="hidden" name="bookTitle" value="$books.book_title">
-							<input type="hidden" name="bookAuthor" value="$books.author">
-							<!--<img class="card-img-top" src="static/images/card-img.png" alt="Card image cap">-->
-							 <div class="card-body">
-							   <h5 class="card-title">$books.book_title</h5>
-							   <p class="card-text">$books.author</p>
-							   <p class="card-text">$books.book_description</p>
-							   <button type="submit" class="btn btn-primary">Read More</button> 
+<div class="card-deck">
+	<div class="row">
+		$for x in range(3):
+			$for books in book:
+				<div class="col-xl-4">
+					<form method="post" action='book_details'>
+						<div class="d-flex justify-content-center">
+							<div class="card col-md-12 text-white bg-dark mb-3" style="max-width: 18rem;"> 
+								<input type="hidden" name="bookId" value="$books.id">
+								<input type="hidden" name="bookDesc" value="$books.book_description">
+								<input type="hidden" name="bookTitle" value="$books.book_title">
+								<input type="hidden" name="bookAuthor" value="$books.author">
+								<!--<img class="card-img-top" src="static/images/card-img.png" alt="Card image cap">-->
+								 <div class="card-body">
+								   <h5 class="card-title">$books.book_title</h5>
+								   <p class="card-text">$books.author</p>
+								   <p class="card-text">$books.book_description</p>
+								   <button type="submit" class="btn btn-primary">Read More</button> 
+								</div>
 							</div>
 						</div>
-					</div>
-				</form>
-			</div>
+					</form>
+				</div>
+	</div>
 </div>
