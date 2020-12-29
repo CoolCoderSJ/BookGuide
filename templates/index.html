@@ -34,12 +34,13 @@ $def with (book)
 <script src="static/js/popper.min.js"></script>
 <script src="static/js/bootstrap-4.4.1.js"></script>
 
-<div class="jumbotron">
-  <h1 class="display-4">Hello!</h1>
-  <p class="lead">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p>
-  <hr class="my-4">
-
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Hello!</h1>
+    <p class="lead">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p>
+  </div>
 </div>
+
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">
     <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -65,6 +66,8 @@ $def with (book)
 								<input type="hidden" name="bookDesc" value="$books.book_description">
 								<input type="hidden" name="bookTitle" value="$books.book_title">
 								<input type="hidden" name="bookAuthor" value="$books.author">
+								<input type="hidden" name="bookGrade" value="$books.grade">
+
 
 								 <h5 class="card-title padjust">$books.book_title</h5>
 								<p class="card-text padjust pdesc">$books.author</p>

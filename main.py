@@ -54,7 +54,19 @@ class add:
     def POST(self):
         i = web.input()
         n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade)
-        raise web.seeother('/')
+        if i.revnext=="on":
+            book = db.select('books')
+            i = web.input()
+            bookTitle = i.title
+            bookDesc = ""
+            bookAuthor = i.author
+            qr = db.select('books', where="book_title=$bookTitle", vars=locals())
+            results = list(qr)
+            bookId = int(results[0]['id'])
+            bookGrade = int(results[0]['grade'])
+            return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade)
+        else:
+            raise web.seeother('/')
 
 class new:
     def GET(self):
@@ -69,7 +81,8 @@ class book_details:
         bookTitle = i.bookTitle
         bookDesc = i.bookDesc
         bookAuthor = i.bookAuthor
-        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor)
+        bookGrade = i.bookGrade
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade)
 
 class test:
     def GET(self):
