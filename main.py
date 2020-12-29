@@ -53,7 +53,7 @@ class welcome:
 class add:
     def POST(self):
         i = web.input()
-        n = db.insert('books', book_title=i.title, author=i.author)
+        n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade)
         raise web.seeother('/')
 
 class new:
