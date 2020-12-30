@@ -38,6 +38,7 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
       
   </div>
 </nav>
+
 	<div class="d-flex justify-content-center">
 		<div class="card col-md-12"> 
 		  <div class="card-body">
@@ -51,5 +52,37 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 			</div>
 		</div>
 	</div>
+
+<div class="d-flex justify-content-center">
+	<div class="card col-md-12"> 
+		  <div class="card-body">
+		  	<fieldset>
+		    <form method="post" action="review">
+		    	<legend>Review this Book:</legend>
+		    <div class="form-group">
+				    <label for="reviewdesc">Review here:</label>
+				    <textarea class="form-control" id="reviewdesc" name="review" required>Enter your description here.</textarea>
+				    <input type="hidden" name="bookId" value="$bookId">
+				    <input type="email" name="email" placeholder="Your email (Optional)">
+				    <input type="text" name="name" placeholder="Your name (Optional)">
+				   </div>
+				   <button type="submit" value="review" class="btn btn-primary">Submit</button>
+
+		</form>
+	</fieldset>
+			</div>
+		</div>
+	</div>
+
+	$for review in reviews:
+		$if review.id == bookId:
+			<div class="d-flex justify-content-center">
+				<div class="card col-md-12"> 
+		  			<div class="card-body">
+		  				<h5 class="card-title">$review.description</h5>
+		  				<p class="card-footer">By $name , $email</p>
+					</div>
+				</div>
+			</div>
 </body>
 </html>

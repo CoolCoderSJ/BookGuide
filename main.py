@@ -18,7 +18,8 @@ urls = (
     '/new', 'new',
     '/add', 'add',
     '/test', 'test',
-    '/book_details', 'book_details'
+    '/book_details', 'book_details',
+    '/review', 'review'
     )
 
 
@@ -38,6 +39,7 @@ class add:
         n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade)
         if "revnext" in i:
             book = db.select('books')
+            reviews = db.select('reviews')
             i = web.input()
             bookTitle = i.title
             bookDesc = ""
@@ -46,7 +48,7 @@ class add:
             results = list(qr)
             bookId = int(results[0]['id'])
             bookGrade = int(results[0]['grade'])
-            return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade)
+            return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
         else:
             raise web.seeother('/')
 
@@ -65,6 +67,24 @@ class book_details:
         bookDesc = i.bookDesc
         bookAuthor = i.bookAuthor
         bookGrade = i.bookGrade
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
+
+class review:
+    def POST(self):
+        book = db.select('books')
+        reviews = db.select('reviews')
+        i = web.input()
+        bookId = int(i.bookId)
+        Desc = i.review
+        email = i.email
+        name = i.name
+        qr = db.select('books', where="id=$bookId", vars=locals())
+        results = list(qr)
+        bookTitle = results[0]['book_title']
+        bookDesc = results[0]['book_description']
+        bookGrade = int(results[0]['grade'])
+        bookAuthor = results[0]['author']
+        db.insert('reviews', book_id=i.bookId, email=i.email, name=i.name, description=i.review)
         return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 
 class test:
