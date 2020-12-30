@@ -3409,7 +3409,7 @@ input[type="button"].btn-block {
 }
 
 .dropdown-item.active, .dropdown-item:active {
-  color: #fff;
+  color: #000 !important;
   text-decoration: none;
   background-color: #007bff;
 }
