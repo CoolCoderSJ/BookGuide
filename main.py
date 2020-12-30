@@ -11,24 +11,6 @@ db = web.database(
 )
 
 
-"""
-urls = (
-    '/(.*)', 'hello'
-)
-app = web.application(urls, globals())
-
-
-class hello:
-    def GET(self, name):
-        if not name:
-            name = 'Shuchir'
-        return 'Hello, ' + name + '!'
-
-
-if __name__ == "__main__":
-    app.run()
-
-"""
 
 urls = (
     '/', 'index',
@@ -54,7 +36,7 @@ class add:
     def POST(self):
         i = web.input()
         n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade)
-        if i.revnext=="on":
+        if "revnext" in i:
             book = db.select('books')
             i = web.input()
             bookTitle = i.title
@@ -76,13 +58,14 @@ class new:
 class book_details:
     def POST(self):
         book = db.select('books')
+        reviews = db.select('reviews')
         i = web.input()
         bookId = int(i.bookId)
         bookTitle = i.bookTitle
         bookDesc = i.bookDesc
         bookAuthor = i.bookAuthor
         bookGrade = i.bookGrade
-        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade)
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 
 class test:
     def GET(self):
