@@ -48,6 +48,8 @@ class add:
             results = list(qr)
             bookId = int(results[0]['id'])
             bookGrade = int(results[0]['grade'])
+            qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
+            reviews = list(qr2)
             return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
         else:
             raise web.seeother('/')
@@ -60,23 +62,24 @@ class new:
 class book_details:
     def POST(self):
         book = db.select('books')
-        reviews = db.select('reviews')
         i = web.input()
         bookId = int(i.bookId)
-        bookTitle = i.bookTitle
-        bookDesc = i.bookDesc
-        bookAuthor = i.bookAuthor
-        bookGrade = i.bookGrade
+        qr = db.select('books', where="id=$bookId", vars=locals())
+        results = list(qr)
+        bookTitle = results[0]['book_title']
+        bookDesc = results[0]['book_description']
+        bookAuthor = results[0]['author']
+        bookGrade = results[0]['grade']
+        qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
+        reviews = list(qr2)
         return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 
 class review:
     def POST(self):
         book = db.select('books')
-        reviews = db.select('reviews')
         i = web.input()
         bookId = int(i.bookId)
         Desc = i.review
-        email = i.email
         name = i.name
         qr = db.select('books', where="id=$bookId", vars=locals())
         results = list(qr)
@@ -84,8 +87,14 @@ class review:
         bookDesc = results[0]['book_description']
         bookGrade = int(results[0]['grade'])
         bookAuthor = results[0]['author']
-        db.insert('reviews', book_id=i.bookId, email=i.email, name=i.name, description=i.review)
-        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
+        if i.review != "":
+            db.insert('reviews', book_id=i.bookId, name=i.name, description=i.review)
+        print(i.review)
+        i.review = ""
+        print("New Val:"+i.review)
+        qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
+        reviews = list(qr2)
+
 
 class test:
     def GET(self):
