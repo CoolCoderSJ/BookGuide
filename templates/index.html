@@ -3,14 +3,16 @@ $def with (book)
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catalog</title>
 <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css"> 
-
+<link href="static/css/rating.min.css" rel="stylesheet" type="text/css"> 
+<link href="static/css/star-rating.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
 <style type="text/css">
    body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
    .jumbotron { background: #343a40 !important; color: white;} 
    .navbar { background: #343a40 !important; color: white;} 
 </style>
 
-<style type="text/css">
+<!-- <style type="text/css">
 	.mtop {
 		margin-top: 40px;
 	}
@@ -29,10 +31,13 @@ $def with (book)
 }
 
 </style>
-
+ -->
 <script src="static/js/jquery-3.4.1.min.js"></script>
 <script src="static/js/popper.min.js"></script>
 <script src="static/js/bootstrap-4.4.1.js"></script>
+<script src="static/js/rating.js"></script>
+<script src="static/js/mdb.js"></script>
+<script src="static/js/my_script.js"></script>
 
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
@@ -54,7 +59,16 @@ $def with (book)
 
   </div>
 </nav>
-<div class="container">
+<!-- <span id="rateMe">
+  <i class="fas fa-star py-2 px-1 rate-popover" data-index="0" data-html="true" data-toggle="popover" data-placement="top" title="Very bad"></i>
+  <i class="fas fa-star py-2 px-1 rate-popover" data-index="1" data-html="true" data-toggle="popover" data-placement="top" title="Poor"></i>
+  <i class="fas fa-star py-2 px-1 rate-popover" data-index="2" data-html="true" data-toggle="popover" data-placement="top" title="OK"></i>
+  <i class="fas fa-star py-2 px-1 rate-popover" data-index="3" data-html="true" data-toggle="popover" data-placement="top" title="Good"></i>
+  <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true" data-toggle="popover" data-placement="top" title="Excellent"></i>
+</span>
+ -->
+
+ <div class="container">
 	<div class="row">
 			$for x in range(3):
 				<div class="card-deck">
