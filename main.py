@@ -18,6 +18,7 @@ urls = (
     '/new', 'new',
     '/add', 'add',
     '/test', 'test',
+    '/book_details/(.+)', 'book_details',
     '/book_details', 'book_details',
     '/review', 'review'
     )
@@ -73,6 +74,20 @@ class book_details:
         qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
         reviews = list(qr2)
         return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
+    
+    def GET(self):
+        book = db.select('books')
+        i = web.input(bookId=None)
+        bookId = int(i.bookId)
+        qr = db.select('books', where="id=$bookId", vars=locals())
+        results = list(qr)
+        bookTitle = results[0]['book_title']
+        bookDesc = results[0]['book_description']
+        bookAuthor = results[0]['author']
+        bookGrade = results[0]['grade']
+        qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
+        reviews = list(qr2)
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 
 class review:
     def POST(self):
@@ -87,14 +102,13 @@ class review:
         bookDesc = results[0]['book_description']
         bookGrade = int(results[0]['grade'])
         bookAuthor = results[0]['author']
-        if i.review != "":
-            db.insert('reviews', book_id=i.bookId, name=i.name, description=i.review)
-        print(i.review)
-        i.review = ""
-        print("New Val:"+i.review)
+        stars = i.stars
+        print("\n\nRating = "+stars+"\n\n")
+        db.insert('reviews', book_id=i.bookId, name=i.name, description=i.review, rating = i.stars)
         qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
         reviews = list(qr2)
-
+        bookId2 = str(bookId)
+        raise web.seeother('/book_details?bookId='+bookId2)
 
 class test:
     def GET(self):
