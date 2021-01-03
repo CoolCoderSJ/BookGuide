@@ -40,3 +40,97 @@
      white-space: nowrap;
      overflow: hidden;
      text-overflow: ellipsis;
+}
+
+.stars-container {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '★★★★★';
+}
+
+.stars-container:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '★★★★★';
+  color: lightgray;
+}
+
+.stars-container:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '★★★★★';
+  color: gold;
+  overflow: hidden;
+}
+
+
+.stars-0:before, .stars-10:before, .stars-20:before, 
+.stars-30:before, .stars-40:before, .stars-50:before, 
+.stars-60:before, .stars-70:before, .stars-80:before, 
+.stars-90:before, .stars-100:before {
+  width: 100%;
+  color: lightgray;
+  overflow: hidden;
+}
+
+.stars-0:after { 
+  width: 0%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-10:after { 
+  width: 10%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-20:after { 
+  width: 20%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-30:after { 
+  width: 30%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-40:after { 
+  width: 40%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-50:after { 
+  width: 50%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-60:after { 
+  width: 60%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-70:after { 
+  width: 70%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-80:after { 
+  width: 80%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-90:after { 
+  width: 90%;
+  color: gold;
+  overflow: hidden;
+   }
+.stars-100:after { 
+  width: 100%;
+  color: gold;
+  overflow: hidden;
+   }
