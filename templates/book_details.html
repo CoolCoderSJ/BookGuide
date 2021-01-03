@@ -1,4 +1,4 @@
-$def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
+$def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
 
 <!DOCTYPE html>
 <html>
@@ -57,6 +57,8 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 		    <h5 class="card-title">$bookTitle</h5>
 		    <h6 class="card-text">$bookAuthor</h6>
 		    <br>
+		    <span class="stars" data-rating="$avg" data-num-stars="5" ></span>
+		    <br>
 		    <p class="card-text">$bookDesc</p>
 
 		    <p class="card-text">Grades $bookGrade and higher</p>
@@ -110,9 +112,9 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 
 
 <br>
+
 <h4 class="card-title" style="text-align: center;">Reviews -</h4>
 <br>
-
 
 <div class="container" name="revcontainer">
 	$for review in reviews:
@@ -121,7 +123,9 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
 			$ name = "Anonymous"
 		<div class="d-flex justify-content-center">
 			<div class="card col-md-12"> 
+				<!-- <div id="fixture"></div> -->
 	  			<div class="card-body">
+	  				<span class="stars" data-rating="$review.rating" data-num-stars="5" ></span>
 	  				<h6 class="card-body">$review['description']</h6>
 	  				<p class="card-footer"><em>- $name</em></p>
 				</div>

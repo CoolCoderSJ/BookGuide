@@ -26,8 +26,10 @@ urls = (
 
 class index:
     def GET(self):
-        book = db.select('books')
-        return render.index(book)
+        global db
+        books = db.select('books')
+        reviews = db.select('reviews')
+        return render.index(books, reviews, db)
 
 class welcome:
     def GET(self):
@@ -51,7 +53,20 @@ class add:
             bookGrade = int(results[0]['grade'])
             qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
             reviews = list(qr2)
-            return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
+            avg_rating1 = 0
+            avg_rating2 = 0
+            avg = 0
+            for review in reviews:
+                if review['rating'] != None:
+                    avg_rating1 += review['rating']
+                    avg_rating2 += 1
+            if avg_rating2 == 0:
+                avg = 0
+            else:
+                avg = avg_rating1/avg_rating2
+            avgstr = str(avg)
+            print("\n\nAVG: "+avgstr+"\n\n")
+            return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
         else:
             raise web.seeother('/')
 
@@ -73,7 +88,20 @@ class book_details:
         bookGrade = results[0]['grade']
         qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
         reviews = list(qr2)
-        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
+        avg_rating1 = 0
+        avg_rating2 = 0
+        avg = 0
+        for review in reviews:
+            if review['rating'] != None:
+                avg_rating1 += review['rating']
+                avg_rating2 += 1
+        if avg_rating2 == 0:
+            avg = 0
+        else:
+            avg = avg_rating1/avg_rating2        
+        avgstr = str(avg)
+        print("\n\nAVG: "+avgstr+"\n\n")
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
     
     def GET(self):
         book = db.select('books')
@@ -87,7 +115,20 @@ class book_details:
         bookGrade = results[0]['grade']
         qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
         reviews = list(qr2)
-        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews)
+        avg_rating1 = 0
+        avg_rating2 = 0
+        avg = 0
+        for review in reviews:
+            if review['rating'] != None:
+                avg_rating1 += review['rating']
+                avg_rating2 += 1
+        if avg_rating2 == 0:
+            avg = 0
+        else:
+            avg = avg_rating1/avg_rating2
+        avgstr = str(avg)
+        print("\n\nAVG: "+avgstr+"\n\n")
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
 
 class review:
     def POST(self):
