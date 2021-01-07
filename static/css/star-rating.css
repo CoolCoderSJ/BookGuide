@@ -28,8 +28,10 @@
     margin-top: 40px;
   }
   .padjust {
-    padding-top: 20px !important;
     padding-left: 20px !important;
+  }
+  .madjust {
+    padding-top: 20px !important;
   }
 
   .bpadjust {

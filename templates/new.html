@@ -37,14 +37,14 @@ $def with (book)
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent1">
 
- <a class="nav-link" href="index">Go home<span class="sr-only">(current)</span></a> 
+ <a class="nav-link current" href="#">Add your own book<span class="sr-only">(current)</span></a> 
 
   </div>
 </nav>
 	<!--<div class="d-flex justify-content-center">-->
 		<fieldset>
 			<legend>Add a book:</legend>
-			<form method="post" action='add'>
+			<form method="post" enctype="multipart/form-data" action='add'>
 			  <div class="form-group">
 			    <label for="title">Book Name</label>
 			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
@@ -72,6 +72,11 @@ $def with (book)
 				      <option value="12">Grade 12 and up</option>
 				    </select>
 			</div>
+<br>
+<div class="mb-3">
+  <label for="formFile" class="form-label">Add a picture of this book (Optional)</label>
+  <input type="file" class="form-control" name="myfile" id="formFile">
+</div>
 <br>
 			  <div class="custom-control custom-checkbox">
   <input type="checkbox" class="custom-control-input" id="customCheck1" name="revnext">

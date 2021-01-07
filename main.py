@@ -1,4 +1,5 @@
 import web
+import os
 render = web.template.render('templates/')
 
 db = web.database(
@@ -38,8 +39,19 @@ class welcome:
 
 class add:
     def POST(self):
-        i = web.input()
-        n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade)
+        i = web.input(myfile={})
+        filedir = 'static/images/books' 
+        if 'myfile' in i:
+            fileext = i.myfile.filename.split('.')[1]
+            print(fileext)
+            myfilepath = filedir + '/' + i.title + "." + fileext
+            fout = open(myfilepath, "wb")
+            fout.write(i.myfile.file.read())
+
+            fout.close() 
+        else:
+            myfilepath = 'static/images/books/placeholder.png'
+        n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade, image=myfilepath)
         if "revnext" in i:
             book = db.select('books')
             reviews = db.select('reviews')

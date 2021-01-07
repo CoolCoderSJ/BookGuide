@@ -12,11 +12,6 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
 <script src="static/js/rating.js"></script>
 <script src="static/js/mdb.js"></script>
 <script src="static/js/my_script.js"></script>
-<style>
-	* {
-		align-items: center;
-	}
-</style>
 <style type="text/css">
    body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */ 
    .navbar { background: #343a40 !important; color: white;} 
@@ -44,7 +39,7 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent1">
 
- <a class="nav-link" href="index">Go home<span class="sr-only">(current)</span></a> 
+ <a class="nav-link" href="new">Add your own book<span class="sr-only">(current)</span></a> 
       
   </div>
 </nav>
@@ -113,22 +108,20 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
 
 <br>
 
-<h4 class="card-title" style="text-align: center;">Reviews -</h4>
+<h4 class="card-title" style="margin-left: 35px;">Reviews -</h4>
 <br>
 
-<div class="container" name="revcontainer">
+<div class="container" name="revcontainer" style="align-items: left">
 	$for review in reviews:
 		$ name = review['name']
 		$if name == "":
 			$ name = "Anonymous"
-		<div class="d-flex justify-content-center">
-			<div class="card col-md-12"> 
-				<!-- <div id="fixture"></div> -->
-	  			<div class="card-body">
-	  				<span class="stars" data-rating="$review.rating" data-num-stars="5" ></span>
-	  				<h6 class="card-body">$review['description']</h6>
-	  				<p class="card-footer"><em>- $name</em></p>
-				</div>
+		<div class="card col-md-12"> 
+			<!-- <div id="fixture"></div> -->
+  			<div class="card-body">
+  				<span class="stars" data-rating="$review.rating" data-num-stars="5" ></span>
+  				<h6 class="card-body">$review['description']</h6>
+  				<p class="card-text"><em>- $name</em></p>
 			</div>
 		</div>
 </div>
