@@ -120,8 +120,8 @@ $def with (books, reviews, db)
 								<input type="hidden" name="bookTitle" value="$book.book_title">
 								<input type="hidden" name="bookAuthor" value="$book.author">
 								<input type="hidden" name="bookGrade" value="$book.grade">
-								<div>
-									<img src="$book.image" class="padjust madjust" alt="book cover" style="max-width: 250px; height: auto;">
+								<div class="imgcontainer">
+									<img src="$book.image" alt="book cover"  style="max-width:100%; max-height: 100%;">
 								</div>
 								 <h5 class="card-title padjust madjust">$title</h5>
 								<p class="card-text padjust pdesc">$author</p>

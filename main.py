@@ -41,7 +41,10 @@ class add:
     def POST(self):
         i = web.input(myfile={})
         filedir = 'static/images/books' 
-        if 'myfile' in i:
+        print("\n\n"+i.myfile.filename+"\n\n")
+        if i.myfile.filename == None or i.myfile.filename == "":
+            myfilepath = 'static/images/books/placeholder.png'
+        else:
             fileext = i.myfile.filename.split('.')[1]
             print(fileext)
             myfilepath = filedir + '/' + i.title + "." + fileext
@@ -49,8 +52,6 @@ class add:
             fout.write(i.myfile.file.read())
 
             fout.close() 
-        else:
-            myfilepath = 'static/images/books/placeholder.png'
         n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade, image=myfilepath)
         if "revnext" in i:
             book = db.select('books')
@@ -78,7 +79,8 @@ class add:
                 avg = avg_rating1/avg_rating2
             avgstr = str(avg)
             print("\n\nAVG: "+avgstr+"\n\n")
-            return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
+            bookIdstr =str(bookId)
+            return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
         else:
             raise web.seeother('/')
 
@@ -113,7 +115,8 @@ class book_details:
             avg = avg_rating1/avg_rating2        
         avgstr = str(avg)
         print("\n\nAVG: "+avgstr+"\n\n")
-        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
+        bookIdstr = str(bookId)
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
     
     def GET(self):
         book = db.select('books')
@@ -140,7 +143,8 @@ class book_details:
             avg = avg_rating1/avg_rating2
         avgstr = str(avg)
         print("\n\nAVG: "+avgstr+"\n\n")
-        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
+        bookIdstr = str(bookId)
+        return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
 
 class review:
     def POST(self):

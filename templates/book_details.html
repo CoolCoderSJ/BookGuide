@@ -1,4 +1,4 @@
-$def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg)
+$def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
 
 <!DOCTYPE html>
 <html>
@@ -44,11 +44,15 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
   </div>
 </nav>
 
-
-
+$ qr = db.query("SELECT * from books WHERE id="+bookIdstr)
+$ qr = list(qr)
+$ image = qr[0]['image']
 	<div class="d-flex justify-content-center">
 		<div class="card col-md-12"> 
 		  <div class="card-body">
+		  	<div class="imgcontainer float-left">
+				<img src="$image" alt="book cover"  style="max-width:100%; max-height: 100%;">
+			</div>
 		    <h5 class="card-title">$bookTitle</h5>
 		    <h6 class="card-text">$bookAuthor</h6>
 		    <br>
