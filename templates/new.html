@@ -1,4 +1,4 @@
-$def with (book)
+$def with (book, db, str)
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +24,13 @@ $def with (book)
    	color: white !important;
    }
 </style>
+<script src="static/js/jquery-3.4.1.min.js"></script>
+<script src="static/js/popper.min.js"></script>
+<script src="static/js/bootstrap-4.4.1.js"></script>
+<script src="static/js/rating.js"></script>
+<script src="static/js/my_script.js"></script>
+
+
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Book</title>
@@ -47,7 +54,7 @@ $def with (book)
 			<form method="post" enctype="multipart/form-data" action='add'>
 			  <div class="form-group">
 			    <label for="title">Book Name</label>
-			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
+			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom" required>
 			  <div class="form-group">
 			  	<br>
 				    <label for="author">Author</label>
@@ -85,9 +92,15 @@ $def with (book)
 <br>
 <br>
 
-		  	
-
-			 <button type="submit" value="Add" class="btn btn-primary">Submit</button>
+			$ qr = db.query("SELECT book_title from books")
+			$ allbook = list(qr)
+			$ allbooks = []	  	
+			$for book in allbook:
+				$allbooks.append(book['book_title'])
+			<script type="text/javascript">
+				var allbooks = "$allbooks"
+			</script>
+			 <input type='button' onclick='verifyexistingbook(allbooks, document.getElementById("title").value);' value='Add' class='btn btn-primary'>
 			</form>
 		</fieldset>
 	<!--</div>-->

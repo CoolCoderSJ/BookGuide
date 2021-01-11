@@ -4,12 +4,12 @@ $(document).ready(function() {
 
 var $stars;
 jQuery(document).ready(function ($) {
-  function addScore(score, $domElement) {
-    $("<span class='stars-container'>")
-      .addClass("stars-" + score.toString())
-      .text("★★★★★")
-      .appendTo($domElement);
-  }
+    //$('[data-toggle="tooltip"]').tooltip();
+
+//   function verifyexistingbook(){
+//   $('#title').tooltip({ trigger: 'hover', title: 'Test Tooltip' });
+//   return false;
+// }
   $.fn.stars = function() {
     return $(this).each(function() {
         const rating = $(this).data("rating");
@@ -19,7 +19,7 @@ jQuery(document).ready(function ($) {
         const noStar = '<i class="far fa-star" style="color: gold;"></i>'.repeat(Math.floor(numStars-rating));
         $(this).html(`${fullStar}${halfStar}${noStar}`);
     });
-}
+};
 $(function(){
                 $('.stars').stars();
             });
@@ -33,7 +33,6 @@ $(function(){
     var stars = document.getElementById('rate');
     stars.value = index;
   });
-  addScore(70, $("#fixture"));
 });
 
 function myFunc(){
@@ -42,4 +41,42 @@ function myFunc(){
     frm.reset();  // Reset all form data
     return false; // Prevent page refresh
   }
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+function verifyexistingbook(allbooks, thebook) {
+  allbooks3 = decodeHtml(allbooks)
+  allbooks4 = allbooks3.split(",")
+  allbooks2 = [];
+  bLen = allbooks4.length;
+  thebook1 = " '"+thebook+"'"
 
+  for (i = 0; i < bLen; i++){
+    if (i==0){
+      var str3 = allbooks4[i].split("[")[-1]
+      var str = "'"+str3
+    allbooks2.push(str.toLowerCase())
+    }
+    else if(i==bLen-1) {
+      var str1 = allbooks4[i].split("]")[-1]
+      var str = "'"+str1
+      allbooks2.push(str.toLowerCase())
+    }
+    else {
+    var str = allbooks4[i]
+    allbooks2.push(str.toLowerCase())
+  }
+  
+  }
+      //$('[data-toggle="tooltip"]').tooltip();
+  // document.getElementById("title").setAttribute("data-toggle", "tooltip")
+  alert(allbooks2);
+  if (allbooks2.includes(thebook1)){
+  alert(thebook1);
+  }
+   document.getElementById("title").setAttribute("title", "This is TEST");
+   $('#title').tooltip();
+
+}

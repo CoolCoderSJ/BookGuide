@@ -87,7 +87,7 @@ class add:
 class new:
     def GET(self):
         book = db.select('books')
-        return render.new(book)
+        return render.new(book, db, str)
 
 class book_details:
     def POST(self):
