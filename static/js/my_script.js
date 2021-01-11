@@ -36,10 +36,19 @@ $(function(){
 });
 
 function myFunc(){
+    var star = document.getElementById("rate")
+    var desc = document.getElementById("reviewdesc")
+    if (star.value === "0" && desc.value === "") {
+       desc.setAttribute("class", "form-control border border-danger");
+      desc.setAttribute("title", "Either fill in the stars or enter a text review.");
+   $('#reviewdesc').tooltip();
+    }
+    else {
     var frm = document.getElementsByName('addform')[0];
     frm.submit(); // Submit the form
     frm.reset();  // Reset all form data
     return false; // Prevent page refresh
+  }
   }
 function decodeHtml(html) {
     var txt = document.createElement("textarea");
@@ -68,15 +77,27 @@ function verifyexistingbook(allbooks, thebook) {
     var str = allbooks4[i]
     allbooks2.push(str.toLowerCase())
   }
-  
+
   }
       //$('[data-toggle="tooltip"]').tooltip();
   // document.getElementById("title").setAttribute("data-toggle", "tooltip")
-  alert(allbooks2);
   if (allbooks2.includes(thebook1)){
-  alert(thebook1);
-  }
-   document.getElementById("title").setAttribute("title", "This is TEST");
-   $('#title').tooltip();
+    document.getElementById("title").setAttribute("class", "form-control border border-danger");
+document.getElementById("title").setAttribute("title", "This book already exists.");
+   $('#title').tooltip();  }
+   else if (document.getElementById("grade").value === ""){
+    document.getElementById("grade").setAttribute("class", "custom-select border border-danger");
+document.getElementById("grade").setAttribute("title", "Please Select an Item");
+   $('#grade').tooltip();  }
+   else if (document.getElementById("grade").value === null){
+    document.getElementById("grade").setAttribute("class", "custom-select border border-danger");
+document.getElementById("grade").setAttribute("title", "Please Select an Item");
+   $('#grade').tooltip();  }
+   
+   else {
+    var frm = document.getElementById('newbook');
+    frm.submit(); // Submit the form
+    frm.reset();  // Reset all form data
+   }
 
 }

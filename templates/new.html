@@ -51,7 +51,7 @@ $def with (book, db, str)
 	<!--<div class="d-flex justify-content-center">-->
 		<fieldset>
 			<legend>Add a book:</legend>
-			<form method="post" enctype="multipart/form-data" action='add'>
+			<form method="post" enctype="multipart/form-data" action='add' id="newbook">
 			  <div class="form-group">
 			    <label for="title">Book Name</label>
 			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom" required>
@@ -63,7 +63,7 @@ $def with (book, db, str)
 			</div>
 			<br>
 			<div class="form-group">
-				    <select class="custom-select" name="grade" required>
+				    <select class="custom-select" id="grade" name="grade" required>
 				      <option value="">Select an appropriate grade level</option>
 				      <option value="1">Grade 1 and up</option>
 				      <option value="2">Grade 2 and up</option>
