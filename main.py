@@ -1,4 +1,4 @@
-import web
+import webpy as web
 import os
 render = web.template.render('templates/')
 
