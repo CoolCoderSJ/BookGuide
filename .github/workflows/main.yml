@@ -26,5 +26,8 @@ jobs:
       - name: Start server
         run: |
           pip3 install setuptools
-          pip3 install web.py
+          unzip webpy
+          cd webpy/
+          python setup.py install
+          cd root/
           python main.py
