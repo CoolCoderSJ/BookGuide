@@ -25,5 +25,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Start server
         run: |
+          pip3 install setuptools
           pip3 install web.py
           python main.py
