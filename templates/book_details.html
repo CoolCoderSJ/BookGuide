@@ -32,15 +32,17 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
 </head>
 <body>
 
-	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="./index">
-    <img src="static/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    Collaboread
-  </a>
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Collaboread</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-
- <a class="nav-link" href="new">Add your own book<span class="sr-only">(current)</span></a> 
-      
+<ul class="navbar-nav mr-auto">
+      <li class="nav-item active"> </li>
+      <li class="nav-item"> </li>
+      <li class="nav-item"> </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
+    </form>
   </div>
 </nav>
 
