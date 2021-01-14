@@ -12,7 +12,6 @@ db = web.database(
 )
 
 
-
 urls = (
     '/', 'index',
     '/index', 'index',
@@ -40,7 +39,7 @@ class welcome:
 class add:
     def POST(self):
         i = web.input(myfile={})
-        filedir = 'static/images/books' 
+        filedir = 'static/images/books'
         print("\n\n"+i.myfile.filename+"\n\n")
         if i.myfile.filename == None or i.myfile.filename == "":
             myfilepath = 'static/images/books/placeholder.png'
@@ -51,7 +50,7 @@ class add:
             fout = open(myfilepath, "wb")
             fout.write(i.myfile.file.read())
 
-            fout.close() 
+            fout.close()
         n = db.insert('books', book_title=i.title, author=i.author, grade=i.grade, image=myfilepath)
         if "revnext" in i:
             book = db.select('books')
@@ -112,12 +111,12 @@ class book_details:
         if avg_rating2 == 0:
             avg = 0
         else:
-            avg = avg_rating1/avg_rating2        
+            avg = avg_rating1/avg_rating2
         avgstr = str(avg)
         print("\n\nAVG: "+avgstr+"\n\n")
         bookIdstr = str(bookId)
         return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
-    
+
     def GET(self):
         book = db.select('books')
         i = web.input(bookId=None)
