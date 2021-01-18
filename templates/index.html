@@ -55,20 +55,29 @@ $def with (books, reviews, db)
 					$for x in range(3): <!--This uses webpy code. The code is looped 3 times to create 3 cards per row-->
 						<div class="card-deck"> <!--Organize each row into a card group, or a card deck-->
 						$for book in books: <!--Repeat for each book in database-->
-							$ avg = 0 <!--Average star rating-->
-							$ avg1 = 0 <!-- total stars-->
-							$ avg2 = 0 <!-- total reviews with stars-->
+							$ avg = 0
+							<!--Average star rating-->
+							$ avg1 = 0
+							<!-- total stars-->
+							$ avg2 = 0
+							<!-- total reviews with stars-->
 							<!--Query the database to get a single result. this result combines reviews with books by using JOIN.-->
 							$ qr = db.query("SELECT * FROM books JOIN reviews ON books.id = reviews.book_id")
 							<!--Convert to list for operations-->
 							$ results = [qr]
-							$for i in qr: <!--For each review-->
-								$if i['book_id'] == book.id and i['rating'] != None: <!--If the book id in reviews table matches the book id in the books table and the stars arent null...-->
-									$ avg1 = avg1 + i['rating'] <!--Add the stars to the total-->
-									$ avg2 = avg2+1 <!--Add 1 to num of reviews-->
-							$if avg2 == 0: <!-- If there are no star ratings, default average to 0-->
+							$for i in qr:
+							<!--For each review-->
+								$if i['book_id'] == book.id and i['rating'] != None:
+								<!--If the book id in reviews table matches the book id in the books table and the stars arent null...-->
+									$ avg1 = avg1 + i['rating']
+									<!--Add the stars to the total-->
+									$ avg2 = avg2+1
+									<!--Add 1 to num of reviews-->
+							$if avg2 == 0:
+							<!-- If there are no star ratings, default average to 0-->
 								$ avg = 0
-							$else: <!--otherwise, divide total by num of reviews to get average-->
+							$else:
+							<!--otherwise, divide total by num of reviews to get average-->
 								$ avg = avg1/avg2
 							<!--Get all of the values for the book-->
 							$ author = book.author
