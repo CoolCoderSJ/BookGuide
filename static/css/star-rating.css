@@ -67,3 +67,47 @@
   float: left;
   margin-right: 40px !important;
 }
+
+/*Add some padding to the new book form so that it doesnt stick to the border of the sreen*/
+.fieldset {
+  padding: 30px !important;
+}
+
+.body {
+  background: #2b2e32 !important; color: white;
+} /* This is to adjust the color scheme */
+
+/*Adjusting the navbar's colors*/
+.navbar {
+  background: #343a40 !important; color: white;
+}
+
+/*Adjusting the card's colors*/
+.card {
+  background: #343a40 !important; color: white;
+}
+
+/*Adjusting the input's colors*/
+.inputadd {
+  background: #343a40 !important; color: white !important;
+}
+
+/*Adjusting the label's colors*/
+.labelnew {
+  color: white !important;
+}
+
+/*Adjusting the form title's colors*/
+.legend {
+  color: white !important;
+}
+
+/*Adjusting the card's colors*/
+.card-title {
+  color: white !important;
+}
+
+/*Adjusting the card's colors*/
+.card-text {
+  color: white !important;
+}

@@ -1,112 +1,101 @@
 $def with (book, db, str) <!--For web.py, these are the parameters passed to this file-->
 <!DOCTYPE html>
 <html>
-<head>
-	<style type="text/css">
-		fieldset {
-			padding: 30px !important;
-		}
-		body {
-			padding-top: 110px !important;
-		}
-	</style>
-	<style type="text/css">
-   body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
-   .navbar { background: #343a40 !important; color: white;}
-   .card { background: #343a40 !important; color: white;}
-   input { background: #343a40 !important; color: white !important;}
-   label {color: white !important;}
-   legend {color: white !important;}
-   .card-title {
-   	color: white !important;
-   }
-   .card-text {
-   	color: white !important;
-   }
-</style>
-<!--Import all of the JS Scripts-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script src="static/js/rating.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-<script src="static/js/my_script.js"></script>
+	<head>
+		<!-- Set metadata, like the initial scale -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Set tab title -->
+		<title>New Book</title>
+		<!--CSS style sheet imports-->
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/blitzer/jquery-ui.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link href="static/css/rating.min.css" rel="stylesheet" type="text/css">
+		<link href="static/css/star-rating.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+		<!--Import all of the JS Scripts-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+		<script src="static/js/rating.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+		<script src="static/js/my_script.js"></script>
+	</head>
 
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>New Book</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
-<body>
-	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Collaboread</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-<ul class="navbar-nav mr-auto">
-      <li class="nav-item active"> </li>
-      <li class="nav-item"> </li>
-      <li class="nav-item"> </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
-    </form>
-  </div>
-</nav>
-	<!--<div class="d-flex justify-content-center">-->
-		<fieldset>
+
+	<body class="body "style="padding-top: 110px !important;">
+		<!-- Set the navigation bar -->
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Collaboread</a>
+	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+	  	<div class="collapse navbar-collapse" id="navbarSupportedContent1">
+					<ul class="navbar-nav mr-auto">
+	      		<li class="nav-item active"> </li>
+	      		<li class="nav-item"> </li>
+	      		<li class="nav-item"> </li>
+	    		</ul>
+	    		<form class="form-inline my-2 my-lg-0">
+						<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
+	    		</form>
+	  	</div>
+		</nav>
+		<!-- Add book form -->
+		<fieldset class="field">
 			<legend>Add a book:</legend>
-			<form method="post" enctype="multipart/form-data" action='add' id="newbook">
-			  <div class="form-group">
-			    <label for="title">Book Name</label>
-			    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom" required>
-			  <div class="form-group">
-			  	<br>
-				    <label for="author">Author</label>
-				    <input type="text" class="form-control" id="author" name="author" placeholder="Enter Author" >
-				   </div>
-			</div>
-			<br>
-			<div class="form-group">
-				    <select class="custom-select" id="grade" name="grade" required>
-				      <option value="">Select an appropriate grade level</option>
-				      <option value="1">Grade 1 and up</option>
-				      <option value="2">Grade 2 and up</option>
-				      <option value="3">Grade 3 and up</option>
-				      <option value="4">Grade 4 and up</option>
-				      <option value="5">Grade 5 and up</option>
-				      <option value="6">Grade 6 and up</option>
-				      <option value="7">Grade 7 and up</option>
-				      <option value="8">Grade 8 and up</option>
-				      <option value="9">Grade 9 and up</option>
-				      <option value="10">Grade 10 and up</option>
-				      <option value="11">Grade 11 and up</option>
-				      <option value="12">Grade 12 and up</option>
-				    </select>
-			</div>
-<br>
-<div class="mb-3">
-  <label for="formFile" class="form-label">Add a picture of this book (Optional)</label>
-  <input type="file" class="form-control" name="myfile" id="formFile">
-</div>
-<br>
-			  <div class="custom-control custom-checkbox">
-  <input type="checkbox" class="custom-control-input" id="customCheck1" name="revnext">
-  <label class="custom-control-label" for="customCheck1">I want to review this book next.</label>
-</div>
-<br>
-<br>
-
-			$ qr = db.query("SELECT book_title from books")
-			$ allbook = list(qr)
-			$ allbooks = []
-			$for book in allbook:
-				$allbooks.append(book['book_title'])
-			<script type="text/javascript">
-				var allbooks = "$allbooks"
-			</script>
-			 <input type='button' onclick='verifyexistingbook(allbooks, document.getElementById("title").value);' value='Add' class='btn btn-primary'>
-			</form>
-		</fieldset>
-	<!--</div>-->
-</body>
+				<form method="post" enctype="multipart/form-data" action='add' id="newbook">
+				  <div class="form-group">
+				    <label for="title">Book Name</label>
+				    <input type="text" class="form-control inputadd" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom" required>
+				  	<div class="form-group">
+				  		<br>
+					    <label for="author">Author</label>
+					    <input type="text" class="form-control inputadd" id="author" name="author" placeholder="Enter Author" >
+					  </div>
+					 </div>
+					 <br>
+					 <!-- Grades dropdown -->
+					 <div class="form-group">
+					    	<select class="custom-select" id="grade" name="grade" required>
+						      <option value="">Select an appropriate grade level</option>
+						      <option value="1">Grade 1 and up</option>
+						      <option value="2">Grade 2 and up</option>
+						      <option value="3">Grade 3 and up</option>
+						      <option value="4">Grade 4 and up</option>
+						      <option value="5">Grade 5 and up</option>
+						      <option value="6">Grade 6 and up</option>
+						      <option value="7">Grade 7 and up</option>
+						      <option value="8">Grade 8 and up</option>
+						      <option value="9">Grade 9 and up</option>
+						      <option value="10">Grade 10 and up</option>
+						      <option value="11">Grade 11 and up</option>
+						      <option value="12">Grade 12 and up</option>
+					    	</select>
+					</div>
+					<br>
+					<!-- Optional picture -->
+					<div class="mb-3">
+	  				<label for="formFile" class="form-label">Add a picture of this book (Optional)</label>
+	  				<input type="file" class="form-control inputadd" name="myfile" id="formFile">
+					</div>
+					<br>
+				  <div class="custom-control custom-checkbox">
+	  				<input type="checkbox" class="custom-control-input inputadd" id="customCheck1" name="revnext">
+	  				<label class="custom-control-label" for="customCheck1">I want to review this book next.</label>
+					</div>
+					<br>
+					<br>
+					<!-- Get only the book titles from the database -->
+					$ qr = db.query("SELECT book_title from books")
+					$ allbook = list(qr) <!--Convert to list for operations-->
+					$ allbooks = []
+					$for book in allbook:
+						$allbooks.append(book['book_title']) <!--Javascript doesn't take kindly to importing a direct python list -->
+					<!-- Run the JavaScript function on button click to make sure the book doesn't already exist -->
+					<script type="text/javascript">
+						var allbooks = "$allbooks"
+					</script>
+				 	<input class="inputadd" type='button' onclick='verifyexistingbook(allbooks, document.getElementById("title").value);' value='Add' class='btn btn-primary'>
+				</form>
+			</fieldset>
+	</body>
 </html>
