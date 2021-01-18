@@ -110,17 +110,17 @@ class book_details: #Define what happens when user wants to see individual page
         return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
 
     def GET(self):
-        book = db.select('books')
-        i = web.input(bookId=None)
-        bookId = int(i.bookId)
-        qr = db.select('books', where="id=$bookId", vars=locals())
-        results = list(qr)
-        bookTitle = results[0]['book_title']
-        bookDesc = results[0]['book_description']
-        bookAuthor = results[0]['author']
-        bookGrade = results[0]['grade']
-        qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
-        reviews = list(qr2)
+        book = db.select('books') #Get all books from the database
+        i = web.input(bookId=None) #Get URL parameters, set bookId to None by default in case none is given
+        bookId = int(i.bookId) #Convert bookId to integer
+        qr = db.select('books', where="id=$bookId", vars=locals()) #Get book details from database using the ID to get more details.
+        results = list(qr) #Convert to list for further operations.
+        bookTitle = results[0]['book_title'] #Get the book title from the list
+        bookDesc = results[0]['book_description'] #Get the book description from the list
+        bookAuthor = results[0]['author'] #Get the book author from the list
+        bookGrade = results[0]['grade'] #Get the book grade from the list.
+        qr2 = db.select('reviews', where="book_id=$bookId", vars=locals()) #Get all reviews for the selected book.
+        reviews = list(qr2) #Convert to list for later operations
         avg_rating1 = 0 #The total star rating. This value will be updated later
         avg_rating2 = 0 #Number of reviews that have stars
         avg = 0 #Average star rating
@@ -136,27 +136,26 @@ class book_details: #Define what happens when user wants to see individual page
         #Show the individual page with all of the collected values
         return render.book_details(book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
 
-class review:
+class review: #Define what happens when a review is submitted
     def POST(self):
-        book = db.select('books')
-        i = web.input()
-        bookId = int(i.bookId)
-        Desc = i.review
-        name = i.name
-        qr = db.select('books', where="id=$bookId", vars=locals())
-        results = list(qr)
-        bookTitle = results[0]['book_title']
-        bookDesc = results[0]['book_description']
-        bookGrade = int(results[0]['grade'])
-        bookAuthor = results[0]['author']
-        stars = i.stars
-        db.insert('reviews', book_id=i.bookId, name=i.name, description=i.review, rating = i.stars)
-        qr2 = db.select('reviews', where="book_id=$bookId", vars=locals())
-        reviews = list(qr2)
-        bookId2 = str(bookId)
-        raise web.seeother('/book_details?bookId='+bookId2)
+        book = db.select('books') #Get all books from database
+        i = web.input() #Get user input
+        bookId = int(i.bookId) #Get bookId (Hidden input)
+        Desc = i.review #Get text review
+        name = i.name #Get reviewer name
+        qr = db.select('books', where="id=$bookId", vars=locals()) #Get book details for specific book from database
+        results = list(qr) #Convert response to list for operations
+        bookTitle = results[0]['book_title'] #Get the book title from the list
+        bookDesc = results[0]['book_description'] #Get the book description from the list
+        bookAuthor = results[0]['author'] #Get the book author from the list
+        bookGrade = results[0]['grade'] #Get the book grade from the list.
+        stars = i.stars #Get stars value
+        db.insert('reviews', book_id=i.bookId, name=i.name, description=i.review, rating = i.stars) #Insert text review, reviewer name, bookId, and star rating into datbase
+        qr2 = db.select('reviews', where="book_id=$bookId", vars=locals()) #Get reviews for specific book
+        reviews = list(qr2) #Convert to list for operations
+        raise web.seeother('/book_details?bookId='+bookId2) #Reload the individual page/reviews
 
 
-if __name__ == "__main__":
-    app = web.application(urls, globals())
-    app.run()
+if __name__ == "__main__": #If current file is run -
+    app = web.application(urls, globals()) #Define the web server (this is a webpy feature)
+    app.run() #Start the server
