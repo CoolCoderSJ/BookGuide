@@ -144,6 +144,25 @@ function verifyexistingbook(allbooks, thebook) {
     //Initalize the tooltip
     $('#grade').tooltip();
  }
+ //If the value of the title box is empty...
+  else if (document.getElementById("title").value === ""){
+    //Highlight the box in red
+   document.getElementById("title").setAttribute("class", "custom-select border border-danger");
+   //Set the contents of the tooltip
+   document.getElementById("title").setAttribute("title", "Please enter a title");
+   //Initalize the tooltip
+   $('#title').tooltip();
+ }
+
+ //If the value of the title box is empty...
+  else if (document.getElementById("title").value === null){
+    //Highlight the box in red
+   document.getElementById("title").setAttribute("class", "custom-select border border-danger");
+   //Set the contents of the tooltip
+   document.getElementById("title").setAttribute("title", "Please enter a title");
+   //Initalize the tooltip
+   $('#title').tooltip();
+ }
 
    //If all checks are met...
    else {

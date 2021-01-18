@@ -153,6 +153,7 @@ class review: #Define what happens when a review is submitted
         db.insert('reviews', book_id=i.bookId, name=i.name, description=i.review, rating = i.stars) #Insert text review, reviewer name, bookId, and star rating into datbase
         qr2 = db.select('reviews', where="book_id=$bookId", vars=locals()) #Get reviews for specific book
         reviews = list(qr2) #Convert to list for operations
+        bookId2 = str(bookId)
         raise web.seeother('/book_details?bookId='+bookId2) #Reload the individual page/reviews
 
 

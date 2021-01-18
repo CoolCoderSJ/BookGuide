@@ -87,15 +87,17 @@ $def with (book, db, str)
 					<br>
 					<!-- Get only the book titles from the database -->
 					$ qr = db.query("SELECT book_title from books")
-					$ allbook = list(qr) <!--Convert to list for operations-->
+					$# Convert to list for operations
+					$ allbook = list(qr)
 					$ allbooks = []
 					$for book in allbook:
-						$allbooks.append(book['book_title']) <!--Javascript doesn't take kindly to importing a direct python list -->
+						$# Javascript doesn't take kindly to importing a direct python list
+						$allbooks.append(book['book_title'])
 					<!-- Run the JavaScript function on button click to make sure the book doesn't already exist -->
 					<script type="text/javascript">
 						var allbooks = "$allbooks"
 					</script>
-				 	<input class="inputadd" type='button' onclick='verifyexistingbook(allbooks, document.getElementById("title").value);' value='Add' class='btn btn-primary'>
+				 	<button class="inputadd" type='button' onclick='verifyexistingbook(allbooks, document.getElementById("title").value);' value='Add' class='btn btn-primary'>Add</button>
 				</form>
 			</fieldset>
 	</body>
