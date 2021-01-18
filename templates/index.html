@@ -1,50 +1,43 @@
-$def with (books, reviews, db)
+$def with (books, reviews, db) <!--For web.py, these are the parameters passed to this file-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Tab title-->
+		<title>Catalog</title>
+		<!--CSS style sheet imports-->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link href="static/css/rating.min.css" rel="stylesheet" type="text/css">
+		<link href="static/css/star-rating.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+		<!--Import all of the JS Scripts-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+		<script src="static/js/rating.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+		<script src="static/js/my_script.js"></script>
+	</head>
 <body style="padding-top: 110px">
-	<link href="templates/globals.html" rel="import" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalog</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<link href="static/css/rating.min.css" rel="stylesheet" type="text/css"> 
-<link href="static/css/star-rating.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-<style type="text/css">
-   body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
-   .jumbotron { background: #343a40 !important; color: white;} 
-   .navbar { background: #343a40 !important; color: white;} 
+
+<style media="screen">
+body { background: #2b2e32 !important; color: white;} /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+.jumbotron { background: #343a40 !important; color: white;}
+.navbar { background: #343a40 !important; color: white;}
 </style>
 
-<script src="static/js/jquery-3.4.1.min.js"></script>
-<script src="static/js/popper.min.js"></script>
-<script src="static/js/bootstrap-4.4.1.js"></script>
-<script src="static/js/rating.js"></script>
-<script src="static/js/mdb.js"></script>
-<script src="static/js/my_script.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-
+<!--set the banner displayed on the homepage-->
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">Hello!</h1>
-    <p class="lead">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p>
+    <h1 class="display-4">Hello!</h1> <!--The title of the banner-->
+    <p class="lead">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p> <!--Content of banner-->
   </div>
 </div>
 
 
-<!--
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">
-    <img src="static/images/logo.png" width="30" height="30" class="d-inline-block" alt="">
-    Collaboread
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-
-
- <a class="nav-link" href="new">Add your own Book<span class="sr-only">(current)</span></a> 
-
-  </div>
-</nav>
--->
-
+<!-- Set the navigation bar on top -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Collaboread</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent1">
@@ -59,37 +52,33 @@ $def with (books, reviews, db)
   </div>
 </nav>
 
-<!-- <span id="rateMe">
-  <i class="fas fa-star py-2 px-1 rate-popover" data-index="0" data-html="true" data-toggle="popover" data-placement="top" title="Very bad"></i>
-  <i class="fas fa-star py-2 px-1 rate-popover" data-index="1" data-html="true" data-toggle="popover" data-placement="top" title="Poor"></i>
-  <i class="fas fa-star py-2 px-1 rate-popover" data-index="2" data-html="true" data-toggle="popover" data-placement="top" title="OK"></i>
-  <i class="fas fa-star py-2 px-1 rate-popover" data-index="3" data-html="true" data-toggle="popover" data-placement="top" title="Good"></i>
-  <i class="fas fa-star py-2 px-1 rate-popover" data-index="4" data-html="true" data-toggle="popover" data-placement="top" title="Excellent"></i>
-</span>
- -->
-
+<!-- A container for all of the cards -->
  <div class="container">
 	<div class="row">
-			$for x in range(3):
-				<div class="card-deck">
-				$for book in books:
-					$ avg = 0
-					$ avg1 = 0
-					$ avg2 = 0
+			$for x in range(3): <!--This uses webpy code. The code is looped 3 times to create 3 cards per row-->
+				<div class="card-deck"> <!--Organize each row into a card group, or a card deck-->
+				$for book in books: <!--Repeat for each book in database-->
+					$ avg = 0 <!--Average star rating-->
+					$ avg1 = 0 <!-- total stars-->
+					$ avg2 = 0 <!-- total reviews with stars-->
+					<!--Query the database to get a single result. this result combines reviews with books by using JOIN.-->
 					$ qr = db.query("SELECT * FROM books JOIN reviews ON books.id = reviews.book_id")
+					<!--Convert to list for operations-->
 					$ results = [qr]
-					$for i in qr:
-						$if i['book_id'] == book.id and i['rating'] != None:
-							$ avg1 = avg1 + i['rating']
-							$ avg2 = avg2+1
-					$if avg2 == 0:
+					$for i in qr: <!--For each review-->
+						$if i['book_id'] == book.id and i['rating'] != None: <!--If the book id in reviews table matches the book id in the books table and the stars arent null...-->
+							$ avg1 = avg1 + i['rating'] <!--Add the stars to the total-->
+							$ avg2 = avg2+1 <!--Add 1 to num of reviews-->
+					$if avg2 == 0: <!-- If there are no star ratings, default average to 0-->
 						$ avg = 0
-					$else:
+					$else: <!--otherwise, divide total by num of reviews to get average-->
 						$ avg = avg1/avg2
+					<!--Get all of the values for the book-->
 					$ author = book.author
 					$ title = book.book_title
 					$ desc = book.book_description
 					$ grade = book.grade
+					<!--Set placeholder text in case there is no description or author-->
 					$if desc == "" or desc == None:
 						$ desc = "No description available."
 					$if author == "" or author == None:
@@ -97,12 +86,14 @@ $def with (books, reviews, db)
 					<div class="col-md-4 col-sm-6 col-12">
 						<div class="card bg-dark mtop" style="min-height: 500px; box-shadow: 20px 20px #303539">
 							<form method="post" action='book_details'>
+								<!--hidden inputs, used for passing on data. User cannot see these-->
 								<input type="hidden" name="bookId" value="$book.id">
 								<input type="hidden" name="bookDesc" value="$book.book_description">
 								<input type="hidden" name="bookTitle" value="$book.book_title">
 								<input type="hidden" name="bookAuthor" value="$book.author">
 								<input type="hidden" name="bookGrade" value="$book.grade">
 								<div class="imgcontainer">
+									<!--Show the image-->
 									<img src="$book.image" alt="book cover"  style="max-width:100%; max-height: 100%;">
 								</div>
 								 <h5 class="card-title padjust madjust">$title</h5>
@@ -111,10 +102,12 @@ $def with (books, reviews, db)
 								<span class="stars padjust madjust" data-rating="$avg" data-num-stars="5"></span>
 								<br>
 								<p class="card-text padjust madjust">Grades $grade and up</p>
-								<button type="submit" class="btn btn-primary bpadjust">Read More</button> 
+								<button type="submit" class="btn btn-primary bpadjust">Read More</button>
 							</form>
 						</div>
 					</div>
 				</div>
 	</div>
 </div>
+</body>
+</html>
