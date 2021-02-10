@@ -1,4 +1,3 @@
-$def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, avg, db, bookIdstr)
 <!-- ^^ Params used on this page -->
 <!DOCTYPE html>
 <html>
@@ -7,21 +6,21 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Set tab title -->
-		<title>More About $bookTitle</title>
+		<title>More About {{ bookTitle }}</title>
 		<!--CSS style sheet imports-->
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/blitzer/jquery-ui.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		<link href="static/css/rating.min.css" rel="stylesheet" type="text/css">
-		<link href="static/css/star-rating.css" rel="stylesheet" type="text/css">
+		<link href="/static/css/rating.min.css" rel="stylesheet" type="text/css">
+		<link href="/static/css/star-rating.css" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
 		<!--Import all of the JS Scripts-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-		<script src="static/js/rating.js"></script>
+		<script src="/static/js/rating.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-		<script src="static/js/my_script.js"></script>
+		<script src="/static/js/my_script.js"></script>
 	</head>
 
 	<body class="body" style="padding-top: 110px">
@@ -39,26 +38,31 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
     			</form>
   		</div>
 		</nav>
-		<!-- get the book image from the database -->
-		$ qr = db.query("SELECT * from books WHERE id="+bookIdstr)
-		$ qr = list(qr)
-		$ image = qr[0]['image']
+		{% with messages = get_flashed_messages() %}
+		   {% if messages %}
+		      {% for message in messages %}
+						 <div class="alert alert-danger" role="alert">
+							 {{ message }}
+						 </div>
+		      {% endfor %}
+		   {% endif %}
+		{% endwith %}
 		<div class="d-flex justify-content-center">
 			<div class="card col-md-12">
 				 <div class="card-body">
 					 <!-- Make sure the image stays in a container on the left of the book details -->
 					 <div class="imgcontainer float-left">
-						 <img src="$image" alt="book cover"  style="max-width:100%; max-height: 100%;">
+						 <img src="{{ image }}" alt="book cover"  style="max-width:100%; max-height: 100%;">
 					</div>
-				  <h5 class="card-title">$bookTitle</h5>
-				  <h6 class="card-text">$bookAuthor</h6>
+				  <h5 class="card-title">{{ bookTitle }}</h5>
+				  <h6 class="card-text">{{ bookAuthor }}</h6>
 				  <br>
 					<!-- Average star rating -->
-				  <span class="stars" data-rating="$avg" data-num-stars="5" ></span>
+				  <span class="stars" data-rating="{{ avg }}" data-num-stars="5" ></span>
 				  <br>
-				  <p class="card-text">$bookDesc</p>
+				  <p class="card-text">{{ bookDesc }}</p>
 
-				  <p class="card-text">Grades $bookGrade and higher</p>
+				  <p class="card-text">Grades {{ bookGrade }} and higher</p>
 				  <br>
 					<!-- Button that will trigger the add review form modal -->
 				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
@@ -72,8 +76,8 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content bg-dark" style="color: white !important;">
 		    	<fieldset class="fieldset">
-				    <form method="post" action="review" name="addform">
-				    	<input type="hidden" name="bookId" value="$bookId">
+				    <form method="post" action="http://localhost:1111/review" name="addform">
+				    	<input type="hidden" name="bookId" value="{{ bookId }}">
 				    	<input type="hidden" id=
 				    	"rate" name="stars" value="0">
 				    	<br>
@@ -84,14 +88,14 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
 								</div>
 						    <input class="form-control" type="text" name="name" placeholder="Your name (Optional)">
 						    <textarea class="form-control" id="reviewdesc" name="review" placeholder="Enter your description here."></textarea>
-						    <input type="hidden" name="bookId" value="$bookId">
+						    <input type="hidden" name="bookId" value="{{ bookId }}">
 						  </div>
 
 		      		<div class="modal-footer">
 								<!-- Close button -->
 		        		<button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
 								<!-- Add review button, this leads to a JS function that makes sure either stars or text is filled -->
-								<button type="button" value="review" onclick="myFunc()" class="btn btn-primary">Submit</button>
+								<button type="submit" value="review" class="btn btn-primary">Submit</button>
 		      		</div>
 						</form>
 					</fieldset>
@@ -106,17 +110,19 @@ $def with (book, bookId, bookTitle, bookDesc, bookAuthor, bookGrade, reviews, av
 
 		<div class="container" name="revcontainer" style="align-items: left">
 			<!-- If there isn't a name given, set name to anonymous -->
-			$for review in reviews:
-				$ name = review['name']
-				$if name == "":
-					$ name = "Anonymous"
+			{% for review in reviews %}
+				{% set name = review[-3] %}
+				{% if name == "" %}
+					{% set name = "Anonymous" %}
+				{% endif %}
 				<div class="card col-md-12">
 		  			<div class="card-body">
-		  				<span class="stars" data-rating="$review.rating" data-num-stars="5" ></span>
-		  				<h6 class="card-body">$review['description']</h6>
-		  				<p class="card-text"><em>- $name</em></p>
+		  				<span class="stars" data-rating="{{ review[-1] }}" data-num-stars="5" ></span>
+		  				<h6 class="card-body">{{ review[-2] }}</h6>
+		  				<p class="card-text"><em>- {{ name }}</em></p>
 					</div>
 				</div>
+			{% endfor %}
 		</div>
 
 	</body>
