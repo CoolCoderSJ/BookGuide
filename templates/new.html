@@ -1,4 +1,3 @@
-$def with (book, db, str)
 <!--For web.py, these are the parameters passed to this file-->
 <!DOCTYPE html>
 <html>
@@ -25,7 +24,7 @@ $def with (book, db, str)
 	</head>
 
 
-	<body class="body "style="padding-top: 110px !important;">
+	<body class="body newbookpage">
 		<!-- Set the navigation bar -->
 		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Collaboread</a>
 	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
@@ -40,6 +39,15 @@ $def with (book, db, str)
 	    		</form>
 	  	</div>
 		</nav>
+		{% with messages = get_flashed_messages() %}
+		   {% if messages %}
+		      {% for message in messages %}
+						 <div class="alert alert-danger" role="alert">
+							 {{ message }}
+						 </div>
+		      {% endfor %}
+		   {% endif %}
+		{% endwith %}
 		<!-- Add book form -->
 		<fieldset class="field">
 			<legend>Add a book:</legend>
@@ -86,18 +94,11 @@ $def with (book, db, str)
 					<br>
 					<br>
 					<!-- Get only the book titles from the database -->
-					$ qr = db.query("SELECT book_title from books")
-					$# Convert to list for operations
-					$ allbook = list(qr)
-					$ allbooks = []
-					$for book in allbook:
-						$# Javascript doesn't take kindly to importing a direct python list
-						$allbooks.append(book['book_title'])
 					<!-- Run the JavaScript function on button click to make sure the book doesn't already exist -->
 					<script type="text/javascript">
 						var allbooks = "$allbooks"
 					</script>
-				 	<button class="inputadd" type='button' onclick='verifyexistingbook(allbooks, document.getElementById("title").value);' value='Add' class='btn btn-primary'>Add</button>
+				 	<button class="inputadd btn btn-primary" type='submit' value='Add' class='btn btn-primary'>Add</button>
 				</form>
 			</fieldset>
 	</body>
