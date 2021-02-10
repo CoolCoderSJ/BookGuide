@@ -50,6 +50,12 @@
    text-overflow: ellipsis;
 }
 
+.newbookpage {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 110px !important;
+}
+
 /*Set a container for all of the images */
 .imgcontainer {
   /*Set the width and height */
