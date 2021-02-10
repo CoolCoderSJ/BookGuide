@@ -1,3 +1,4 @@
+$def with (books, reviews, db)
 <!--For web.py, these are the parameters passed to this file-->
 <!DOCTYPE html>
 <html>
@@ -51,47 +52,70 @@
 		<!-- A container for all of the cards -->
 		 <div class="container">
 			<div class="row">
-					<div class="card-deck"> <!--Organize each row into a card group, or a card deck-->
-						{% for book in books %}
+					$for x in range(3): $# This uses webpy code. The code is looped 3 times to create 3 cards per row-->
+						<div class="card-deck"> <!--Organize each row into a card group, or a card deck-->
+						$for book in books:
+							$# Average star rating
+							$ avg = 0
 
+							$# Average star rating
+							$ avg1 = 0
 
-							{% set  author = book[-2] %}
-							{% set  title = book[1] %}
-							{% set  desc = book[2] %}
-							{% set  grade = book[-1] %}
+							$# Query the database to get a single result. this result combines reviews with books by using JOIN.
+							$ avg2 = 0
 
-							{% if desc == "" or desc == None %}
-								{% set  desc = "No description available." %}
-							{% endif %}
-							{% if author == "" or author == None %}
-								{% set  author = "Unknown Author" %}
-							{% endif %}
+							$# Query the database to get a single result. this result combines reviews with books by using JOIN.
+							$ review_list = db.query("SELECT * FROM books JOIN reviews ON books.id = reviews.book_id")
+
+							$for i in review_list:
+								$if i['book_id'] == book.id and i['rating'] != None:
+									$# find the sum of the existing rating
+									$ avg1 += i['rating']
+									$# finding the total reviews so far
+									$ avg2 += 1
+
+							$# calculating average star-rating
+							$if avg2 == 0:
+								$ avg = 0
+							$else:
+								$ avg = avg1/avg2
+
+							$# Get all of the other values for the book
+							$ author = book.author
+							$ title = book.book_title
+							$ desc = book.book_description
+							$ grade = book.grade
+
+							$# Set placeholder texts in case there is no description or author
+							$if desc == "" or desc == None:
+								$ desc = "No description available."
+							$if author == "" or author == None:
+								$ author = "Unknown Author"
+
 							<div class="col-md-4 col-sm-6 col-12">
 								<div class="card bg-dark mtop" style="min-height: 500px; box-shadow: 20px 20px #303539">
-									<form method="get" action='book_details/{{ book[0] }}'>
+									<form method="post" action='book_details'>
 										<!--hidden inputs, used for passing on data. User cannot see these-->
-										<input type="hidden" name="bookId" value="{{ book[0] }}">
-										<input type="hidden" name="bookDesc" value="{{ book[2] }}">
-										<input type="hidden" name="bookTitle" value="{{ book[1] }}">
-										<input type="hidden" name="bookAuthor" value="{{ book[-2] }}">
-										<input type="hidden" name="bookGrade" value="{{ book[-1] }}">
+										<input type="hidden" name="bookId" value="$book.id">
+										<input type="hidden" name="bookDesc" value="$book.book_description">
+										<input type="hidden" name="bookTitle" value="$book.book_title">
+										<input type="hidden" name="bookAuthor" value="$book.author">
+										<input type="hidden" name="bookGrade" value="$book.grade">
 										<div class="imgcontainer">
 											<!--Show the image-->
-											<img src="{{ book[-3] }}" alt="book cover"  style="max-width:100%; max-height: 100%;">
+											<img src="$book.image" alt="book cover"  style="max-width:100%; max-height: 100%;">
 										</div>
-										 <h5 class="card-title padjust madjust">{{ title }}</h5>
-										<p class="card-text padjust pdesc">{{ author }}</p>
-										<p class="card-text madjust padjust pdesc">{{ desc }}</p>
-
-										<span class="stars padjust madjust" data-rating="{{ avgrevs[book[1]] }}" data-num-stars="5"></span>
+										 <h5 class="card-title padjust madjust">$title</h5>
+										<p class="card-text padjust pdesc">$author</p>
+										<p class="card-text madjust padjust pdesc">$desc</p>
+										<span class="stars padjust madjust" data-rating="$avg" data-num-stars="5"></span>
 										<br>
-										<p class="card-text padjust madjust">Grades {{ grade }} and up</p>
+										<p class="card-text padjust madjust">Grades $grade and up</p>
 										<button type="submit" class="btn btn-primary bpadjust">Read More</button>
 									</form>
 								</div>
 							</div>
-						{% endfor %}
-					</div>
+						</div>
 			</div>
 		</div>
 	</body>
