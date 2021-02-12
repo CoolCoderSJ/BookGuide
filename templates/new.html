@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Set tab title -->
 		<title>New Book</title>
+
 		<!--CSS style sheet imports-->
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/blitzer/jquery-ui.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -81,6 +82,51 @@
 					    	</select>
 					</div>
 					<br>
+					<div class="form-group">
+							 <select class="custom-select" id="genre-cat" name="genre-category" onchange="genre()" required>
+								 <option value="">Select an appropriate genre category</option>
+								 <option value="fiction">Fiction</option>
+								 <option value="nonfiction">Nonfiction</option>
+							 </select>
+				 </div>
+					<br>
+					<div class="form-group">
+							 <select class="custom-select" id="genre-fic" name="genre-subcategory-fic">
+								 <option value="">Select an appropriate genre</option>
+								 {% for genre in fics %}
+								 		<option value="{{ genre[0] }}">{{ genre[1] }}</option>
+								 {% endfor %}
+							 </select>
+				 </div>
+				 <div class="form-group">
+							<select class="custom-select" id="genre-nonfic" name="genre-subcategory-nonfic">
+								<option value="">Select an appropriate genre</option>
+								{% for genre in nonfics %}
+									 <option value="{{ genre[0] }}">{{ genre[1] }}</option>
+								{% endfor %}
+							</select>
+				</div>
+					<br>
+					<script>
+						var x = document.getElementById("genre-fic");
+						var y = document.getElementById("genre-nonfic");
+						x.style.display = "none";
+						y.style.display = "none";
+						function genre () {
+							var x = document.getElementById("genre-cat");
+							var y = document.getElementById("genre-fic");
+							var z = document.getElementById("genre-nonfic");
+							if (x.value === "fiction") {
+								y.style.display = "block";
+								z.style.display = "none";
+							}
+							else if (x.value === "nonfiction") {
+								z.style.display = "block";
+								y.style.display = "none";
+							}
+						}
+					</script>
+
 					<!-- Optional picture -->
 					<div class="mb-3">
 	  				<label for="formFile" class="form-label">Add a picture of this book (Optional)</label>
@@ -94,10 +140,7 @@
 					<br>
 					<br>
 					<!-- Get only the book titles from the database -->
-					<!-- Run the JavaScript function on button click to make sure the book doesn't already exist -->
-					<script type="text/javascript">
-						var allbooks = "$allbooks"
-					</script>
+
 				 	<button class="inputadd btn btn-primary" type='submit' value='Add' class='btn btn-primary'>Add</button>
 				</form>
 			</fieldset>

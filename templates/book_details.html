@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Set tab title -->
 		<title>More About {{ bookTitle }}</title>
+
 		<!--CSS style sheet imports-->
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/blitzer/jquery-ui.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -63,6 +64,7 @@
 				  <p class="card-text">{{ bookDesc }}</p>
 
 				  <p class="card-text">Grades {{ bookGrade }} and higher</p>
+					<p class="card-text">Genre - {{ bookGenre }}</p>
 				  <br>
 					<!-- Button that will trigger the add review form modal -->
 				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
@@ -76,7 +78,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content bg-dark" style="color: white !important;">
 		    	<fieldset class="fieldset">
-				    <form method="post" action="http://localhost:1111/review" name="addform">
+				    <form method="post" action="http://localhost:5000/review" name="addform">
 				    	<input type="hidden" name="bookId" value="{{ bookId }}">
 				    	<input type="hidden" id=
 				    	"rate" name="stars" value="0">

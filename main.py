@@ -3,8 +3,16 @@ import os #Import os commands
 import sqlite3
 from werkzeug.utils import secure_filename
 from threading import Thread
+from flaskwebgui import FlaskUI
+from PyQt5.QtCore import *
+from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtGui
+from threading import Timer
+import sys
 
-app = Flask('')
+app = Flask(__name__)
+ui = FlaskUI(app, fullscreen=True)
 app.secret_key = '36b4610b69d1acc500fcc8557a3070846f1241c08c37e0d81b33abdf0afb2f0f'
 
 @app.route('/')
@@ -18,7 +26,6 @@ def index(): #Define what happens when Homepagw is visited.
     db.execute("SELECT * from reviews") #Get all reviews from database
     reviews = db.fetchall()
     db.close()
-    print("BOOKS: "+str(books), "\n\nREVIEWS: "+str(reviews))
     avgrevs = {}
 
     for book in books:
@@ -29,18 +36,27 @@ def index(): #Define what happens when Homepagw is visited.
         avg1 = 0
         avg2 = 0
         for i in review_list:
-            if i[6]:
-                if int(i[6]) == int(book[0]) and i[-1] != None:
+            if i[8]:
+                if int(i[8]) == int(book[0]) and i[-1] != 0:
                     avg1 = avg1 + i[-1]
                     avg2 = avg2 + 1
-        print(avg2)
         if avg2 == 0:
             avg = 0
         else:
             avg = avg1/avg2
-        avgrevs[book[1]] = int(avg)
-        print(avgrevs)
-    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
+            print(avg)
+        avgrevs[book[0]] = float(avg)
+    print(avgrevs)
+    print("\n\n\n\n\n"+str(review_list)+"\n\n\n\n\n")
+
+    db = conn.cursor()
+    genre_list = db.execute("SELECT * FROM books JOIN genres ON books.genre_id = genres.id").fetchall()
+    db.close()
+    genres = {}
+    for genre in genre_list:
+        collection = [genre[-2], genre[-1]]
+        genres[genre[0]] = collection
+    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
 
 @app.route('/add', methods=["POST"])
 def add(): #Define what happens when a book is added
@@ -48,6 +64,7 @@ def add(): #Define what happens when a book is added
     db = conn.cursor()
     if request.method == 'POST':
         i = request.form
+        print(i)
         qr = db.execute("SELECT * from books").fetchall()
         for book in qr:
             if book[1].lower() == i['title'].lower():
@@ -57,7 +74,12 @@ def add(): #Define what happens when a book is added
             flash("Book Title is a required field.")
             return redirect("/new")
         if i['grade'] == "":
-            flash("Appropriate Grde is a required field.")
+            flash("Appropriate Grade is a required field.")
+        if i['genre-subcategory-fic'] == '' and i['genre-subcategory-nonfic'] == '':
+            flash("Please select a genre.")
+            return redirect("/new")
+        if i['genre-subcategory-fic'] != "" and i['genre-subcategory-nonfic'] != "":
+            flash("Please select a genre from only one category.")
             return redirect("/new")
         filedir = 'static/images/books' #Directory where book images are stored
         file = request.files['myfile']
@@ -68,7 +90,11 @@ def add(): #Define what happens when a book is added
             myfilepath = filedir + '/' + request.form['title'] + "." + fileext #Define the filepath. This is the directory + the book name + file extension
             file.save(myfilepath)
         #Insert the book title, author, grade, genre, and image file path in the database
-        db.execute(f"INSERT into books (book_title, author, grade, image) VALUES ('{request.form['title']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}')")
+        if request.form['genre-category'] == "fiction":
+            sub = request.form['genre-subcategory-fic']
+        elif request.form['genre-category'] == "nonfiction":
+            sub = request.form['genre-subcategory-nonfic']
+        db.execute(f"INSERT into books (book_title, author, grade, image, genre_id) VALUES ('{request.form['title']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}')")
         conn.commit()
         # If user wants to go to the indivdual page:
         if "revnext" in request.form:
@@ -93,6 +119,7 @@ def add(): #Define what happens when a book is added
                 avg = 0
             else: #If there were star ratings, do the following -
                 avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
+            print(avg)
             bookIdstr =str(bookId) #Convert BookID to string for later use
             #Show the individual page with all of the collected values
             return redirect("/book_details/"+str(bookId))
@@ -105,7 +132,9 @@ def new(): #Define what happens when user clicks the "Add a book" button
     db = conn.cursor()
     if request.method == 'GET':
         book = db.execute("SELECT * from books").fetchall() #Get all books from database (Used to make sure book doesn't already exist)
-        return render_template("new.html", book=book) #Pass the books, db object for operations, and string object for operations to the new book form and show form.
+        fics = db.execute("SELECT * from genres WHERE type = 'fiction'").fetchall()
+        nonfics = db.execute("SELECT * from genres WHERE type = 'nonfiction'").fetchall()
+        return render_template("new.html", book=book, fics=fics, nonfics=nonfics) #Pass the books, db object for operations, and string object for operations to the new book form and show form.
 
 
 @app.route('/book_details/<id>')
@@ -142,8 +171,17 @@ def book_details(id): #Define what happens when user wants to see individual pag
             avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
         bookIdstr =str(bookId) #Convert BookID to string for later use
         #Show the individual page with all of the collected values
-        image = "http://localhost:1111/"+qr[0][3]
-        return render_template("book_details.html", book=book, bookId=bookId, bookTitle=bookTitle, bookDesc=bookDesc, bookAuthor=bookAuthor, bookGrade=bookGrade, reviews=reviews, avg=avg, db=db, bookIdstr=bookIdstr, image=image)
+        image = "http://localhost:5000/"+qr[0][3]
+        db = conn.cursor()
+        genre_list = db.execute("SELECT * FROM books JOIN genres ON books.genre_id = genres.id").fetchall()
+        db.close()
+        print("\n\nGENRES: "+str(genre_list))
+        genres = {}
+        for genre in genre_list:
+            collection = [genre[-2], genre[-1]]
+            genres[genre[0]] = collection
+        bookGenre = genres[bookId][0]
+        return render_template("book_details.html", book=book, bookId=bookId, bookTitle=bookTitle, bookDesc=bookDesc, bookAuthor=bookAuthor, bookGrade=bookGrade, reviews=reviews, avg=avg, db=db, bookIdstr=bookIdstr, image=image, bookGenre=bookGenre)
 
 @app.route('/review', methods=["POST"])
 def review(): #Define what happens when a review is submitted
@@ -181,4 +219,23 @@ def review(): #Define what happens when a review is submitted
             bookId2 = str(bookId)
             return redirect('/book_details/'+bookId2, code=303) #Reload the individual page/reviews
 
-app.run(host="0.0.0.0", port=1111)
+def ui(location):
+    qt_app = QApplication(sys.argv)
+    web = QWebEngineView()
+    web.setWindowTitle("Collaboread")
+    web.resize(900, 800)
+    scriptDir = os.path.dirname(os.path.realpath(__file__))
+    web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/books/ffff.png'))
+    web.setZoomFactor(1.5)
+    web.load(QUrl(location))
+    web.show()
+    sys.exit(qt_app.exec_())
+
+print("\n\n\nAPP RUNNING ON PORT 5000\n\n\n")
+if __name__ == "__main__":
+    #ui.run()
+    Timer(1,lambda: ui("http://127.0.0.1:5000/")).start()
+    app.run()
+
+#PYINSTALLER SCRIPT
+#pyinstaller -n Collaboread -w --add-data="static;static" --add-data="templates;templates" --add-data="collaboreadflask.db;." main.py
