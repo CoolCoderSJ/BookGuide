@@ -42,134 +42,87 @@ jQuery(document).ready(function ($) { //Again, when the oage is ready, do the fo
     //Set the value of the hidden input to the data-index
     stars.value = index;
   });
+
+
 });
 
+function Fonky() {
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
 
-//Used to identify whether either a star rating or text rating is given
-function myFunc(){
-    //Get the html element with id "rate" and set it to a variable, star (This is the star rating)
-    var star = document.getElementById("rate")
-    //Get the html element with id "reviewdesc" and set it to a variable, desc (This is the text review)
-    var desc = document.getElementById("reviewdesc")
-    //If both the star rating and text are empty, do -
-    if (star.value === "0" && desc.value === "") {
-      // Highlight the text box in red
-       desc.setAttribute("class", "form-control border border-danger");
-       //Show a tooltip asking the user to either fill in the text or star rating
-      desc.setAttribute("title", "Either fill in the stars or enter a text review.");
-      // Activate the tooltip
-      $('#reviewdesc').tooltip();
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active2");
+      var content = document.getElementsByClassName("content")[0];
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+}
+function search(field, filter) {
+  // Declare variables
+  var filter, ul, li, a, i, txtValue;
+  ul = document.getElementById("container");
+  li = ul.getElementsByClassName('col-md-4');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByClassName(field)[0];
+    txtValue = a.textContent || a.innerText;
+    if (filter.value === "") {
+      li[i].setAttribute("style", "display: ''; max-width: 33.333333%;")
     }
-    //If either one is filled in...
-    else {
-      var frm = document.getElementsByName('addform')[0];
-      frm.submit(); // Submit the form
-      frm.reset();  // Reset all form data
+    else if (txtValue.toUpperCase().indexOf(filter) > -1 && li[i].style.display != "none") {
+      li[i].setAttribute("style", "display: ''; max-width: 100%;")
+    } else {
+      li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
     }
+  }
 }
 
-//This is used to decode HTML codes, for example - &quot; is a quotation mark
-function decodeHtml(html) {
-  //Create an element whose value is the decoded html
-    var txt = document.createElement("textarea");
-    //Set the element to the html given
-    txt.innerHTML = html;
-    //return the value of the html
-    return txt.value;
+function starsearch() {
+  // Declare variables
+  var filter, ul, li, a, i, txtValue;
+  filter = document.getElementById("starsearch").value.toUpperCase();
+  ul = document.getElementById("container");
+  li = ul.getElementsByClassName('col-md-4');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByClassName("star")[0];
+    txtValue = a.value;
+    if (filter.value == "") {
+      li[i].setAttribute("style", "display: ''; max-width: 33.333333%;")
+    }
+    else if (Number(txtValue.toUpperCase()) >= Number(filter) && (txtValue != "")) {
+      li[i].setAttribute("style", "display: ''; max-width: 100%;")
+    } else {
+      li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
+    }
+  }
 }
 
-//This function checks to make sure that the book is not already in the database
-function verifyexistingbook(allbooks, thebook) {
-  //Decode html from the database book titles
-  allbooks3 = decodeHtml(allbooks)
-  //Passing a python list to javascript makes it a string, so we have to convert it to a js array
-  allbooks4 = allbooks3.split(",")
-  //This will be used to lower titles
-  allbooks2 = [];
-  //Get num of books
-  bLen = allbooks4.length;
-  //There are some issues converting python lists to js arrays, so convert inputted title "thebook", to a title with quotes around it
-  thebook1 = " '"+thebook+"'"
-  //Do the following for each book in the array
-  for (i = 0; i < bLen; i++){
-    //If the book is the first book...
-    if (i==0){
-      //Remove the "[" that comes when converting
-      var str3 = allbooks4[i].split("[")[-1]
-      var str = "'"+str3
-      //Add the final result to the list of processed books
-      allbooks2.push(str.toLowerCase())
+function ficsearch() {
+  // Declare variables
+  var filter, ul, li, a, i, txtValue;
+  filter = document.getElementById("ficsearch").value.toUpperCase();
+  ul = document.getElementById("container");
+  li = ul.getElementsByClassName('col-md-4');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByClassName("ficnonfic")[0];
+    txtValue = a.value;
+    if (filter == "") {
+      li[i].setAttribute("style", "display: ''; max-width: 33.333333%;")
     }
-    //If its the last book...
-    else if(i==bLen-1) {
-      //Remove the "]" that comes when converting
-      var str1 = allbooks4[i].split("]")[-1]
-      var str = "'"+str1
-      //add to the list of processed books
-      allbooks2.push(str.toLowerCase())
+    else if (filter === txtValue.toUpperCase()) {
+      li[i].setAttribute("style", "display: ''; max-width: 100%;")
+    } else {
+      li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
     }
-    //Otherwise...
-    else {
-      var str = allbooks4[i]
-      //Add to the list of processed books
-      allbooks2.push(str.toLowerCase())
   }
-
-  }
-  //If book already exists...
-  if (allbooks2.includes(thebook1)){
-    //Highlight the title box in red
-    document.getElementById("title").setAttribute("class", "form-control border border-danger");
-    //Set the content of the tooltip
-    document.getElementById("title").setAttribute("title", "This book already exists.");
-    //Initalize the tooltip
-    $('#title').tooltip();
-  }
-  //If the value of the grade dropdown is empty...
-   else if (document.getElementById("grade").value === ""){
-     //Highlight the box in red
-    document.getElementById("grade").setAttribute("class", "custom-select border border-danger");
-    //Set the contents of the tooltip
-    document.getElementById("grade").setAttribute("title", "Please Select an Item");
-    //Initalize the tooltip
-    $('#grade').tooltip();
-  }
-
-  //Same thing, but if the value is null
-   else if (document.getElementById("grade").value === null){
-     //Highlight the box in red
-    document.getElementById("grade").setAttribute("class", "custom-select border border-danger");
-    //Set the contents of the tooltip
-    document.getElementById("grade").setAttribute("title", "Please Select an Item");
-    //Initalize the tooltip
-    $('#grade').tooltip();
- }
- //If the value of the title box is empty...
-  else if (document.getElementById("title").value === ""){
-    //Highlight the box in red
-   document.getElementById("title").setAttribute("class", "custom-select border border-danger");
-   //Set the contents of the tooltip
-   document.getElementById("title").setAttribute("title", "Please enter a title");
-   //Initalize the tooltip
-   $('#title').tooltip();
- }
-
- //If the value of the title box is empty...
-  else if (document.getElementById("title").value === null){
-    //Highlight the box in red
-   document.getElementById("title").setAttribute("class", "custom-select border border-danger");
-   //Set the contents of the tooltip
-   document.getElementById("title").setAttribute("title", "Please enter a title");
-   //Initalize the tooltip
-   $('#title').tooltip();
- }
-
-   //If all checks are met...
-   else {
-    //Get the form
-    var frm = document.getElementById('newbook');
-    frm.submit(); // Submit the form
-    frm.reset();  // Reset all form data
-   }
-
 }

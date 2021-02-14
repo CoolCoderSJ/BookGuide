@@ -22,6 +22,9 @@ def index(): #Define what happens when Homepagw is visited.
     db.execute("SELECT * from books") #Get all books from database
     books = db.fetchall()
     db.close()
+    print(type(books))
+    books.reverse()
+    print(type(books))
     db = conn.cursor()
     db.execute("SELECT * from reviews") #Get all reviews from database
     reviews = db.fetchall()
@@ -45,7 +48,7 @@ def index(): #Define what happens when Homepagw is visited.
         else:
             avg = avg1/avg2
             print(avg)
-        avgrevs[book[0]] = float(avg)
+        avgrevs[book[0]] = [float(avg), round(float(avg))]
     print(avgrevs)
     print("\n\n\n\n\n"+str(review_list)+"\n\n\n\n\n")
 
@@ -56,7 +59,37 @@ def index(): #Define what happens when Homepagw is visited.
     for genre in genre_list:
         collection = [genre[-2], genre[-1]]
         genres[genre[0]] = collection
-    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
+    db = conn.cursor()
+    genre2 = db.execute("SELECT * FROM genres").fetchall()
+    db.close()
+    i = request.args
+    print(i)
+    if i.get("sort"):
+        if i.get("sort") == "old":
+            books.reverse()
+        elif i.get("sort") == "abc":
+            book_titles = []
+            for book in books:
+                book_titles.append(book[1])
+            book_titles.sort()
+            books2 = []
+            for title in book_titles:
+                for book in books:
+                    if book[1] == title:
+                        books2.append(book)
+            books = books2
+        elif i.get("sort") == "oldabc":
+            books.reverse()
+            book_titles = []
+            for book in books:
+                book_titles.append(book[1])
+            books2 = []
+            for title in book_titles:
+                for book in books:
+                    if book[1] == title:
+                        books2.append(book)
+            books = books2
+    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
 
 @app.route('/add', methods=["POST"])
 def add(): #Define what happens when a book is added
