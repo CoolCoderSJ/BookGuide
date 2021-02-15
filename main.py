@@ -252,6 +252,14 @@ def review(): #Define what happens when a review is submitted
             bookId2 = str(bookId)
             return redirect('/book_details/'+bookId2, code=303) #Reload the individual page/reviews
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 def ui(location):
     qt_app = QApplication(sys.argv)
     web = QWebEngineView()
