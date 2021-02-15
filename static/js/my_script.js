@@ -75,7 +75,7 @@ function search(field, filter) {
     if (filter.value === "") {
       li[i].setAttribute("style", "display: ''; max-width: 33.333333%;")
     }
-    else if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    else if (txtValue.toUpperCase().indexOf(filter) > -1 && li[i].style.display != "none") {
       li[i].setAttribute("style", "display: ''; max-width: 100%;")
     } else {
       li[i].setAttribute("style", "display: none; max-width: 33.333333%;")

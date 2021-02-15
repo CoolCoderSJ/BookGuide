@@ -25,7 +25,7 @@
 	</head>
 
 
-	<body class="body newbookpage" style="margin-bottom: 80px;">
+	<body class="body newbookpage">
 		<!-- Set the navigation bar -->
 		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Collaboread</a>
 	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
@@ -51,7 +51,7 @@
 		{% endwith %}
 		<!-- Add book form -->
 		<fieldset class="field">
-			<h5>Collaboread: Add a book</h5>
+			<legend>Add a book:</legend>
 				<form method="post" enctype="multipart/form-data" action='add' id="newbook">
 				  <div class="form-group">
 				    <label for="title">Book Name</label>
@@ -144,12 +144,5 @@
 				 	<button class="inputadd btn btn-primary" type='submit' value='Add' class='btn btn-primary'>Add</button>
 				</form>
 			</fieldset>
-			<footer class="footer mt-auto py-3 bg-dark">
-				<form class="form-inline my-2 my-lg-0">
-					<a class="nav-link" href="/about">About Us</a>
-					<a class="nav-link" href="/contact">Contact Us</a>
-					<a class="nav-link" href="/">&copy; Shuchir Jain, 2021</a>
-				</form>
-			</footer>
 	</body>
 </html>

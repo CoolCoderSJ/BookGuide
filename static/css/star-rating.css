@@ -153,10 +153,3 @@
   overflow: hidden;
   margin-left: 1200px !important;
 }
-
-.footer {
-    position: fixed;
-    height: 60px;
-    bottom: 0;
-    width: 100%;
-}
