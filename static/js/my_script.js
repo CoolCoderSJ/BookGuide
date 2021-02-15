@@ -69,6 +69,7 @@ function search(field, filter) {
   li = ul.getElementsByClassName('col-md-4');
 
   // Loop through all list items, and hide those who don't match the search query
+  count = 0;
   for (i = 0; i < li.length; i++) {
     a = li[i].getElementsByClassName(field)[0];
     txtValue = a.textContent || a.innerText;
@@ -77,10 +78,12 @@ function search(field, filter) {
     }
     else if (txtValue.toUpperCase().indexOf(filter) > -1 && li[i].style.display != "none") {
       li[i].setAttribute("style", "display: ''; max-width: 100%;")
+      count += 1;
     } else {
       li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
     }
   }
+  updatecount(count);
 }
 
 function starsearch() {
@@ -91,6 +94,7 @@ function starsearch() {
   li = ul.getElementsByClassName('col-md-4');
 
   // Loop through all list items, and hide those who don't match the search query
+  count = 0;
   for (i = 0; i < li.length; i++) {
     a = li[i].getElementsByClassName("star")[0];
     txtValue = a.value;
@@ -99,10 +103,12 @@ function starsearch() {
     }
     else if (Number(txtValue.toUpperCase()) >= Number(filter) && (txtValue != "")) {
       li[i].setAttribute("style", "display: ''; max-width: 100%;")
+      count += 1;
     } else {
       li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
     }
   }
+  updatecount(count);
 }
 
 function ficsearch() {
@@ -113,6 +119,7 @@ function ficsearch() {
   li = ul.getElementsByClassName('col-md-4');
 
   // Loop through all list items, and hide those who don't match the search query
+  count = 0;
   for (i = 0; i < li.length; i++) {
     a = li[i].getElementsByClassName("ficnonfic")[0];
     txtValue = a.value;
@@ -121,8 +128,17 @@ function ficsearch() {
     }
     else if (filter === txtValue.toUpperCase()) {
       li[i].setAttribute("style", "display: ''; max-width: 100%;")
+      count += 1;
     } else {
       li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
     }
   }
+  updatecount(count);
+}
+
+function updatecount(val) {
+  elem = document.getElementById("bookcount");
+  if (val != 0) {
+  elem.innerHTML = "Books Found: "+val;
+}
 }

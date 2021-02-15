@@ -23,11 +23,11 @@
 		<script src="static/js/my_script.js"></script>
 	</head>
 
-	<body class="body" style="padding-top: 110px" onload="Fonky()">
+	<body class="body" style="padding-top: 190px;" onload="Fonky()">
 
 
 		<!-- Set the navigation bar on top -->
-		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Collaboread</a>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: none;"> <a class="navbar-brand" href="/">Collaboread</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
 				<ul class="navbar-nav mr-auto">
@@ -44,72 +44,19 @@ manage_search
 </span></button>
 		    </form>
 		  </div>
+
 		</nav>
+
 		<div class="content">
-		<br>
 		<select class="custom-select" id="search_term">
 		 <option value="title">What to search...</option>
 		 <option value="title">Book Titles</option>
 		 <option value="desc">Book Descriptions</option>
 		 <option value="author">Book Authors</option>
 		</select>
-
-		<br>
-		<br>
-		<select class="custom-select" id="grade_search" onchange="search('grade', document.getElementById('grade_search').value.toUpperCase())">
-		 <option value="">All Grades...</option>
-		 <option value="1 ">Grades 1 and up</option>
-		 <option value="2 ">Grades 2 and up</option>
-		 <option value="3 ">Grades 3 and up</option>
-		 <option value="4 ">Grades 4 and up</option>
-		 <option value="5 ">Grades 5 and up</option>
-		 <option value="6 ">Grades 6 and up</option>
-		 <option value="7 ">Grades 7 and up</option>
-		 <option value="8 ">Grades 8 and up</option>
-		 <option value="9 ">Grades 9 and up</option>
-		 <option value="10 ">Grades 10 and up</option>
-		 <option value="11 ">Grades 11 and up</option>
-		 <option value="12 ">Grades 12 and up</option>
-		</select>
-
-		<br>
-		<br>
-		<select class="custom-select" id="genre_search" onchange="search('genre', document.getElementById('genre_search').value.toUpperCase())">
-		 <option value="">All Genres...</option>
-		 {% for genre in genre2 %}
-			 <option value="{{ genre[1] }}">{{ genre[1] }}</option>
-		 {% endfor %}
-		</select>
-		<br>
-		<br>
-		<select class="custom-select" id="ficsearch" onchange="ficsearch()">
-		 <option value="">Fiction or Nonfiction...</option>
-		 <option value="fiction">Fiction</option>
-		 <option value="nonfiction">Nonfiction</option>
-		</select>
-		<br>
-		<br>
-		<select class="custom-select" id="starsearch" onchange="starsearch()">
-		 <option value="">All Star Ratings...</option>
-		 <option value="1">Rated 1 Star and higher</option>
-		 <option value="2">Rated 2 Stars and higher</option>
-		 <option value="3">Rated 3 Stars and higher</option>
-		 <option value="4">Rated 4 Stars and higher</option>
-		 <option value="5">Rated 5 Stars and higher</option>
-		</select>
-		<br>
-		<br>
-		<form method="get" action="/" id="sortform">
-		<select class="custom-select" id="sort" name="sort" onchange="document.getElementById('sortform').submit()">
-		 <option value="new">Sort Options...</option>
-		 <option value="new">Newest to Oldest</option>
-		 <option value="old">Oldest to Newest</option>
-		 <option value="abc">Sorted Alphabetically</option>
-		</select>
-	</form>
-		</div>
-		<br>
-		<br>
+	</div>
+<br>
+<br>
 		<!--set the banner displayed on the homepage-->
 		<div class="jumbotron jumbotron-fluid" style="background: #343a40 !important; color: white;">
 		  <div class="container">
@@ -117,6 +64,64 @@ manage_search
 		    <p class="lead">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p> <!--Content of banner-->
 		  </div>
 		</div>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Filters</a>
+				<ul class="navbar-nav mr-auto">
+		      <li class="nav-item active"> </li>
+		      <li class="nav-item"> </li>
+		      <li class="nav-item"> </li>
+		    </ul>
+		    <form class="form-inline my-2 my-lg-0">
+					<select class="custom-select filter" id="grade_search" onchange="search('grade', document.getElementById('grade_search').value.toUpperCase())">
+					 <option value="">All Grades...</option>
+					 <option value="1 ">Grades 1 and up</option>
+					 <option value="2 ">Grades 2 and up</option>
+					 <option value="3 ">Grades 3 and up</option>
+					 <option value="4 ">Grades 4 and up</option>
+					 <option value="5 ">Grades 5 and up</option>
+					 <option value="6 ">Grades 6 and up</option>
+					 <option value="7 ">Grades 7 and up</option>
+					 <option value="8 ">Grades 8 and up</option>
+					 <option value="9 ">Grades 9 and up</option>
+					 <option value="10 ">Grades 10 and up</option>
+					 <option value="11 ">Grades 11 and up</option>
+					 <option value="12 ">Grades 12 and up</option>
+					</select>
+					<select class="custom-select filter" id="genre_search" onchange="search('genre', document.getElementById('genre_search').value.toUpperCase())">
+					 <option value="">All Genres...</option>
+					 {% for genre in genre2 %}
+						 <option value="{{ genre[1] }}">{{ genre[1] }}</option>
+					 {% endfor %}
+					</select>
+					<select class="custom-select filter" id="ficsearch" onchange="ficsearch()">
+					 <option value="">Fiction or Nonfiction...</option>
+					 <option value="fiction">Fiction</option>
+					 <option value="nonfiction">Nonfiction</option>
+					</select>
+					<select class="custom-select filter" id="starsearch" onchange="starsearch()">
+					 <option value="">All Star Ratings...</option>
+					 <option value="1">Rated 1 Star and higher</option>
+					 <option value="2">Rated 2 Stars and higher</option>
+					 <option value="3">Rated 3 Stars and higher</option>
+					 <option value="4">Rated 4 Stars and higher</option>
+					 <option value="5">Rated 5 Stars and higher</option>
+					</select>
+		    </form>
+		  </div>
+			<form method="get" action="/" id="sortform" class="filter">
+			<select class="custom-select" id="sort" name="sort" onchange="document.getElementById('sortform').submit()">
+			 <option value="new">Sort Options...</option>
+			 <option value="new">Newest to Oldest</option>
+			 <option value="old">Oldest to Newest</option>
+			 <option value="abc">Sorted Alphabetically</option>
+			</select>
+		</form>
+		<a href="/" class="nav-link filter">Reset Filters</a>
+		</nav>
+		<br>
+		<br>
+		<h5 id="bookcount" style="padding-left: 30px;"></h5>
+		
+		<br>
 		<!-- A container for all of the cards -->
 		 <ul class="container" id="container">
 			<div class="row">
@@ -161,5 +166,12 @@ manage_search
 					</div>
 			</div>
 		</ul>
+		<footer class="footer mt-auto py-3 bg-dark">
+			<form class="form-inline my-2 my-lg-0 text-muted">
+				<a class="nav-link" href="/about">About Us</a>
+				<a class="nav-link" href="/contact">Contact Us</a>
+				<a class="nav-link" href="/">&copy; Shuchir Jain, 2021</a>
+			</form>
+		</footer>
 	</body>
 </html>

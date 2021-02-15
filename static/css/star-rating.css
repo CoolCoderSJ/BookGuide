@@ -151,5 +151,51 @@
 .content {
   display: none;
   overflow: hidden;
-  margin-left: 1200px !important;
+}
+
+.nav-link {
+  color: white;
+}
+
+.filter {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.footer {
+    position: fixed;
+    height: 60px;
+    bottom: 0;
+    width: 100%;
+}
+
+body {
+  margin-bottom: 70px;
+}
+
+.myInput {
+  color: white !important;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0 25px;
+  height: 50px;
+  font-size: 18px;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: #f1f1f1;
+}
+
+.closebtn {
+  padding-left: 10px;
+  color: #888;
+  font-weight: bold;
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.closebtn:hover {
+  color: #000;
 }
