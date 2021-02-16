@@ -64,7 +64,7 @@ function Fonky() {
 }
 function search(field, filter) {
   // Declare variables
-  var filter, ul, li, a, i, txtValue;
+  var ul, li, a, i, txtValue;
   ul = document.getElementById("container");
   li = ul.getElementsByClassName('col-md-4');
 
@@ -73,11 +73,11 @@ function search(field, filter) {
   for (i = 0; i < li.length; i++) {
     a = li[i].getElementsByClassName(field)[0];
     txtValue = a.textContent || a.innerText;
-    if (filter.value === "") {
-      li[i].setAttribute("style", "display: ''; max-width: 33.333333%;")
+    if (filter.value === '') {
+      li[i].setAttribute("style", "display: 'block'; max-width: 33.333333%;")
     }
-    else if (txtValue.toUpperCase().indexOf(filter) > -1 && li[i].style.display != "none") {
-      li[i].setAttribute("style", "display: ''; max-width: 100%;")
+    else if (txtValue.toUpperCase().indexOf(filter) > -1 && li[i].style.display != 'none') {
+      li[i].setAttribute("style", "display: 'block'; max-width: 100%;")
       count += 1;
     } else {
       li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
@@ -86,59 +86,16 @@ function search(field, filter) {
   updatecount(count);
 }
 
-function starsearch() {
-  // Declare variables
-  var filter, ul, li, a, i, txtValue;
-  filter = document.getElementById("starsearch").value.toUpperCase();
-  ul = document.getElementById("container");
-  li = ul.getElementsByClassName('col-md-4');
-
-  // Loop through all list items, and hide those who don't match the search query
-  count = 0;
-  for (i = 0; i < li.length; i++) {
-    a = li[i].getElementsByClassName("star")[0];
-    txtValue = a.value;
-    if (filter.value == "") {
-      li[i].setAttribute("style", "display: ''; max-width: 33.333333%;")
-    }
-    else if (Number(txtValue.toUpperCase()) >= Number(filter) && (txtValue != "")) {
-      li[i].setAttribute("style", "display: ''; max-width: 100%;")
-      count += 1;
-    } else {
-      li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
-    }
-  }
-  updatecount(count);
-}
-
-function ficsearch() {
-  // Declare variables
-  var filter, ul, li, a, i, txtValue;
-  filter = document.getElementById("ficsearch").value.toUpperCase();
-  ul = document.getElementById("container");
-  li = ul.getElementsByClassName('col-md-4');
-
-  // Loop through all list items, and hide those who don't match the search query
-  count = 0;
-  for (i = 0; i < li.length; i++) {
-    a = li[i].getElementsByClassName("ficnonfic")[0];
-    txtValue = a.value;
-    if (filter == "") {
-      li[i].setAttribute("style", "display: ''; max-width: 33.333333%;")
-    }
-    else if (filter === txtValue.toUpperCase()) {
-      li[i].setAttribute("style", "display: ''; max-width: 100%;")
-      count += 1;
-    } else {
-      li[i].setAttribute("style", "display: none; max-width: 33.333333%;")
-    }
-  }
-  updatecount(count);
-}
 
 function updatecount(val) {
   elem = document.getElementById("bookcount");
   if (val != 0) {
   elem.innerHTML = "Books Found: "+val;
+}
+}
+
+function filter(filters) {
+  for (var i = 0; i < filters.length; i++) {
+    document.getElementsByName(filters['data'][i]['name'])[0].value = filters['data'][i]['val'];
 }
 }

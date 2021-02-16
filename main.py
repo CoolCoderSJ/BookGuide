@@ -17,7 +17,7 @@ app.secret_key = '36b4610b69d1acc500fcc8557a3070846f1241c08c37e0d81b33abdf0afb2f
 
 @app.route('/')
 def index(): #Define what happens when Homepagw is visited.
-    conn = sqlite3.connect("collaboreadflask.db")
+    conn = sqlite3.connect("database.db")
     db = conn.cursor()
     db.execute("SELECT * from books") #Get all books from database
     books = db.fetchall()
@@ -29,6 +29,65 @@ def index(): #Define what happens when Homepagw is visited.
     db.execute("SELECT * from reviews") #Get all reviews from database
     reviews = db.fetchall()
     db.close()
+
+    i = request.args
+    if i.get("genre"):
+        genre = f"genres.name = '{i.get('genre')}'"
+    else:
+        genre = ""
+
+    if i.get("grade"):
+        grade = "books.grade >= "+i.get("grade")
+    else:
+        grade = ""
+
+    if i.get("ficsearch"):
+        ficsearch = f"genres.type = '{i.get('ficsearch')}'"
+    else:
+        ficsearch = ""
+
+    if i.get("star"):
+        star = "reviews.rating >= "+i.get("star")
+    else:
+        star = ""
+    filts = [genre, grade, ficsearch, star]
+    print(filts)
+    print(len(filts))
+    filts2 = []
+    for item in filts:
+        print("ITEM: "+item)
+        if item == '':
+            filts2.append(item)
+            print(filts)
+    for item in filts2:
+        filts.remove(item)
+    print(len(filts))
+    filter_query = ""
+    if len(filts) > 1:
+        filter_query += " AND ".join(filts)
+    else:
+        filter_query += "".join(filts)
+    print(filter_query)
+    if genre or grade or ficsearch or star:
+        db = conn.cursor()
+        query = db.execute(f"SELECT * from books LEFT OUTER JOIN reviews ON books.id = reviews.book_id JOIN genres ON books.genre_id = genres.id WHERE {filter_query}").fetchall()
+        print(query)
+        db.close()
+        bookids = []
+        books2 = []
+        for result in query:
+            if result[0] not in bookids:
+                bookids.append(result[0])
+                books2.append(result)
+
+        books2.reverse()
+        books = books2
+        bookcount = "Books Found: "+str(len(books))
+        filters = [[{"name": "genre", "value": i.get("genre")}], [{"name": "grade", "val": i.get("grade")}], [{"name": "ficnonfic", "val": i.get("ficsearch")}], [{"name": "star", "val": i.get("star")}]]
+    else:
+        filters = []
+        bookcount = ""
+
     avgrevs = {}
 
     for book in books:
@@ -89,11 +148,12 @@ def index(): #Define what happens when Homepagw is visited.
                     if book[1] == title:
                         books2.append(book)
             books = books2
-    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
+    print(i)
+    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2, filters=filters, bookcount=bookcount) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
 
 @app.route('/add', methods=["POST"])
 def add(): #Define what happens when a book is added
-    conn = sqlite3.connect("collaboreadflask.db")
+    conn = sqlite3.connect("database.db")
     db = conn.cursor()
     if request.method == 'POST':
         i = request.form
@@ -161,7 +221,7 @@ def add(): #Define what happens when a book is added
 
 @app.route('/new', methods=["GET"])
 def new(): #Define what happens when user clicks the "Add a book" button
-    conn = sqlite3.connect("collaboreadflask.db")
+    conn = sqlite3.connect("database.db")
     db = conn.cursor()
     if request.method == 'GET':
         book = db.execute("SELECT * from books").fetchall() #Get all books from database (Used to make sure book doesn't already exist)
@@ -172,7 +232,7 @@ def new(): #Define what happens when user clicks the "Add a book" button
 
 @app.route('/book_details/<id>')
 def book_details(id): #Define what happens when user wants to see individual page
-    conn = sqlite3.connect("collaboreadflask.db")
+    conn = sqlite3.connect("database.db")
     db = conn.cursor()
     if request.method == 'GET':
         db = conn.cursor()
@@ -218,7 +278,7 @@ def book_details(id): #Define what happens when user wants to see individual pag
 
 @app.route('/review', methods=["POST"])
 def review(): #Define what happens when a review is submitted
-    conn = sqlite3.connect("collaboreadflask.db")
+    conn = sqlite3.connect("database.db")
     db = conn.cursor()
     if request.method == 'POST':
         book = db.execute("SELECT * from books").fetchall() #Get all books from database from database
@@ -263,7 +323,7 @@ def contact():
 def ui(location):
     qt_app = QApplication(sys.argv)
     web = QWebEngineView()
-    web.setWindowTitle("Collaboread")
+    web.setWindowTitle("Collabread")
     web.resize(900, 800)
     scriptDir = os.path.dirname(os.path.realpath(__file__))
     web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/books/ffff.png'))
@@ -279,4 +339,4 @@ if __name__ == "__main__":
     app.run()
 
 #PYINSTALLER SCRIPT
-#pyinstaller -n Collaboread -w --add-data="static;static" --add-data="templates;templates" --add-data="collaboreadflask.db;." main.py
+#pyinstaller -n Collabread -w --add-data="static;static" --add-data="templates;templates" --add-data="Collabreadflask.db;." main.py

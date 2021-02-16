@@ -21,13 +21,15 @@
 		<script src="static/js/rating.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
 		<script src="static/js/my_script.js"></script>
+		{% for filter in filters %}
+		{% endfor %}
 	</head>
 
 	<body class="body" style="padding-top: 190px;" onload="Fonky()">
 
 
 		<!-- Set the navigation bar on top -->
-		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: none;"> <a class="navbar-brand" href="/">Collaboread</a>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: none;"> <a class="navbar-brand" href="/">Collabread</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
 				<ul class="navbar-nav mr-auto">
@@ -38,7 +40,7 @@
 		    <form class="form-inline my-2 my-lg-0">
 					<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 					<a class="nav-link" href="/new">Add book</a>
-					<input type="text" id="myInput" class="form-control bg-dark" onkeyup="search(document.getElementById('search_term').value, document.getElementById('myInput').value.toUpperCase())" placeholder="Search..." style="border: none;">
+					<input type="text" id="myInput" class="form-control bg-dark" onkeyup="search(document.getElementById('search_term').value, document.getElementById('myInput').value.toUpperCase())" placeholder="Search..." style="border: none; color: white;">
 					<button type="button" class="collapsible bg-dark"><span class="material-icons">
 manage_search
 </span></button>
@@ -61,43 +63,43 @@ manage_search
 		<div class="jumbotron jumbotron-fluid" style="background: #343a40 !important; color: white;">
 		  <div class="container">
 		    <h1 class="display-4">Hello!</h1> <!--The title of the banner-->
-		    <p class="lead">Welcome to Collaboread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p> <!--Content of banner-->
+		    <p class="lead">Welcome to Collabread! Here, you can review books to help others choose a great book next time they can't find something interesting to read. You can choose an existing book, or you can add your own.</p> <!--Content of banner-->
 		  </div>
 		</div>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/">Filters</a>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/"></a>
 				<ul class="navbar-nav mr-auto">
 		      <li class="nav-item active"> </li>
 		      <li class="nav-item"> </li>
 		      <li class="nav-item"> </li>
 		    </ul>
-		    <form class="form-inline my-2 my-lg-0">
-					<select class="custom-select filter" id="grade_search" onchange="search('grade', document.getElementById('grade_search').value.toUpperCase())">
+		    <form class="form-inline my-2 my-lg-0" method="get" action="/" id="filterform">
+					<select class="custom-select filter" id="grade_search" name="grade">
 					 <option value="">All Grades...</option>
-					 <option value="1 ">Grades 1 and up</option>
-					 <option value="2 ">Grades 2 and up</option>
-					 <option value="3 ">Grades 3 and up</option>
-					 <option value="4 ">Grades 4 and up</option>
-					 <option value="5 ">Grades 5 and up</option>
-					 <option value="6 ">Grades 6 and up</option>
-					 <option value="7 ">Grades 7 and up</option>
-					 <option value="8 ">Grades 8 and up</option>
-					 <option value="9 ">Grades 9 and up</option>
-					 <option value="10 ">Grades 10 and up</option>
-					 <option value="11 ">Grades 11 and up</option>
-					 <option value="12 ">Grades 12 and up</option>
+					 <option value="1">Grades 1 and up</option>
+					 <option value="2">Grades 2 and up</option>
+					 <option value="3">Grades 3 and up</option>
+					 <option value="4">Grades 4 and up</option>
+					 <option value="5">Grades 5 and up</option>
+					 <option value="6">Grades 6 and up</option>
+					 <option value="7">Grades 7 and up</option>
+					 <option value="8">Grades 8 and up</option>
+					 <option value="9">Grades 9 and up</option>
+					 <option value="10">Grades 10 and up</option>
+					 <option value="11">Grades 11 and up</option>
+					 <option value="12">Grades 12 and up</option>
 					</select>
-					<select class="custom-select filter" id="genre_search" onchange="search('genre', document.getElementById('genre_search').value.toUpperCase())">
+					<select class="custom-select filter" id="genre_search" name="genre">
 					 <option value="">All Genres...</option>
 					 {% for genre in genre2 %}
-						 <option value="{{ genre[1] }}">{{ genre[1] }}</option>
+						 <option value="{{ genre[1] }}" name="genre[0]">{{ genre[1] }}</option>
 					 {% endfor %}
 					</select>
-					<select class="custom-select filter" id="ficsearch" onchange="ficsearch()">
+					<select class="custom-select filter" id="ficsearch" name="ficsearch">
 					 <option value="">Fiction or Nonfiction...</option>
 					 <option value="fiction">Fiction</option>
 					 <option value="nonfiction">Nonfiction</option>
 					</select>
-					<select class="custom-select filter" id="starsearch" onchange="starsearch()">
+					<select class="custom-select filter" id="starsearch" name="star">
 					 <option value="">All Star Ratings...</option>
 					 <option value="1">Rated 1 Star and higher</option>
 					 <option value="2">Rated 2 Stars and higher</option>
@@ -105,22 +107,20 @@ manage_search
 					 <option value="4">Rated 4 Stars and higher</option>
 					 <option value="5">Rated 5 Stars and higher</option>
 					</select>
-		    </form>
 		  </div>
-			<form method="get" action="/" id="sortform" class="filter">
-			<select class="custom-select" id="sort" name="sort" onchange="document.getElementById('sortform').submit()">
+			<select class="custom-select" id="sort" name="sort">
 			 <option value="new">Sort Options...</option>
 			 <option value="new">Newest to Oldest</option>
 			 <option value="old">Oldest to Newest</option>
 			 <option value="abc">Sorted Alphabetically</option>
 			</select>
+			<button type="submit" class="btn btn-link filter nav-link">Filter</button>
 		</form>
-		<a href="/" class="nav-link filter">Reset Filters</a>
 		</nav>
 		<br>
 		<br>
-		<h5 id="bookcount" style="padding-left: 30px;"></h5>
-		
+		<h5 id="bookcount" style="padding-left: 30px;">{{ bookcount }}</h5>
+
 		<br>
 		<!-- A container for all of the cards -->
 		 <ul class="container" id="container">
@@ -149,6 +149,9 @@ manage_search
 											<img src="{{ book[3] }}" alt="book cover"  style="max-width:100%; max-height: 100%;">
 										</div>
 										<input type="hidden" value="{{ avgrevs[book[0]][1] }}" class="star">
+										<input type="hidden" value="{{ grade }}" class="grade">
+										<input type="hidden" value="{{ genre }}" class="genre">
+										<input type="hidden" value="{{ genres[book[0]][1] }}" class="ficnonfic">
 										<input type="hidden" class="ficnonfic" value="{{ genres[book[0]][1] }}">
 										<h5 class="card-title padjust madjust title">{{ title }}</h5>
 										<p class="card-text padjust pdesc author">{{ author }}</p>
@@ -156,7 +159,7 @@ manage_search
 
 										<span class="stars padjust madjust" data-rating="{{ avgrevs[book[0]][0] }}" data-num-stars="5"></span>
 										<br>
-										<p class="card-text padjust madjust grade">Grades {{ grade }} and up</p>
+										<p class="card-text padjust madjust">Grades {{ grade }} and up</p>
 										<p class="card-text padjust madjust genre">Genre - {{ genre }}</p>
 										<button type="submit" class="btn btn-primary bpadjust">Read More</button>
 									</form>

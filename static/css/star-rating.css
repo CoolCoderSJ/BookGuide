@@ -199,3 +199,11 @@ body {
 .closebtn:hover {
   color: #000;
 }
+
+/* .custom-select {
+  background: none;
+} */
+
+.col-md-4 {
+  max-width: 100%;
+}
