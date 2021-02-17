@@ -361,7 +361,7 @@ def ui(location):
     web.resize(900, 800)
     scriptDir = os.path.dirname(os.path.realpath(__file__))
     web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/images/brandlogo.png'))
-    web.setZoomFactor(1.5)
+    web.setZoomFactor(1)
     web.load(QUrl(location))
     web.show()
     sys.exit(qt_app.exec_())
@@ -370,7 +370,7 @@ print("\n\n\nAPP RUNNING ON PORT 5000\n\n\n")
 if __name__ == "__main__":
     #ui.run()
     Timer(1,lambda: ui("http://127.0.0.1:5000/")).start()
-    app.run()
+    app.run(debug=True)
 
 #PYINSTALLER SCRIPT
 #pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="database.db;." main.py
