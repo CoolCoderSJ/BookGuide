@@ -340,7 +340,7 @@ def contact():
 def ui(location):
     qt_app = QApplication(sys.argv)
     web = QWebEngineView()
-    web.setWindowTitle("Collabread")
+    web.setWindowTitle("BookGuide")
     web.resize(900, 800)
     scriptDir = os.path.dirname(os.path.realpath(__file__))
     web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/books/ffff.png'))
@@ -356,4 +356,4 @@ if __name__ == "__main__":
     app.run()
 
 #PYINSTALLER SCRIPT
-#pyinstaller -n Collabread -w --add-data="static;static" --add-data="templates;templates" --add-data="Collabreadflask.db;." main.py
+#pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="BookGuideflask.db;." main.py
