@@ -79,7 +79,11 @@
 }
 
 .body {
-  background: #2b2e32 !important; color: white;
+  background-image: url('http://localhost:5000/static/images/logo.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  color: white;
 } /* This is to adjust the color scheme */
 
 /*Adjusting the navbar's colors*/
@@ -206,4 +210,9 @@ body {
 
 .col-md-4 {
   max-width: 100%;
+}
+
+.filter {
+  color: white;
+  border: none;
 }

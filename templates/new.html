@@ -54,18 +54,18 @@
 			<h5>Add a book</h5>
 				<form method="post" enctype="multipart/form-data" action='add' id="newbook">
 				  <div class="form-group">
-				    <label for="title">Book Name</label>
-				    <input type="text" class="form-control inputadd" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom" required>
+				    <label for="title" style="color: black;">Book Name</label>
+				    <input type="text" class="form-control inputadd" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom"  style="color: white;" required>
 				  	<div class="form-group">
 				  		<br>
-					    <label for="author">Author</label>
-					    <input type="text" class="form-control inputadd" id="author" name="author" placeholder="Enter Author" >
+					    <label for="author" style="color: black;">Author</label>
+					    <input type="text" class="form-control inputadd" id="author" name="author" style="color: white;" placeholder="Enter Author" >
 					  </div>
 					 </div>
 					 <br>
 					 <!-- Grades dropdown -->
 					 <div class="form-group">
-					    	<select class="custom-select" id="grade" name="grade" required>
+					    	<select class="custom-select bg-dark" id="grade" name="grade" style="color: white;" required>
 						      <option value="">Select an appropriate grade level</option>
 						      <option value="1">Grade 1 and up</option>
 						      <option value="2">Grade 2 and up</option>
@@ -83,7 +83,7 @@
 					</div>
 					<br>
 					<div class="form-group">
-							 <select class="custom-select" id="genre-cat" name="genre-category" onchange="genre()" required>
+							 <select class="custom-select bg-dark" id="genre-cat" name="genre-category" style="color: white;" onchange="genre()" required>
 								 <option value="">Select an appropriate genre category</option>
 								 <option value="fiction">Fiction</option>
 								 <option value="nonfiction">Nonfiction</option>
@@ -91,7 +91,7 @@
 				 </div>
 					<br>
 					<div class="form-group">
-							 <select class="custom-select" id="genre-fic" name="genre-subcategory-fic">
+							 <select class="custom-select bg-dark" id="genre-fic" name="genre-subcategory-fic" style="color: white;">
 								 <option value="">Select an appropriate genre</option>
 								 {% for genre in fics %}
 								 		<option value="{{ genre[0] }}">{{ genre[1] }}</option>
@@ -99,7 +99,7 @@
 							 </select>
 				 </div>
 				 <div class="form-group">
-							<select class="custom-select" id="genre-nonfic" name="genre-subcategory-nonfic">
+							<select class="custom-select bg-dark" id="genre-nonfic" name="genre-subcategory-nonfic" style="color: white;">
 								<option value="">Select an appropriate genre</option>
 								{% for genre in nonfics %}
 									 <option value="{{ genre[0] }}">{{ genre[1] }}</option>
@@ -129,13 +129,13 @@
 
 					<!-- Optional picture -->
 					<div class="mb-3">
-	  				<label for="formFile" class="form-label">Add a picture of this book (Optional)</label>
+	  				<label for="formFile" class="form-label" style="color: black;">Add a picture of this book (Optional)</label>
 	  				<input type="file" class="form-control inputadd" name="myfile" id="formFile">
 					</div>
 					<br>
 				  <div class="custom-control custom-checkbox">
 	  				<input type="checkbox" class="custom-control-input inputadd" id="customCheck1" name="revnext">
-	  				<label class="custom-control-label" for="customCheck1">I want to review this book next.</label>
+	  				<label class="custom-control-label" for="customCheck1" style="color: black;">I want to review this book next.</label>
 					</div>
 					<br>
 					<br>

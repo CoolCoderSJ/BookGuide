@@ -73,7 +73,7 @@ function search(field, filter) {
   for (i = 0; i < li.length; i++) {
     a = li[i].getElementsByClassName(field)[0];
     txtValue = a.textContent || a.innerText;
-    if (filter.value === '') {
+    if (filter === '') {
       li[i].setAttribute("style", "display: 'block'; max-width: 33.333333%;")
     }
     else if (txtValue.toUpperCase().indexOf(filter) > -1 && li[i].style.display != 'none') {

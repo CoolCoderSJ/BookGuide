@@ -67,6 +67,7 @@ def index(): #Define what happens when Homepagw is visited.
         filter_query += " AND ".join(filts)
     else:
         filter_query += "".join(filts)
+
     print(filter_query)
     if genre or grade or ficsearch or star:
         db = conn.cursor()
@@ -83,10 +84,27 @@ def index(): #Define what happens when Homepagw is visited.
         books2.reverse()
         books = books2
         bookcount = "Books Found: "+str(len(books))
-        filters = [[{"name": "genre", "value": i.get("genre")}], [{"name": "grade", "val": i.get("grade")}], [{"name": "ficnonfic", "val": i.get("ficsearch")}], [{"name": "star", "val": i.get("star")}]]
+        filters = [{"name": "Grade", "val": i.get("grade")}, {"name": "Genre", "val": i.get("genre")}, {"name": "Fic vs. Nonfic", "val": i.get("ficsearch")}, {"name": "Star Rating", "val": i.get("star")}]
+        filters2 = []
+        for item in filters:
+            print(item)
+            if item['val'] == "":
+                filters2.append(item)
+        for item in filters2:
+            filters.remove(item)
+
+        if len(filters) > 1:
+            x = " / "
+        else:
+            x = ""
+
+        breadcrumb = ""
+        for filter in filters:
+            breadcrumb += filter['name'] + ": " + filter['val'] + x
     else:
         filters = []
         bookcount = ""
+        breadcrumb = "Showing all books"
 
     avgrevs = {}
 
@@ -109,7 +127,6 @@ def index(): #Define what happens when Homepagw is visited.
             print(avg)
         avgrevs[book[0]] = [float(avg), round(float(avg))]
     print(avgrevs)
-    print("\n\n\n\n\n"+str(review_list)+"\n\n\n\n\n")
 
     db = conn.cursor()
     genre_list = db.execute("SELECT * FROM books JOIN genres ON books.genre_id = genres.id").fetchall()
@@ -149,7 +166,7 @@ def index(): #Define what happens when Homepagw is visited.
                         books2.append(book)
             books = books2
     print(i)
-    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2, filters=filters, bookcount=bookcount) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
+    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2, filters=filters, bookcount=bookcount, breadcrumb=breadcrumb) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
 
 @app.route('/add', methods=["POST"])
 def add(): #Define what happens when a book is added
