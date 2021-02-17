@@ -10,10 +10,18 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtGui
 from threading import Timer
 import sys
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 ui = FlaskUI(app, fullscreen=True)
 app.secret_key = '36b4610b69d1acc500fcc8557a3070846f1241c08c37e0d81b33abdf0afb2f0f'
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'prachijain.test@gmail.com'
+app.config['MAIL_PASSWORD'] = 'shuchir123'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 @app.route('/')
 def index(): #Define what happens when Homepagw is visited.
@@ -335,9 +343,16 @@ def review(): #Define what happens when a review is submitted
 def about():
     return render_template("about.html")
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html")
+    if request.method == "GET":
+        return render_template("contact.html")
+    elif request.method == "POST":
+        msg = Message("BookGuide Contact Form Filled", sender="prachijain.test@gmail.com", recipients=['prachijain.test@gmail.com'])
+        msg.body = f"SENDER: {request.form['name']}\n\nEMAIL: {request.form['email']}\n\n\nCONTENT:\n{request.form['content']}"
+        mail.send(msg)
+        flash("Successfully Submitted!")
+        return redirect("/contact", code=303)
 
 def ui(location):
     qt_app = QApplication(sys.argv)
@@ -358,4 +373,4 @@ if __name__ == "__main__":
     app.run()
 
 #PYINSTALLER SCRIPT
-#pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="BookGuideflask.db;." main.py
+#pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="database.db;." main.py
