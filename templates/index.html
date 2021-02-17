@@ -23,11 +23,13 @@
 		<script src="static/js/my_script.js"></script>
 	</head>
 
-	<body class="body" style="padding-top: 190px;" onload="Fonky()">
+	<body class="body" style="padding-top: 110px;" onload="Fonky()">
 
 
 		<!-- Set the navigation bar on top -->
-		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: none;"> <a class="navbar-brand" href="/">BookGuide</a>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: none;">
+			 <img src="static/images/brandlogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+			 <a class="navbar-brand" href="/">BookGuide</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
 				<ul class="navbar-nav mr-auto">
@@ -66,7 +68,7 @@ manage_search
 		</div>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/"></a>
 		    <form class="form-inline my-2 my-lg-0" method="get" action="/" id="filterform">
-					<select class="custom-select filter bg-dark" id="grade_search" name="grade">
+					<select class="custom-select filter" id="grade_search" name="grade">
 					 <option value="">All Grades...</option>
 					 <option value="1">Grades 1 and up</option>
 					 <option value="2">Grades 2 and up</option>
@@ -81,18 +83,18 @@ manage_search
 					 <option value="11">Grades 11 and up</option>
 					 <option value="12">Grades 12 and up</option>
 					</select>
-					<select class="custom-select filter bg-dark" id="genre_search" name="genre">
+					<select class="custom-select filter" id="genre_search" name="genre">
 					 <option value="">All Genres...</option>
 					 {% for genre in genre2 %}
 						 <option value="{{ genre[1] }}" name="genre[0]">{{ genre[1] }}</option>
 					 {% endfor %}
 					</select>
-					<select class="custom-select filter bg-dark" id="ficsearch" name="ficsearch">
+					<select class="custom-select filter" id="ficsearch" name="ficsearch">
 					 <option value="">Fiction or Nonfiction...</option>
 					 <option value="fiction">Fiction</option>
 					 <option value="nonfiction">Nonfiction</option>
 					</select>
-					<select class="custom-select filter bg-dark" id="starsearch" name="star">
+					<select class="custom-select filter" id="starsearch" name="star">
 					 <option value="">All Star Ratings...</option>
 					 <option value="1">Rated 1 Star and higher</option>
 					 <option value="2">Rated 2 Stars and higher</option>
@@ -101,24 +103,21 @@ manage_search
 					 <option value="5">Rated 5 Stars and higher</option>
 					</select>
 		  </div>
-			<select class="custom-select bg-dark filter" id="sort" name="sort">
+			<select class="custom-select filter" id="sort" name="sort">
 			 <option value="new">Sort Options...</option>
 			 <option value="new">Newest to Oldest</option>
 			 <option value="old">Oldest to Newest</option>
 			 <option value="abc">Sorted Alphabetically</option>
 			</select>
-			<button type="submit" class="btn btn-link filter nav-link">Filter</button>
+			<button type="submit" class="btn btn-link nav-link">{{ filtertext }}</button>
 		</form>
 		</nav>
 		<nav aria-label="breadcrumb">
   <ol class="breadcrumb bg-dark">
 			<li class="breadcrumb-item active" aria-current="page" style="margin: none; padding: none;">{{ breadcrumb }}</li>
   </ol>
-</nav>
-<nav aria-label="breadcrumb">
-<ol class="breadcrumb bg-dark">
-	<li class="breadcrumb-item active" aria-current="page" id="bookcount" style="margin: none; padding: none;">{{ bookcount }}</li>
-</ol>
+	<h5 aria-current="page" id="bookcount" style="margin: none; padding: none; color: black;">{{ bookcount }}</h5>
+
 </nav>
 
 		<br>

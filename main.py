@@ -83,7 +83,6 @@ def index(): #Define what happens when Homepagw is visited.
 
         books2.reverse()
         books = books2
-        bookcount = "Books Found: "+str(len(books))
         filters = [{"name": "Grade", "val": i.get("grade")}, {"name": "Genre", "val": i.get("genre")}, {"name": "Fic vs. Nonfic", "val": i.get("ficsearch")}, {"name": "Star Rating", "val": i.get("star")}]
         filters2 = []
         for item in filters:
@@ -99,12 +98,15 @@ def index(): #Define what happens when Homepagw is visited.
             x = ""
 
         breadcrumb = ""
+        bookcount = "Books Found: "+str(len(books))
+        filtertext = "Clear Filters"
         for filter in filters:
             breadcrumb += filter['name'] + ": " + filter['val'] + x
     else:
         filters = []
-        bookcount = ""
         breadcrumb = "Showing all books"
+        bookcount = ""
+        filtertext = "Filter"
 
     avgrevs = {}
 
@@ -166,7 +168,7 @@ def index(): #Define what happens when Homepagw is visited.
                         books2.append(book)
             books = books2
     print(i)
-    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2, filters=filters, bookcount=bookcount, breadcrumb=breadcrumb) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
+    return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2, filters=filters, bookcount=bookcount, breadcrumb=breadcrumb, filtertext=filtertext) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
 
 @app.route('/add', methods=["POST"])
 def add(): #Define what happens when a book is added
@@ -343,7 +345,7 @@ def ui(location):
     web.setWindowTitle("BookGuide")
     web.resize(900, 800)
     scriptDir = os.path.dirname(os.path.realpath(__file__))
-    web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/books/ffff.png'))
+    web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/images/brandlogo.png'))
     web.setZoomFactor(1.5)
     web.load(QUrl(location))
     web.show()

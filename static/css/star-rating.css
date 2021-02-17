@@ -213,6 +213,10 @@ body {
 }
 
 .filter {
-  color: white;
+  color: black;
   border: none;
+}
+
+.jumbotron {
+  margin-bottom: 0rem !important;
 }
