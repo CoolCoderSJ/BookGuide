@@ -25,28 +25,28 @@
 	</head>
 
 
-	<body class="body newbookpage" style="margin-bottom: 80px;">
+	<body class="body newbookpage">
 		<!-- Set the navigation bar -->
 		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <img src="static/images/brandlogo.png" width="30" height="30" class="d-inline-block align-top" alt=""><a class="navbar-brand" href="/">BookGuide</a>
-	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-	  	<div class="collapse navbar-collapse" id="navbarSupportedContent1">
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
 					<ul class="navbar-nav mr-auto">
-	      		<li class="nav-item active"> </li>
-	      		<li class="nav-item"> </li>
-	      		<li class="nav-item"> </li>
-	    		</ul>
-	    		<form class="form-inline my-2 my-lg-0">
+				  <li class="nav-item active"> </li>
+				  <li class="nav-item"> </li>
+				  <li class="nav-item"> </li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
 						<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
-	    		</form>
-	  	</div>
+				</form>
+		  </div>
 		</nav>
 		{% with messages = get_flashed_messages() %}
 		   {% if messages %}
-		      {% for message in messages %}
+			  {% for message in messages %}
 						 <div class="alert alert-danger" role="alert">
 							 {{ message }}
 						 </div>
-		      {% endfor %}
+			  {% endfor %}
 		   {% endif %}
 		{% endwith %}
 		<!-- Add book form -->
@@ -54,36 +54,36 @@
 			<h5>Add a book</h5>
 				<form method="post" enctype="multipart/form-data" action='add' id="newbook">
 				  <div class="form-group">
-				    <label for="title" style="color: black;">Book Name</label>
-				    <input type="text" class="form-control inputadd" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom"  style="color: white;" required>
-				  	<div class="form-group">
-				  		<br>
-					    <label for="author" style="color: black;">Author</label>
-					    <input type="text" class="form-control inputadd" id="author" name="author" style="color: white;" placeholder="Enter Author" >
+					<label for="title">Book Name</label>
+					<input type="text" class="form-control inputadd" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom" required>
+					  <div class="form-group">
+						  <br>
+						<label for="author">Author</label>
+						<input type="text" class="form-control inputadd" id="author" name="author" placeholder="Enter Author" >
 					  </div>
 					 </div>
 					 <br>
 					 <!-- Grades dropdown -->
 					 <div class="form-group">
-					    	<select class="custom-select bg-dark" id="grade" name="grade" style="color: white;" required>
-						      <option value="">Select an appropriate grade level</option>
-						      <option value="1">Grade 1 and up</option>
-						      <option value="2">Grade 2 and up</option>
-						      <option value="3">Grade 3 and up</option>
-						      <option value="4">Grade 4 and up</option>
-						      <option value="5">Grade 5 and up</option>
-						      <option value="6">Grade 6 and up</option>
-						      <option value="7">Grade 7 and up</option>
-						      <option value="8">Grade 8 and up</option>
-						      <option value="9">Grade 9 and up</option>
-						      <option value="10">Grade 10 and up</option>
-						      <option value="11">Grade 11 and up</option>
-						      <option value="12">Grade 12 and up</option>
-					    	</select>
+							<select class="custom-select bg-dark" id="grade" name="grade" required>
+							  <option value="">Select an appropriate grade level</option>
+							  <option value="1">Grade 1 and up</option>
+							  <option value="2">Grade 2 and up</option>
+							  <option value="3">Grade 3 and up</option>
+							  <option value="4">Grade 4 and up</option>
+							  <option value="5">Grade 5 and up</option>
+							  <option value="6">Grade 6 and up</option>
+							  <option value="7">Grade 7 and up</option>
+							  <option value="8">Grade 8 and up</option>
+							  <option value="9">Grade 9 and up</option>
+							  <option value="10">Grade 10 and up</option>
+							  <option value="11">Grade 11 and up</option>
+							  <option value="12">Grade 12 and up</option>
+							</select>
 					</div>
 					<br>
 					<div class="form-group">
-							 <select class="custom-select bg-dark" id="genre-cat" name="genre-category" style="color: white;" onchange="genre()" required>
+							 <select class="custom-select bg-dark" id="genre-cat" name="genre-category" onchange="genre()" required>
 								 <option value="">Select an appropriate genre category</option>
 								 <option value="fiction">Fiction</option>
 								 <option value="nonfiction">Nonfiction</option>
@@ -91,15 +91,15 @@
 				 </div>
 					<br>
 					<div class="form-group">
-							 <select class="custom-select bg-dark" id="genre-fic" name="genre-subcategory-fic" style="color: white;">
+							 <select class="custom-select bg-dark" id="genre-fic" name="genre-subcategory-fic">
 								 <option value="">Select an appropriate genre</option>
 								 {% for genre in fics %}
-								 		<option value="{{ genre[0] }}">{{ genre[1] }}</option>
+										 <option value="{{ genre[0] }}">{{ genre[1] }}</option>
 								 {% endfor %}
 							 </select>
 				 </div>
 				 <div class="form-group">
-							<select class="custom-select bg-dark" id="genre-nonfic" name="genre-subcategory-nonfic" style="color: white;">
+							<select class="custom-select bg-dark" id="genre-nonfic" name="genre-subcategory-nonfic">
 								<option value="">Select an appropriate genre</option>
 								{% for genre in nonfics %}
 									 <option value="{{ genre[0] }}">{{ genre[1] }}</option>
@@ -129,19 +129,19 @@
 
 					<!-- Optional picture -->
 					<div class="mb-3">
-	  				<label for="formFile" class="form-label" style="color: black;">Add a picture of this book (Optional)</label>
-	  				<input type="file" class="form-control inputadd" name="myfile" id="formFile">
+					  <label for="formFile" class="form-label">Add a picture of this book (Optional)</label>
+					  <input type="file" class="form-control inputadd" name="myfile" id="formFile">
 					</div>
 					<br>
 				  <div class="custom-control custom-checkbox">
-	  				<input type="checkbox" class="custom-control-input inputadd" id="customCheck1" name="revnext">
-	  				<label class="custom-control-label" for="customCheck1" style="color: black;">I want to review this book next.</label>
+					  <input type="checkbox" class="custom-control-input inputadd" id="customCheck1" name="revnext">
+					  <label class="custom-control-label" for="customCheck1">I want to review this book next.</label>
 					</div>
 					<br>
 					<br>
 					<!-- Get only the book titles from the database -->
 
-				 	<button class="inputadd btn btn-primary" type='submit' value='Add' class='btn btn-primary'>Add</button>
+					 <button class="inputadd btn btn-primary" type='submit' value='Add' class='btn btn-primary'>Add</button>
 				</form>
 			</fieldset>
 			<footer class="footer mt-auto py-3 bg-dark">

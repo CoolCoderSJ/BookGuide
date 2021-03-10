@@ -25,56 +25,57 @@
 	</head>
 
 
-	<body class="body newbookpage" style="margin-bottom: 80px;">
+	<body class="body newbookpage">
 		<!-- Set the navigation bar -->
-		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"><img src="static/images/brandlogo.png" width="30" height="30" class="d-inline-block align-top" alt=""> <a class="navbar-brand" href="/">BookGuide</a>
-	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-	  	<div class="collapse navbar-collapse" id="navbarSupportedContent1">
-					<ul class="navbar-nav mr-auto">
-	      		<li class="nav-item active"> </li>
-	      		<li class="nav-item"> </li>
-	      		<li class="nav-item"> </li>
-	    		</ul>
-	    		<form class="form-inline my-2 my-lg-0">
-						<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
-	    		</form>
-	  	</div>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+			<img src="static/images/brandlogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+			<a class="navbar-brand" href="/">BookGuide</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+				<ul class="navbar-nav mr-auto">
+					  <li class="nav-item active"> </li>
+					  <li class="nav-item"> </li>
+					  <li class="nav-item"> </li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
+					<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
+				</form>
+			  </div>
 		</nav>
 		{% with messages = get_flashed_messages() %}
 		   {% if messages %}
-		      {% for message in messages %}
+			  {% for message in messages %}
 						 <div class="alert alert-success" role="alert">
 							 {{ message }}
 						 </div>
-		      {% endfor %}
+			  {% endfor %}
 		   {% endif %}
 		{% endwith %}
 		<!-- Add book form -->
 		<fieldset class="field">
-			<h5 style="color: black;">Contact Us!</h5>
-				<form method="post" action='contact'>
-				  <div class="form-group">
-				    <label for="title" style="color: black;">Your Name</label>
-				    <input type="text" class="form-control inputadd" id="name" name="name" placeholder="Enter your name here..." required>
-				  	<div class="form-group">
-				  		<br>
-					    <label for="author" style="color: black;">Your Email</label>
-					    <input type="email" class="form-control inputadd" id="email" name="email" placeholder="Enter your email here..." required>
-							<br>
-					    <label for="author" style="color: black;">Questions, concerns, other...</label>
-					    <textarea type="text" class="form-control inputadd" id="content" name="content" placeholder="Type here..." required></textarea>
-					  </div>
-					 </div>
-
-				 	<button class="inputadd btn btn-primary" type='submit' value='Contact' class='btn btn-primary'>Contact</button>
-				</form>
-			</fieldset>
-			<footer class="footer mt-auto py-3 bg-dark">
-				<form class="form-inline my-2 my-lg-0">
-					<a class="nav-link" href="/about">About Us</a>
-					<a class="nav-link" href="/contact">Contact Us</a>
-					<a class="nav-link" href="/">&copy; Shuchir Jain, 2021</a>
-				</form>
-			</footer>
+			<h5>Contact Us!</h5>
+			<form method="post" action='contact'>
+				<div class="form-group">
+					<label for="title">Your Name</label>
+					<input type="text" class="form-control inputadd" id="name" name="name" placeholder="Enter your name here..." required>
+					  <div class="form-group">
+						  <br>
+						<label for="author">Your Email</label>
+						<input type="email" class="form-control inputadd" id="email" name="email" placeholder="Enter your email here..." required>
+						<br>
+						<label for="author">Questions, concerns, other...</label>
+						<textarea type="text" class="form-control inputadd" id="content" name="content" placeholder="Type here..." required></textarea>
+					</div>
+				 </div>
+				 <button class="inputadd btn btn-primary" type='submit' value='Contact' class='btn btn-primary'>Contact</button>
+			</form>
+		</fieldset>
+		<footer class="footer mt-auto py-3 bg-dark">
+			<form class="form-inline my-2 my-lg-0">
+				<a class="nav-link" href="/about">About Us</a>
+				<a class="nav-link" href="/contact">Contact Us</a>
+				<a class="nav-link" href="/">&copy; Shuchir Jain, 2021</a>
+			</form>
+		</footer>
 	</body>
 </html>

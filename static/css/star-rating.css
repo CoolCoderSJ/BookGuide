@@ -1,3 +1,7 @@
+#author, #grade, #title, #genre-cat, #genre-fic, #genre-nonfic, .searchbar, body, .navbar, .card, .collapsible, .nav-link, .jumbotron, .inputadd, .labelnew, .legend, .card-title, .card-text, .modal-content {
+	color: white !important;
+}
+
 /*Set the color of the popover that comes when you hover on the stars */
 .rate-popover {
   color: #c4c4c4;
@@ -49,12 +53,6 @@
    text-overflow: ellipsis;
 }
 
-.newbookpage {
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 110px !important;
-}
-
 /*Set a container for all of the images */
 .imgcontainer {
   /*Set the width and height */
@@ -78,47 +76,21 @@
   padding: 30px !important;
 }
 
-.body {
+/* This is to adjust the page's color scheme and padding/margin */
+body {
   background-image: url('http://localhost:5000/static/images/logo.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  color: white;
-} /* This is to adjust the color scheme */
-
-/*Adjusting the navbar's colors*/
-.navbar {
-  background: #343a40 !important; color: white;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 110px !important;
+  margin-bottom: 70px;
 }
 
-/*Adjusting the card's colors*/
-.card {
-  background: #343a40 !important; color: white;
-}
-
-/*Adjusting the input's colors*/
-.inputadd {
-  background: #343a40 !important; color: white !important;
-}
-
-/*Adjusting the label's colors*/
-.labelnew {
-  color: white !important;
-}
-
-/*Adjusting the form title's colors*/
-.legend {
-  color: white !important;
-}
-
-/*Adjusting the card's colors*/
-.card-title {
-  color: white !important;
-}
-
-/*Adjusting the card's colors*/
-.card-text {
-  color: white !important;
+/*Adjusting the colors for the navbar, card, and inputs*/
+.navbar, .card, .inputadd {
+  background: #343a40 !important;
 }
 
 #myUL {
@@ -141,9 +113,7 @@
 }
 
 .collapsible {
-  color: white;
   cursor: pointer;
-  /* padding: 5px; */
   border: none;
   text-align: left;
   outline: none;
@@ -157,66 +127,51 @@
   overflow: hidden;
 }
 
-.nav-link {
-  color: white;
-}
-
-.filter {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
+/*Make sure footer stays at bottom and is full width */
 .footer {
-    position: fixed;
-    height: 60px;
-    bottom: 0;
-    width: 100%;
+	position: fixed;
+	height: 60px;
+	bottom: 0;
+	width: 100%;
 }
 
-body {
-  margin-bottom: 70px;
-}
-
-.myInput {
-  color: white !important;
-}
-
-.chip {
-  display: inline-block;
-  padding: 0 25px;
-  height: 50px;
-  font-size: 18px;
-  line-height: 50px;
-  border-radius: 25px;
-  background-color: #f1f1f1;
-}
-
-.closebtn {
-  padding-left: 10px;
-  color: #888;
-  font-weight: bold;
-  float: right;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.closebtn:hover {
-  color: #000;
-}
-
-/* .custom-select {
-  background: none;
-} */
-
+/* Make sure the card is full width to prevent it from squishing */
 .col-md-4 {
   max-width: 100%;
 }
 
-.filter {
-  color: black;
-  border: none;
-}
-
 .jumbotron {
   margin-bottom: 0rem !important;
+  background: #343a40 !important;
+}
+
+.fa-star, .fa-star-half {
+	color: gold;
+}
+
+img {
+	max-width:100%;
+	max-height: 100%;
+}
+
+.review-text {
+	margin-left: 35px;
+}
+
+.revcontainer {
+	align-items: left;
+}
+
+.searchbar {
+	border: none;
+}
+
+.breadcrumb-item, .bookcount {
+	margin: none;
+	padding: none;
+}
+
+.card {
+	min-height: 500px;
+	box-shadow: 20px 20px #303539;
 }

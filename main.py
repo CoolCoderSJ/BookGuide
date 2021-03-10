@@ -1,181 +1,193 @@
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect, flash #Import flask and its necesary components
 import os #Import os commands
-import sqlite3
-from werkzeug.utils import secure_filename
+import sqlite3 #Database import
+from werkzeug.utils import secure_filename #A module used for naming files
+
+# Imports used to create the window
 from threading import Thread
-from flaskwebgui import FlaskUI
 from PyQt5.QtCore import *
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtGui
 from threading import Timer
 import sys
+
+#Import used for sending emails from flask
 from flask_mail import Mail, Message
 
+
+# Define flask app
 app = Flask(__name__)
-ui = FlaskUI(app, fullscreen=True)
+#Secret Key for signing cookies
 app.secret_key = '36b4610b69d1acc500fcc8557a3070846f1241c08c37e0d81b33abdf0afb2f0f'
+#Define SMTP Server config for sending emails
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'prachijain.test@gmail.com'
 app.config['MAIL_PASSWORD'] = 'shuchir123'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+#Define mail app
 mail = Mail(app)
 
+
 @app.route('/')
-def index(): #Define what happens when Homepagw is visited.
+def index(): #Define what happens when Homepage is visited.
     conn = sqlite3.connect("database.db")
     db = conn.cursor()
-    db.execute("SELECT * from books") #Get all books from database
-    books = db.fetchall()
+    books = db.execute("SELECT * from books").fetchall() #Get all books from database
     db.close()
-    print(type(books))
-    books.reverse()
-    print(type(books))
+    books.reverse() #Reverse order of books so that the default sort option is Newest to Oldest
     db = conn.cursor()
-    db.execute("SELECT * from reviews") #Get all reviews from database
-    reviews = db.fetchall()
+    reviews = db.execute("SELECT * from reviews").fetchall() #Get all reviews from database
     db.close()
 
-    i = request.args
-    if i.get("genre"):
-        genre = f"genres.name = '{i.get('genre')}'"
+    i = request.args #Get URL parameters
+    if i.get("genre"): #If genre sort option is enabled
+        genre = f"genres.name = '{i.get('genre')}'" #Create query for sort
     else:
-        genre = ""
+        genre = "" #Keep query blank otherwise
 
-    if i.get("grade"):
-        grade = "books.grade >= "+i.get("grade")
+    if i.get("grade"): #If grade sort option is enabled
+        grade = "books.grade >= "+i.get("grade") #Create query for sort
     else:
-        grade = ""
+        grade = "" #Keep query blank otherwise
 
-    if i.get("ficsearch"):
-        ficsearch = f"genres.type = '{i.get('ficsearch')}'"
+    if i.get("ficsearch"): #If fic vs nonfic sort option is enabled
+        ficsearch = f"genres.type = '{i.get('ficsearch')}'" #Create query for sort
     else:
-        ficsearch = ""
+        ficsearch = "" #Keep query blank otherwise
 
-    if i.get("star"):
-        star = "reviews.rating >= "+i.get("star")
+    if i.get("star"): #If star rating sort option is enabled
+        star = "reviews.rating >= "+i.get("star") #Create query for sort
     else:
-        star = ""
+        star = "" #Keep query blank otherwise
+
+    # Add filter queries to a list to analyze
     filts = [genre, grade, ficsearch, star]
-    print(filts)
-    print(len(filts))
-    filts2 = []
-    for item in filts:
-        print("ITEM: "+item)
-        if item == '':
-            filts2.append(item)
-            print(filts)
-    for item in filts2:
-        filts.remove(item)
-    print(len(filts))
+    #Remove blank queries
+    filts.remove('')
+    # Build the query
     filter_query = ""
+    #If more than one sort option selected, join them with keyword AND to prevent sort override
     if len(filts) > 1:
         filter_query += " AND ".join(filts)
+
+    #If not, build the query with the only existing option
     else:
         filter_query += "".join(filts)
-
-    print(filter_query)
-    if genre or grade or ficsearch or star:
+    #If query is not blank (If sort options are selected)
+    if filter_query:
         db = conn.cursor()
+        #Join all of the tables to search all of them at once
         query = db.execute(f"SELECT * from books LEFT OUTER JOIN reviews ON books.id = reviews.book_id JOIN genres ON books.genre_id = genres.id WHERE {filter_query}").fetchall()
-        print(query)
         db.close()
-        bookids = []
-        books2 = []
+        # The join yields multiple book entries since all of the reviews are also added. The following is done to remove the duplicates
+        bookids = [] #List of book ids
+        books2 = [] #Temporary list of books
         for result in query:
-            if result[0] not in bookids:
-                bookids.append(result[0])
-                books2.append(result)
+            if result[0] not in bookids: #If the book has not already been added to the new list
+                bookids.append(result[0]) #Add the bookid to the list of bookids to prevent adding it again
+                books2.append(result) #Add book to new list
 
-        books2.reverse()
-        books = books2
+        books2.reverse() # Reverse new query result to match New to Old sort
+        books = books2 #Destroy temp list and match books list with the temp list
+        #Create filters dictionary for all filters for evaluation
         filters = [{"name": "Grade", "val": i.get("grade")}, {"name": "Genre", "val": i.get("genre")}, {"name": "Fic vs. Nonfic", "val": i.get("ficsearch")}, {"name": "Star Rating", "val": i.get("star")}]
+        #Create another list. This will hold items that are empty that need to be deleted
         filters2 = []
+        #If item is empty, delete it
         for item in filters:
-            print(item)
             if item['val'] == "":
                 filters2.append(item)
         for item in filters2:
             filters.remove(item)
-
+        #If more than one filter is selected, join the filter breadcrumb contents with '/'
         if len(filters) > 1:
             x = " / "
         else:
             x = ""
-
+        #The breadcrumb text
         breadcrumb = ""
+        #Display a bookcount to show user how many books match the query
         bookcount = "Books Found: "+str(len(books))
+        #Display a clear filters button instead of a filter button since filter options have already been selected
         filtertext = "Clear Filters"
+        #Make the breadcrumb text
         for filter in filters:
             breadcrumb += filter['name'] + ": " + filter['val'] + x
+    #if no filters are selected
     else:
-        filters = []
+        filters = [] #Display no filters
+        #set breadcrumb text as all books since no filters are selected
         breadcrumb = "Showing all books"
+        #Do not display bookcount since all books are shown
         bookcount = ""
+        #Show filter button instead clear filter button since there are no filters
         filtertext = "Filter"
 
+    #Make a dictionary that holds the average number of reviews for each book
     avgrevs = {}
 
     for book in books:
         db = conn.cursor()
-        db.execute("SELECT * FROM books JOIN reviews ON books.id = reviews.book_id")
-        review_list = db.fetchall()
+        #Make a JOIN query to get all of a book's reviews next to each book's details
+        review_list = db.execute("SELECT * FROM books JOIN reviews ON books.id = reviews.book_id").fetchall()
         db.close()
-        avg1 = 0
-        avg2 = 0
+        stars_total = 0
+        num_of_stars = 0
+        #Loop through each star to add them and calculate the average
         for i in review_list:
-            if i[8]:
+            if i[8]: #If there is a star review
+            #If the book_id value of the currently iterating review matches the id of the currently iterating book, and the review is not 0
                 if int(i[8]) == int(book[0]) and i[-1] != 0:
-                    avg1 = avg1 + i[-1]
-                    avg2 = avg2 + 1
-        if avg2 == 0:
-            avg = 0
+                    stars_total = stars_total + i[-1] #Add the value of the star to the total
+                    avg2 = num_of_stars + 1 #Add one to the number of stars that have a valid star rating
+        if num_of_stars == 0: #If no valid star ratings were found
+            avg = 0 #Set the average as 0
         else:
-            avg = avg1/avg2
-            print(avg)
+            #else, divide the total by num of stars to get avg
+            avg = stars_total/num_of_stars
+        #add an entry to the dictionary. The key is the book id and the value is a list that has the exact average as well as the rounded average
         avgrevs[book[0]] = [float(avg), round(float(avg))]
-    print(avgrevs)
 
     db = conn.cursor()
+    # Get all of the genres matched with each book
     genre_list = db.execute("SELECT * FROM books JOIN genres ON books.genre_id = genres.id").fetchall()
     db.close()
+    #Make a list that will hold the genre for each book
     genres = {}
     for genre in genre_list:
-        collection = [genre[-2], genre[-1]]
-        genres[genre[0]] = collection
+        #Add an entry to the dictionary. The key is the book id, and the value is a list with the genre type and the genre.
+        genres[genre[0]] = [genre[-2], genre[-1]]
     db = conn.cursor()
+    # Make a list of all genres. This will be iterated over in `index.html`
     genre2 = db.execute("SELECT * FROM genres").fetchall()
     db.close()
-    i = request.args
-    print(i)
+
+    #if url has a sort parameter
     if i.get("sort"):
+        #The list of books is reversed to make a New to Old sort by default. if the option selected is old, reverse the list
         if i.get("sort") == "old":
             books.reverse()
+        #If sort by alphanumeric is selected
         elif i.get("sort") == "abc":
+            #Make a list with book titles. this will be changed to match the abc format later.
             book_titles = []
+            #Add all of the titles to the list
             for book in books:
                 book_titles.append(book[1])
+            #Sort list alphanumerically
             book_titles.sort()
+            #Temp list for books
             books2 = []
+            #Add all of the book metadata to the temp list by matching on title from the book_titles list.
             for title in book_titles:
                 for book in books:
                     if book[1] == title:
                         books2.append(book)
-            books = books2
-        elif i.get("sort") == "oldabc":
-            books.reverse()
-            book_titles = []
-            for book in books:
-                book_titles.append(book[1])
-            books2 = []
-            for title in book_titles:
-                for book in books:
-                    if book[1] == title:
-                        books2.append(book)
-            books = books2
-    print(i)
+            books = books2 #Set books list to the temp
+    #Render the home page with all of the important variables created above.
     return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2, filters=filters, bookcount=bookcount, breadcrumb=breadcrumb, filtertext=filtertext) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
 
 @app.route('/add', methods=["POST"])
@@ -183,32 +195,34 @@ def add(): #Define what happens when a book is added
     conn = sqlite3.connect("database.db")
     db = conn.cursor()
     if request.method == 'POST':
+        #Get the form data
         i = request.form
-        print(i)
-        qr = db.execute("SELECT * from books").fetchall()
-        for book in qr:
+        #Get all books
+        books = db.execute("SELECT * from books").fetchall()
+        for book in books:
+            #If book title is found in database, flash a message to the user and prevent database insert
             if book[1].lower() == i['title'].lower():
                 flash("This book already exists.")
                 return redirect("/new")
-        if i['title'] == "":
-            flash("Book Title is a required field.")
-            return redirect("/new")
-        if i['grade'] == "":
-            flash("Appropriate Grade is a required field.")
+        #If a genre is not selected, flash a message to the user and prevent database insert
         if i['genre-subcategory-fic'] == '' and i['genre-subcategory-nonfic'] == '':
             flash("Please select a genre.")
             return redirect("/new")
+        #If user selects genre from fic and nonfic dropdowns, flash a message to the user and prevent database insert
         if i['genre-subcategory-fic'] != "" and i['genre-subcategory-nonfic'] != "":
             flash("Please select a genre from only one category.")
             return redirect("/new")
+
+
         filedir = 'static/images/books' #Directory where book images are stored
-        file = request.files['myfile']
+        file = request.files['myfile'] #Get uploaded file
         if file.filename == None or file.filename == "": #If no book image is submitted, make the placeholder image the default image.
             myfilepath = 'static/images/books/placeholder.png'
         else: #If an image is submitted, do the following:
             fileext = secure_filename(file.filename.split(".")[-1])
             myfilepath = filedir + '/' + request.form['title'] + "." + fileext #Define the filepath. This is the directory + the book name + file extension
-            file.save(myfilepath)
+            file.save(myfilepath) #Save the image
+
         #Insert the book title, author, grade, genre, and image file path in the database
         if request.form['genre-category'] == "fiction":
             sub = request.form['genre-subcategory-fic']
@@ -239,7 +253,6 @@ def add(): #Define what happens when a book is added
                 avg = 0
             else: #If there were star ratings, do the following -
                 avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
-            print(avg)
             bookIdstr =str(bookId) #Convert BookID to string for later use
             #Show the individual page with all of the collected values
             return redirect("/book_details/"+str(bookId))
@@ -254,7 +267,7 @@ def new(): #Define what happens when user clicks the "Add a book" button
         book = db.execute("SELECT * from books").fetchall() #Get all books from database (Used to make sure book doesn't already exist)
         fics = db.execute("SELECT * from genres WHERE type = 'fiction'").fetchall()
         nonfics = db.execute("SELECT * from genres WHERE type = 'nonfiction'").fetchall()
-        return render_template("new.html", book=book, fics=fics, nonfics=nonfics) #Pass the books, db object for operations, and string object for operations to the new book form and show form.
+        return render_template("new.html", fics=fics, nonfics=nonfics) #Pass the books, db object for operations, and string object for operations to the new book form and show form.
 
 
 @app.route('/book_details/<id>')
@@ -270,7 +283,6 @@ def book_details(id): #Define what happens when user wants to see individual pag
         db = conn.cursor()
         qr = db.execute('SELECT * from books WHERE id == '+str(bookId)).fetchall() #Get book details from database using the ID to get more details.
         db.close()
-        print(qr)
         bookTitle = qr[0][1] #Get the book title from the list
         bookDesc = qr[0][2] #Get the book description from the list
         bookAuthor = qr[0][4] #Get the book author from the list
@@ -291,16 +303,17 @@ def book_details(id): #Define what happens when user wants to see individual pag
             avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
         bookIdstr =str(bookId) #Convert BookID to string for later use
         #Show the individual page with all of the collected values
+        #Get image filepath
         image = "http://localhost:5000/"+qr[0][3]
         db = conn.cursor()
+        #Make genre list
         genre_list = db.execute("SELECT * FROM books JOIN genres ON books.genre_id = genres.id").fetchall()
         db.close()
-        print("\n\nGENRES: "+str(genre_list))
         genres = {}
         for genre in genre_list:
-            collection = [genre[-2], genre[-1]]
-            genres[genre[0]] = collection
+            genres[genre[0]] = [genre[-2], genre[-1]]
         bookGenre = genres[bookId][0]
+        #Render te book's individual page
         return render_template("book_details.html", book=book, bookId=bookId, bookTitle=bookTitle, bookDesc=bookDesc, bookAuthor=bookAuthor, bookGrade=bookGrade, reviews=reviews, avg=avg, db=db, bookIdstr=bookIdstr, image=image, bookGenre=bookGenre)
 
 @app.route('/review', methods=["POST"])
@@ -311,7 +324,6 @@ def review(): #Define what happens when a review is submitted
         book = db.execute("SELECT * from books").fetchall() #Get all books from database from database
         db.close()
         i = request.form #Get user input
-        print(i)
         if i['review'] == "" and i['stars'] == '0':
             flash("Please enter either a text description or fill in the stars.")
             return redirect('/book_details/'+i['bookId'], code=303)
@@ -341,36 +353,49 @@ def review(): #Define what happens when a review is submitted
 
 @app.route("/about")
 def about():
+    #If about page is selected, render about page
     return render_template("about.html")
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "GET":
+        #If contact page is selected, render contact page
         return render_template("contact.html")
     elif request.method == "POST":
+        #If the form is submitted, email me the contact form boxes
         msg = Message("BookGuide Contact Form Filled", sender="prachijain.test@gmail.com", recipients=['prachijain.test@gmail.com'])
         msg.body = f"SENDER: {request.form['name']}\n\nEMAIL: {request.form['email']}\n\n\nCONTENT:\n{request.form['content']}"
         mail.send(msg)
+        #Show user success message and render contact page
         flash("Successfully Submitted!")
         return redirect("/contact", code=303)
 
+#Define the window object
 def ui(location):
+    #Create window object
     qt_app = QApplication(sys.argv)
+    #Load Web Engine to show localhost page
     web = QWebEngineView()
+    #Set window title
     web.setWindowTitle("BookGuide")
+    #Size the window
     web.resize(900, 800)
+    #Set the window icon as the brand logo
     scriptDir = os.path.dirname(os.path.realpath(__file__))
     web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/images/brandlogo.png'))
-    web.setZoomFactor(1)
+    #Magnify the window just a bit
+    web.setZoomFactor(1.2)
+    #Load given URL
     web.load(QUrl(location))
+    #Show the window object
     web.show()
     sys.exit(qt_app.exec_())
 
-print("\n\n\nAPP RUNNING ON PORT 5000\n\n\n")
 if __name__ == "__main__":
-    #ui.run()
+    #Show the window with the localhost:5000 url
     Timer(1,lambda: ui("http://127.0.0.1:5000/")).start()
-    app.run(debug=True)
+    #Start the Flask App
+    app.run()
 
 #PYINSTALLER SCRIPT
 #pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="database.db;." main.py

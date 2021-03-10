@@ -1,4 +1,3 @@
-<!-- ^^ Params used on this page -->
 <!DOCTYPE html>
 <html>
 	<head>
@@ -24,93 +23,100 @@
 		<script src="/static/js/my_script.js"></script>
 	</head>
 
-	<body class="body" style="padding-top: 110px">
+	<body class="body">
 		<!-- Set the navbar -->
-		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark"> <img src="static/images/brandlogo.png" width="30" height="30" class="d-inline-block align-top" alt=""><a class="navbar-brand" href="/">BookGuide</a>
-  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-  		<div class="collapse navbar-collapse" id="navbarSupportedContent1">
-					<ul class="navbar-nav mr-auto">
-      			<li class="nav-item active"> </li>
-      			<li class="nav-item"> </li>
-      			<li class="nav-item"> </li>
-    			</ul>
-    			<form class="form-inline my-2 my-lg-0">
-						<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
-    			</form>
-  		</div>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+			<img src="static/images/brandlogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+			<a class="navbar-brand" href="/">BookGuide</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+				<ul class="navbar-nav mr-auto">
+					  <li class="nav-item active"> </li>
+					  <li class="nav-item"> </li>
+					  <li class="nav-item"> </li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
+					<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a><a class="nav-link" href="/new">Add book</a>
+				</form>
+			  </div>
 		</nav>
+		<!-- If flask gives an error, show the error -->
 		{% with messages = get_flashed_messages() %}
 		   {% if messages %}
-		      {% for message in messages %}
+			  {% for message in messages %}
 						 <div class="alert alert-danger" role="alert">
 							 {{ message }}
 						 </div>
-		      {% endfor %}
+			  {% endfor %}
 		   {% endif %}
 		{% endwith %}
 		<div class="d-flex justify-content-center">
 			<div class="card col-md-12">
-				 <div class="card-body">
-					 <!-- Make sure the image stays in a container on the left of the book details -->
-					 <div class="imgcontainer float-left">
-						 <img src="{{ image }}" alt="book cover"  style="max-width:100%; max-height: 100%;">
+				<div class="card-body">
+					<!-- Make sure the image stays in a container on the left of the book details -->
+					<div class="imgcontainer float-left">
+						<img src="{{ image }}" alt="book cover">
 					</div>
-				  <h5 class="card-title">{{ bookTitle }}</h5>
-				  <h6 class="card-text">{{ bookAuthor }}</h6>
-				  <br>
+					<h5 class="card-title">{{ bookTitle }}</h5>
+					<h6 class="card-text">{{ bookAuthor }}</h6>
+					<br>
 					<!-- Average star rating -->
-				  <span class="stars" data-rating="{{ avg }}" data-num-stars="5" ></span>
-				  <br>
-				  <p class="card-text">{{ bookDesc }}</p>
+					<span class="stars" data-rating="{{ avg }}" data-num-stars="5" ></span>
+					<br>
+					<p class="card-text">{{ bookDesc }}</p>
 
-				  <p class="card-text">Grades {{ bookGrade }} and higher</p>
+					<p class="card-text">Grades {{ bookGrade }} and higher</p>
 					<p class="card-text">Genre - {{ bookGenre }}</p>
-				  <br>
+					<br>
 					<!-- Button that will trigger the add review form modal -->
-				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-		  			Add a review
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+						  Add a review
 					</button>
 				</div>
 			</div>
 		</div>
 		<!-- Modal for adding a review -->
 		<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content bg-dark" style="color: white !important;">
-		    	<fieldset class="fieldset">
-				    <form method="post" action="http://localhost:5000/review" name="addform">
-				    	<input type="hidden" name="bookId" value="{{ bookId }}">
-				    	<input type="hidden" id=
-				    	"rate" name="stars" value="0">
-				    	<br>
-				    	<h5>Review this Book:</h5>
-				    	<div class="form-group">
-				    		<div class="container">
-		  						<span id="rateMe2"  class="empty-stars"></span>
+			<div class="modal-dialog" role="document">
+				<div class="modal-content bg-dark">
+					<fieldset class="fieldset">
+						<form method="post" action="http://localhost:5000/review" name="addform">
+							<input type="hidden" name="bookId" value="{{ bookId }}">
+							<input type="hidden" id=
+							"rate" name="stars" value="0">
+							<br>
+							<h5>Review this Book:</h5>
+							<div class="form-group">
+								<div class="container">
+									  <span id="rateMe2"  class="empty-stars"></span>
 								</div>
-						    <input class="form-control" type="text" name="name" placeholder="Your name (Optional)">
-						    <textarea class="form-control" id="reviewdesc" name="review" placeholder="Enter your description here."></textarea>
-						    <input type="hidden" name="bookId" value="{{ bookId }}">
-						  </div>
+								<input class="form-control" type="text" name="name" placeholder="Your name (Optional)">
+								<textarea class="form-control" id="reviewdesc" name="review" placeholder="Enter your description here."></textarea>
+								<input type="hidden" name="bookId" value="{{ bookId }}">
+							 </div>
 
-		      		<div class="modal-footer">
+							  <div class="modal-footer">
 								<!-- Close button -->
-		        		<button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="reset" class="btn btn-secondary" data-dismiss="modal">
+									Close
+								</button>
 								<!-- Add review button, this leads to a JS function that makes sure either stars or text is filled -->
-								<button type="submit" value="review" class="btn btn-primary">Submit</button>
-		      		</div>
+								<button type="submit" value="review" class="btn btn-primary">
+									Submit
+								</button>
+							  </div>
 						</form>
 					</fieldset>
-		    </div>
-		  </div>
+				</div>
+			</div>
 		</div>
 
 		<br>
 		<!-- All of the reviews -->
-		<h4 class="card-title" style="margin-left: 35px; color: black !important;">Reviews -</h4>
+		<h4 class="card-title review-text">Reviews -</h4>
 		<br>
 
-		<div class="container" name="revcontainer" style="align-items: left">
+		<div class="container revcontainer" name="revcontainer">
 			<!-- If there isn't a name given, set name to anonymous -->
 			{% for review in reviews %}
 				{% set name = review[-3] %}
@@ -118,10 +124,10 @@
 					{% set name = "Anonymous" %}
 				{% endif %}
 				<div class="card col-md-12">
-		  			<div class="card-body">
-		  				<span class="stars" data-rating="{{ review[-1] }}" data-num-stars="5" ></span>
-		  				<h6 class="card-body">{{ review[-2] }}</h6>
-		  				<p class="card-text"><em>- {{ name }}</em></p>
+					  <div class="card-body">
+						  <span class="stars" data-rating="{{ review[-1] }}" data-num-stars="5" ></span>
+						  <h6 class="card-body">{{ review[-2] }}</h6>
+						  <p class="card-text"><em>- {{ name }}</em></p>
 					</div>
 				</div>
 			{% endfor %}
