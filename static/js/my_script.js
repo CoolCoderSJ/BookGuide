@@ -95,4 +95,7 @@ function updatecount(val) {
   if (val != 0) {
   elem.innerHTML = "Books Found: "+val;
 }
+else {
+	elem.innerHTML = "Showing all Books"
+}
 }
