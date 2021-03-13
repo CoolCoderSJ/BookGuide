@@ -40,7 +40,7 @@
 				<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 				<a class="nav-link" href="/new">Add book</a>
 				<!-- Advanced Search icon and search bar -->
-				<input type="text" class="searchbar" class="form-control bg-dark" onkeyup="search(document.getElementById('search_term').value, document.getElementById('myInput').value.toUpperCase())" placeholder="Search...">
+				<input id="searchbar" type="text" class="searchbar form-control bg-dark" onkeyup="search(document.getElementById('search_term').value, document.getElementById('searchbar').value.toUpperCase())" placeholder="Search...">
 				<button type="button" class="collapsible bg-dark"><span class="material-icons">
 				manage_search
 				</span></button>
@@ -142,7 +142,7 @@
 					{% set  author = "Unknown Author" %}
 					{% endif %}
 					<div class="col-md-4">
-						<div class="card bg-dark mtop">
+						<div class="card homepage-card bg-dark mtop">
 							<form method="get" action='book_details/{{ book[0] }}'>
 								<!--hidden inputs, used for passing on data. User cannot see these-->
 								<div class="imgcontainer">
@@ -153,7 +153,6 @@
 								<h5 class="card-title padjust madjust title">{{ title }}</h5>
 								<p class="card-text padjust pdesc author">{{ author }}</p>
 								<p class="card-text madjust padjust pdesc desc">{{ desc }}</p>
-
 								<span class="stars padjust madjust" data-rating="{{ avgrevs[book[0]][0] }}" data-num-stars="5"></span>
 								<br>
 								<p class="card-text padjust madjust">Grades {{ grade }} and up</p>
