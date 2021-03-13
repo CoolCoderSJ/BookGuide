@@ -1,4 +1,4 @@
-#author, #grade, #title, #genre-cat, #genre-fic, #genre-nonfic, .searchbar, body, .navbar, .card, .collapsible, .nav-link, .jumbotron, .inputadd, .labelnew, .legend, .card-title, .card-text, .modal-content {
+#author, #grade, #title, #genre-cat, #genre-fic, #genre-nonfic, .searchbar, .navbar, .card, .collapsible, .nav-link, .jumbotron, .inputadd, .labelnew, .legend, .card-title, .card-text, .modal-content {
 	color: white !important;
 }
 
@@ -86,6 +86,7 @@ body {
   padding-right: 30px;
   padding-top: 110px !important;
   margin-bottom: 70px;
+  color: black !important;
 }
 
 /*Adjusting the colors for the navbar, card, and inputs*/
@@ -133,6 +134,8 @@ body {
 	height: 60px;
 	bottom: 0;
 	width: 100%;
+	padding-left: 0px !important;
+	margin-left: 0px !important;
 }
 
 /* Make sure the card is full width to prevent it from squishing */
@@ -145,8 +148,8 @@ body {
   background: #343a40 !important;
 }
 
-.fa-star, .fa-star-half {
-	color: gold;
+.fa-star, .fa-star-half-alt, .fas {
+	color: gold !important;
 }
 
 img {
@@ -171,7 +174,7 @@ img {
 	padding: none;
 }
 
-.card {
+.homepage-card {
 	min-height: 500px;
 	box-shadow: 20px 20px #303539;
 }
