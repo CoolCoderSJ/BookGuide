@@ -15,6 +15,8 @@ import sys
 #Import used for sending emails from flask
 from flask_mail import Mail, Message
 
+import re
+
 
 # Define flask app
 app = Flask(__name__)
@@ -252,7 +254,9 @@ def add(): #Define what happens when a book is added
 			myfilepath = 'static/images/books/placeholder.png'
 		else: #If an image is submitted, do the following:
 			fileext = secure_filename(file.filename.split(".")[-1])
-			myfilepath = filedir + '/' + request.form['title'] + "." + fileext #Define the filepath. This is the directory + the book name + file extension
+			title = request.form['title']
+			title = re.sub('[^A-Za-z0-9 ]+', '', title)
+			myfilepath = filedir + '/' + title + "." + fileext #Define the filepath. This is the directory + the book name + file extension
 			file.save(myfilepath) #Save the image
 
 		#Insert the book title, author, grade, genre, and image file path in the database

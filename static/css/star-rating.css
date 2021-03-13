@@ -76,6 +76,16 @@
   padding: 30px !important;
 }
 
+/*Make sure footer stays at bottom and is full width */
+.footer {
+	position: fixed;
+	height: 60px;
+	bottom: 0;
+	width: 100%;
+	padding-left: 0px !important;
+	margin-left: 0px !important;
+}
+
 /* This is to adjust the page's color scheme and padding/margin */
 body {
   background-image: url('http://localhost:5000/static/images/logo.png');
@@ -126,16 +136,6 @@ body {
 .content {
   display: none;
   overflow: hidden;
-}
-
-/*Make sure footer stays at bottom and is full width */
-.footer {
-	position: fixed;
-	height: 60px;
-	bottom: 0;
-	width: 100%;
-	padding-left: 0px !important;
-	margin-left: 0px !important;
 }
 
 /* Make sure the card is full width to prevent it from squishing */
