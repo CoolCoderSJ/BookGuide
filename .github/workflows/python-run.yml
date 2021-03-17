@@ -2,10 +2,10 @@ name: Run Python Tests
 on:
   push:
     branches:
-      - master
+      - flask-porting
   pull_request:
     branches:
-      - master
+      - flask-porting
 
 jobs:
   build:
