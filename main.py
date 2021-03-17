@@ -429,7 +429,7 @@ def ui(location):
 
 # if __name__ == "__main__":
 	#Show the window with the localhost:5000 url
-Timer(1,lambda: ui("http://127.0.0.1:5000/")).start()
+# Timer(1,lambda: ui("http://127.0.0.1:5000/")).start()
 #Start the Flask App
 app.run('0.0.0.0')
 
