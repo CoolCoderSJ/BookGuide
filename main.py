@@ -14,7 +14,6 @@ import sys
 
 #Import used for sending emails from flask
 from flask_mail import Mail, Message
-
 import re
 
 
@@ -176,6 +175,7 @@ def index(): #Define what happens when Homepage is visited.
 			avg = stars_total/num_of_stars
 		#add an entry to the dictionary. The key is the book id and the value is a list that has the exact average as well as the rounded average
 		avgrevs[book[0]] = [float(avg), round(float(avg))]
+
 	print(avgrevs)
 	db = conn.cursor()
 	# Get all of the genres matched with each book
@@ -264,7 +264,7 @@ def add(): #Define what happens when a book is added
 			sub = request.form['genre-subcategory-fic']
 		elif request.form['genre-category'] == "nonfiction":
 			sub = request.form['genre-subcategory-nonfic']
-		db.execute(f"INSERT into books (book_title, author, grade, image, genre_id) VALUES ('{request.form['title']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}')")
+		db.execute(f"INSERT into books (book_title, book_description, author, grade, image, genre_id) VALUES ('{request.form['title']}', '{request.form['desc']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}')")
 		conn.commit()
 		# If user wants to go to the indivdual page:
 		if "revnext" in request.form:
@@ -330,7 +330,7 @@ def book_details(id): #Define what happens when user wants to see individual pag
 		avg_rating2 = 0 #Number of reviews that have stars
 		avg = 0 #Average star rating
 		for review in reviews: #For each review in the given reviews, do the following -
-			if review[-1] != None: #If there is a star rating submitted, do the following -
+			if review[-1] != 0: #If there is a star rating submitted, do the following -
 				avg_rating1 += review[-1] #Add the star to the total stars
 				avg_rating2 += 1 #Add one to the total number of reviews that have stars
 		if avg_rating2 == 0: #If there were no reviews with stars, set the average to 0.
@@ -434,4 +434,4 @@ Timer(1,lambda: ui("http://127.0.0.1:5000/")).start()
 app.run('0.0.0.0')
 
 #PYINSTALLER SCRIPT
-#pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="database.db;." main.py
+#pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="database.db;." -i "static/images/logo.ico" main.py

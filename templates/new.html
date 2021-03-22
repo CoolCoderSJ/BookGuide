@@ -54,9 +54,12 @@
 			<h5>Add a book</h5>
 				<form method="post" enctype="multipart/form-data" action='add' id="newbook">
 				  <div class="form-group">
-					<label for="title">Book Name</label>
+					<label for="title">Book Name *</label>
 					<input type="text" class="form-control inputadd" id="title" name="title" placeholder="Enter title" data-toggle="tooltip"data-placement="bottom" required>
 					  <div class="form-group">
+						  <br>
+					   <label for="author">Description</label>
+					   <input type="text" class="form-control inputadd" id="desc" name="desc" placeholder="Briefly describe this book..." >
 						  <br>
 						<label for="author">Author</label>
 						<input type="text" class="form-control inputadd" id="author" name="author" placeholder="Enter Author" >
@@ -66,7 +69,7 @@
 					 <!-- Grades dropdown -->
 					 <div class="form-group">
 							<select class="custom-select bg-dark" id="grade" name="grade" required>
-							  <option value="">Select an appropriate grade level</option>
+							  <option value="">Select an appropriate grade level *</option>
 							  <option value="1">Grade 1 and up</option>
 							  <option value="2">Grade 2 and up</option>
 							  <option value="3">Grade 3 and up</option>
@@ -84,7 +87,7 @@
 					<br>
 					<div class="form-group">
 							 <select class="custom-select bg-dark" id="genre-cat" name="genre-category" onchange="genre()" required>
-								 <option value="">Select an appropriate genre category</option>
+								 <option value="">Select an appropriate genre category *</option>
 								 <option value="fiction">Fiction</option>
 								 <option value="nonfiction">Nonfiction</option>
 							 </select>
@@ -92,7 +95,7 @@
 					<br>
 					<div class="form-group">
 							 <select class="custom-select bg-dark" id="genre-fic" name="genre-subcategory-fic">
-								 <option value="">Select an appropriate genre</option>
+								 <option value="">Select an appropriate genre *</option>
 								 {% for genre in fics %}
 										 <option value="{{ genre[0] }}">{{ genre[1] }}</option>
 								 {% endfor %}
@@ -100,7 +103,7 @@
 				 </div>
 				 <div class="form-group">
 							<select class="custom-select bg-dark" id="genre-nonfic" name="genre-subcategory-nonfic">
-								<option value="">Select an appropriate genre</option>
+								<option value="">Select an appropriate genre *</option>
 								{% for genre in nonfics %}
 									 <option value="{{ genre[0] }}">{{ genre[1] }}</option>
 								{% endfor %}
