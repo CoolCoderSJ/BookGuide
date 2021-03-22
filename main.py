@@ -2,7 +2,7 @@ import sys
 #Prevent creation of cache
 sys.dont_write_bytecode = True
 
-from flask import Flask, render_template, request, redirect, flash #Import flask and its necesary components
+from flask import Flask, render_template, request, redirect, flash, current_app #Import flask and its necesary components
 import os #Import os commands
 import sqlite3 #Database import
 from werkzeug.utils import secure_filename #A module used for naming files
@@ -19,20 +19,78 @@ from threading import Timer
 from flask_mail import Mail, Message
 import re
 
+import logging
+from logging import DEBUG, INFO, ERROR
+from logging.handlers import TimedRotatingFileHandler
+
+
+
 
 # Define flask app
 app = Flask(__name__)
 #Secret Key for signing cookies
 app.secret_key = '36b4610b69d1acc500fcc8557a3070846f1241c08c37e0d81b33abdf0afb2f0f'
-#Define SMTP Server config for sending emails
+#Define App Configuration
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'prachijain.test@gmail.com'
 app.config['MAIL_PASSWORD'] = 'shuchir123'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+app.config["ERROR_LOG_PATH"] = "logs/errors.log"
 #Define mail app
 mail = Mail(app)
+
+# Only set up a file handler if we know where to put the logs
+if app.config.get("ERROR_LOG_PATH"):
+
+	# Create one file for each day. Delete logs over 7 days old.
+	file_handler = TimedRotatingFileHandler(app.config["ERROR_LOG_PATH"], when="D", backupCount=7)
+	#Set level of logger to filter messages that are lower than the currently set level
+	app.logger.setLevel(level=logging.DEBUG)
+	# Use a multi-line format for this logger, for easier scanning
+	file_formatter = logging.Formatter('''
+	Time: %(asctime)s
+	Level: %(levelname)s
+	%(message)s
+''')
+
+	file_handler.setFormatter(file_formatter)
+	app.logger.addHandler(file_handler)
+
+#Before any request is made
+@app.before_request
+def log_entry():
+	#Context of request
+	context = {
+		'url': request.path,
+		'method': request.method,
+		'ip': request.environ.get("REMOTE_ADDR")
+	}
+	#Log an info message to the log file
+	app.logger.info("""Handling Request:
+	Method: %(method)s
+	Local IP: %(ip)s
+	URL: %(url)s
+	---------------------""", context)
+
+#Show messages and a link to go home for http errors
+@app.errorhandler(400)
+def key_error(e):
+	return """
+	<h1>HTTP Error 400</h1>
+	<h3>Bad Request</h3>
+	<p>The app encountered an error. Click <a href="/">here</a> to go Home.</p>
+	""", 400
+
+
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+	return """
+	<h1>HTTP Error</h1>
+	<h3>Internal Server Error</h3>
+	<p>The app encountered an error. Click <a href="/">here</a> to go Home.</p>
+	""", 500
 
 
 @app.route('/')
@@ -236,67 +294,77 @@ def add(): #Define what happens when a book is added
 		i = request.form
 		#Get all books
 		books = db.execute("SELECT * from books").fetchall()
-		for book in books:
-			#If book title is found in database, flash a message to the user and prevent database insert
-			if book[1].lower() == i['title'].lower():
-				flash("This book already exists.")
+		try:
+			for book in books:
+				#If book title is found in database, flash a message to the user and prevent database insert
+				if book[1].lower() == i['title'].lower():
+					flash("This book already exists.")
+					return redirect("/new")
+			#If a genre is not selected, flash a message to the user and prevent database insert
+			if i['genre-subcategory-fic'] == '' and i['genre-subcategory-nonfic'] == '':
+				flash("Please select a genre.")
 				return redirect("/new")
-		#If a genre is not selected, flash a message to the user and prevent database insert
-		if i['genre-subcategory-fic'] == '' and i['genre-subcategory-nonfic'] == '':
-			flash("Please select a genre.")
-			return redirect("/new")
-		#If user selects genre from fic and nonfic dropdowns, flash a message to the user and prevent database insert
-		if i['genre-subcategory-fic'] != "" and i['genre-subcategory-nonfic'] != "":
-			flash("Please select a genre from only one category.")
-			return redirect("/new")
+			#If user selects genre from fic and nonfic dropdowns, flash a message to the user and prevent database insert
+			if i['genre-subcategory-fic'] != "" and i['genre-subcategory-nonfic'] != "":
+				flash("Please select a genre from only one category.")
+				return redirect("/new")
+		except Exception as err:
+			app.logger.error(f"Error encountered while flashing messages to user - {err}")
 
-
-		filedir = 'static/images/books' #Directory where book images are stored
-		file = request.files['myfile'] #Get uploaded file
-		if file.filename == None or file.filename == "": #If no book image is submitted, make the placeholder image the default image.
-			myfilepath = 'static/images/books/placeholder.png'
-		else: #If an image is submitted, do the following:
-			fileext = secure_filename(file.filename.split(".")[-1])
-			title = request.form['title']
-			title = re.sub('[^A-Za-z0-9 ]+', '', title)
-			myfilepath = filedir + '/' + title + "." + fileext #Define the filepath. This is the directory + the book name + file extension
-			file.save(myfilepath) #Save the image
-
-		#Insert the book title, author, grade, genre, and image file path in the database
-		if request.form['genre-category'] == "fiction":
-			sub = request.form['genre-subcategory-fic']
-		elif request.form['genre-category'] == "nonfiction":
-			sub = request.form['genre-subcategory-nonfic']
-		db.execute(f"INSERT into books (book_title, book_description, author, grade, image, genre_id) VALUES ('{request.form['title']}', '{request.form['desc']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}')")
-		conn.commit()
+		try:
+			filedir = 'static/images/books' #Directory where book images are stored
+			file = request.files['myfile'] #Get uploaded file
+			if file.filename == None or file.filename == "": #If no book image is submitted, make the placeholder image the default image.
+				myfilepath = 'static/images/books/placeholder.png'
+			else: #If an image is submitted, do the following:
+				fileext = secure_filename(file.filename.split(".")[-1])
+				title = request.form['title']
+				title = re.sub('[^A-Za-z0-9 ]+', '', title)
+				myfilepath = filedir + '/' + title + "." + fileext #Define the filepath. This is the directory + the book name + file extension
+				file.save(myfilepath) #Save the image
+		except Exception as err:
+			app.logger.error(f"Error encountered while saving images - {err}")
+		try:
+			#Insert the book title, author, grade, genre, and image file path in the database
+			if request.form['genre-category'] == "fiction":
+				sub = request.form['genre-subcategory-fic']
+			elif request.form['genre-category'] == "nonfiction":
+				sub = request.form['genre-subcategory-nonfic']
+			db.execute(f"INSERT into books (book_title, book_description, author, grade, image, genre_id) VALUES ('{request.form['title']}', '{request.form['desc']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}')")
+			conn.commit()
+		except Exception as err:
+			app.logger.error(f"Error encountered while adding info to database - {err}")
 		# If user wants to go to the indivdual page:
-		if "revnext" in request.form:
-			book = db.execute("SELECT * from books") #Get all books from database
-			bookTitle = request.form["title"] #Get the submitted book title
-			bookDesc = "" #set the description empty, since the book was just added and has no description.
-			bookAuthor = request.form["author"] #Get submitted author
-			qr = db.execute('SELECT * from books WHERE book_title == \''+bookTitle+"'").fetchall() #Using the submitted title, get the book info from database
-			#results = list(qr) #Convert the request to a list so that we can do operations with it
-			bookId = int(qr[0][0]) #Get the book ID from the database response
-			bookGrade = int(qr[0][-1]) #Get the book grade from the database response
-			reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get all reviews that were submitted for this book
-			#reviews = list(qr2) #Convert to list for operations
-			avg_rating1 = 0 #The total star rating. This value will be updated later
-			avg_rating2 = 0 #Number of reviews that have stars
-			avg = 0 #Average star rating
-			for review in reviews: #For each review in the given reviews, do the following -
-				if review['rating'] != None: #If there is a star rating submitted, do the following -
-					avg_rating1 += review['rating'] #Add the star to the total stars
-					avg_rating2 += 1 #Add one to the total number of reviews that have stars
-			if avg_rating2 == 0: #If there were no reviews with stars, set the average to 0.
-				avg = 0
-			else: #If there were star ratings, do the following -
-				avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
-			bookIdstr =str(bookId) #Convert BookID to string for later use
-			#Show the individual page with all of the collected values
-			return redirect("/book_details/"+str(bookId))
-		else: #If user does not want to go to the home page then -
-			return redirect('/', code=302) #redirect to home page
+		try:
+			if "revnext" in request.form:
+				book = db.execute("SELECT * from books") #Get all books from database
+				bookTitle = request.form["title"] #Get the submitted book title
+				bookDesc = "" #set the description empty, since the book was just added and has no description.
+				bookAuthor = request.form["author"] #Get submitted author
+				qr = db.execute('SELECT * from books WHERE book_title == \''+bookTitle+"'").fetchall() #Using the submitted title, get the book info from database
+				#results = list(qr) #Convert the request to a list so that we can do operations with it
+				bookId = int(qr[0][0]) #Get the book ID from the database response
+				# bookGrade = int(qr[0][-1]) #Get the book grade from the database response
+				# reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get all reviews that were submitted for this book
+				# #reviews = list(qr2) #Convert to list for operations
+				# avg_rating1 = 0 #The total star rating. This value will be updated later
+				# avg_rating2 = 0 #Number of reviews that have stars
+				# avg = 0 #Average star rating
+				# for review in reviews: #For each review in the given reviews, do the following -
+				# 	if review['rating'] != None: #If there is a star rating submitted, do the following -
+				# 		avg_rating1 += review['rating'] #Add the star to the total stars
+				# 		avg_rating2 += 1 #Add one to the total number of reviews that have stars
+				# if avg_rating2 == 0: #If there were no reviews with stars, set the average to 0.
+				# 	avg = 0
+				# else: #If there were star ratings, do the following -
+				# 	avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
+				# bookIdstr =str(bookId) #Convert BookID to string for later use
+				# #Show the individual page with all of the collected values
+				return redirect("/book_details/"+str(bookId))
+			else: #If user does not want to go to the home page then -
+				return redirect('/', code=302) #redirect to home page
+		except Exception as err:
+			app.logger.error(f"Error encountered while redirecting user because they wanted to add a review next - {err}")
 
 @app.route('/new', methods=["GET"])
 def new(): #Define what happens when user clicks the "Add a book" button
@@ -370,25 +438,27 @@ def review(): #Define what happens when a review is submitted
 			bookId = int(i['bookId']) #Get bookId (Hidden input)
 			Desc = i['review'] #Get text review
 			name = i['name'] #Get reviewer name
-
-			db = conn.cursor()
-			qr = db.execute("SELECT * from books WHERE id = '"+str(bookId)+"'").fetchall() #Get book details for specific book from database
-			db.close()
-			bookTitle = qr[0][1] #Get the book title from the list
-			bookDesc = qr[0][2] #Get the book description from the list
-			bookAuthor = qr[0][4] #Get the book author from the list
-			bookGrade = qr[0][5] #Get the book grade from the list.
-			stars = i['stars'] #Get stars value
-			db = conn.cursor()
-			db.execute(f"INSERT into reviews (book_id, name, description, rating) VALUES ('{i['bookId']}',  '{i['name']}', '{i['review']}', '{i['stars']}')") #Insert text review, reviewer name, bookId, and star rating into datbase
-			conn.commit()
-			db.close()
-			db = conn.cursor()
-			reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get reviews for specific book
-			db.close()
-			#reviews = list(qr2) #Convert to list for operations
-			bookId2 = str(bookId)
-			return redirect('/book_details/'+bookId2, code=303) #Reload the individual page/reviews
+			try:
+				db = conn.cursor()
+				qr = db.execute("SELECT * from books WHERE id = '"+str(bookId)+"'").fetchall() #Get book details for specific book from database
+				db.close()
+				bookTitle = qr[0][1] #Get the book title from the list
+				bookDesc = qr[0][2] #Get the book description from the list
+				bookAuthor = qr[0][4] #Get the book author from the list
+				bookGrade = qr[0][5] #Get the book grade from the list.
+				stars = i['stars'] #Get stars value
+				db = conn.cursor()
+				db.execute(f"INSERT into reviews (book_id, name, description, rating) VALUES ('{i['bookId']}',  '{i['name']}', '{i['review']}', '{i['stars']}')") #Insert text review, reviewer name, bookId, and star rating into datbase
+				conn.commit()
+				db.close()
+				db = conn.cursor()
+				reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get reviews for specific book
+				db.close()
+				#reviews = list(qr2) #Convert to list for operations
+				bookId2 = str(bookId)
+				return redirect('/book_details/'+bookId2, code=303) #Reload the individual page/reviews
+			except Exception as err:
+				app.logger.error(f"Error encountered while adding a review and redirecting - {err}")
 
 @app.route("/about")
 def about():
