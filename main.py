@@ -1,3 +1,7 @@
+import sys
+#Prevent creation of cache
+sys.dont_write_bytecode = True
+
 from flask import Flask, render_template, request, redirect, flash #Import flask and its necesary components
 import os #Import os commands
 import sqlite3 #Database import
@@ -10,7 +14,6 @@ from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtGui
 from threading import Timer
-import sys
 
 #Import used for sending emails from flask
 from flask_mail import Mail, Message
