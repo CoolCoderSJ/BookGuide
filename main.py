@@ -520,4 +520,4 @@ Timer(1,lambda: ui("http://127.0.0.1:5000/")).start()
 app.run('0.0.0.0')
 
 #PYINSTALLER SCRIPT
-#pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="database.db;." -i "static/images/logo.ico" main.py
+#pyinstaller -n BookGuide -w --add-data="static;static" --add-data="templates;templates" --add-data="database.db;." --add-data="logs;logs" -i "static/images/logo.ico" main.py
