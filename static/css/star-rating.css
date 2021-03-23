@@ -77,10 +77,11 @@
 }
 
 /*Make sure footer stays at bottom and is full width */
-.footer {
+.footer, footer, footer > form {
 	position: fixed;
 	height: 60px;
 	bottom: 0;
+	left: 0;
 	width: 100%;
 	padding-left: 0px !important;
 	margin-left: 0px !important;
@@ -143,11 +144,13 @@ body {
   max-width: 100%;
 }
 
+/* Adjust color scheme */
 .jumbotron {
   margin-bottom: 0rem !important;
   background: #343a40 !important;
 }
 
+/* Set star colors to gold */
 .fa-star, .fa-star-half-alt, .fas {
 	color: gold !important;
 }
@@ -157,6 +160,7 @@ img {
 	max-height: 100%;
 }
 
+/*Make sure reviews aren't sticking to the edges of the box */
 .review-text {
 	margin-left: 35px;
 }
@@ -165,6 +169,7 @@ img {
 	align-items: left;
 }
 
+/*Make searhbar prettier */
 .searchbar {
 	border: none;
 }
@@ -177,4 +182,9 @@ img {
 .homepage-card {
 	min-height: 500px;
 	box-shadow: 20px 20px #303539;
+}
+
+/*Add spacing between filter dropdowns */
+.filter {
+	margin-right: 5px;
 }
