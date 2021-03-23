@@ -32,7 +32,7 @@ app = Flask(__name__)
 #Secret Key for signing cookies
 app.secret_key = '36b4610b69d1acc500fcc8557a3070846f1241c08c37e0d81b33abdf0afb2f0f'
 #Define App Configuration
-app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_SERVER'] ='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'prachijain.test@gmail.com'
 app.config['MAIL_PASSWORD'] = 'shuchir123'
@@ -48,7 +48,7 @@ if app.config.get("ERROR_LOG_PATH"):
 	# Create one file for each day. Delete logs over 7 days old.
 	file_handler = TimedRotatingFileHandler(app.config["ERROR_LOG_PATH"], when="D", backupCount=7)
 	#Set level of logger to filter messages that are lower than the currently set level
-	app.logger.setLevel(level=logging.ERROR)
+	app.logger.setLevel(level=logging.DEBUG)
 	# Use a multi-line format for this logger, for easier scanning
 	file_formatter = logging.Formatter('''
 	Time: %(asctime)s
@@ -326,10 +326,15 @@ def add(): #Define what happens when a book is added
 				myfilepath = 'static/images/books/placeholder.png'
 			else: #If an image is submitted, do the following:
 				fileext = secure_filename(file.filename.split(".")[-1])
-				title = request.form['title']
-				title = re.sub('[^A-Za-z0-9 ]+', '', title)
-				myfilepath = filedir + '/' + title + "." + fileext #Define the filepath. This is the directory + the book name + file extension
-				file.save(myfilepath) #Save the image
+				#If unsuported file type is given
+				if fileext.lower() != "png" and fileext.lower() != "jpg" and fileext.lower() != "jpeg" and fileext.lower() != "svg":
+					flash("Unsuported file type")
+					return redirect("/new")
+				else:
+					title = request.form['title']
+					title = re.sub('[^A-Za-z0-9 ]+', '', title)
+					myfilepath = filedir + '/' + title + "." + fileext #Define the filepath. This is the directory + the book name + file extension
+					file.save(myfilepath) #Save the image
 		except Exception as err:
 			app.logger.error(f"Error encountered while saving images - {err}")
 		try:
