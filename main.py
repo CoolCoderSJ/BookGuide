@@ -38,7 +38,7 @@ app.config['MAIL_USERNAME'] = 'prachijain.test@gmail.com'
 app.config['MAIL_PASSWORD'] = 'shuchir123'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config["ERROR_LOG_PATH"] = "logs/errors.log"
+app.config["ERROR_LOG_PATH"] = "logs/BookGuide.log"
 #Define mail app
 mail = Mail(app)
 
