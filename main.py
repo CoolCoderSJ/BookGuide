@@ -19,6 +19,7 @@ from threading import Timer
 from flask_mail import Mail, Message
 import re
 
+#Import modules used for the logger
 import logging
 from logging import DEBUG, INFO, ERROR
 from logging.handlers import TimedRotatingFileHandler
@@ -47,7 +48,7 @@ if app.config.get("ERROR_LOG_PATH"):
 	# Create one file for each day. Delete logs over 7 days old.
 	file_handler = TimedRotatingFileHandler(app.config["ERROR_LOG_PATH"], when="D", backupCount=7)
 	#Set level of logger to filter messages that are lower than the currently set level
-	app.logger.setLevel(level=logging.DEBUG)
+	app.logger.setLevel(level=logging.ERROR)
 	# Use a multi-line format for this logger, for easier scanning
 	file_formatter = logging.Formatter('''
 	Time: %(asctime)s
@@ -205,7 +206,8 @@ def index(): #Define what happens when Homepage is visited.
 	else:
 		filters = [] #Display no filters
 		#set breadcrumb text as all books since no filters are selected
-		breadcrumb = "Showing all books"
+		num_of_books = len(books)
+		breadcrumb = f"Showing all books ({num_of_books})"
 		#Do not display bookcount since all books are shown
 		bookcount = ""
 		#Show filter button instead clear filter button since there are no filters
@@ -257,6 +259,9 @@ def index(): #Define what happens when Homepage is visited.
 		#The list of books is reversed to make a New to Old sort by default. if the option selected is old, reverse the list
 		if i.get("sort") == "old":
 			books.reverse()
+			#Display a clear filters button instead of a filter button since filter options have already been selected
+			filtertext = "Clear Filters"
+			breadcrumb = "Sorted By: Oldest to Newest / " + breadcrumb
 		#If sort by alphanumeric is selected
 		elif i.get("sort") == "abc":
 			#Make a list with book titles. this will be changed to match the abc format later.
@@ -281,6 +286,9 @@ def index(): #Define what happens when Homepage is visited.
 								booklist.append(item)
 						books2.append(booklist)
 			books = books2 #Set books list to the temp
+			#Display a clear filters button instead of a filter button since filter options have already been selected
+			filtertext = "Clear Filters"
+			breadcrumb = "Sorted By: Alphanumeric Order / " + breadcrumb
 	#Render the home page with all of the important variables created above.
 	print("E")
 	return render_template("index.html", books=books, reviews=reviews, avgrevs=avgrevs, genres=genres, genre2=genre2, filters=filters, bookcount=bookcount, breadcrumb=breadcrumb, filtertext=filtertext) #Show index.html file, pass the books, reviews, and db (used for database operations) to the html file.
