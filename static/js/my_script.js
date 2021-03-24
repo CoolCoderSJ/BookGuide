@@ -101,9 +101,7 @@ else {
 }
 
 //What to do when contact form is Filled
-function contact() {
-	name = document.getElementById('name').value
-	content = document.getElementById('content').value
-	window.open("mailto:shuchir.jain@gmail.com?subject=BookGuide Contact Form Filled&body=Sender: "+name+"\n\n\nContent:\n"+content)
-	document.getElementById('contactform').submit()
+function sendMail() {
+	document.getElementById('contactform').action="mailto:shuchir.jain@gmail.com?subject=BookGuide Contact Form&body=Sender: "+document.getElementById('name').value+"%0d%0a%0d%0a%0d%0aContent:%0d%0a"+document.getElementById('content').value;
+	document.getElementById('contactform').submit();
 }
