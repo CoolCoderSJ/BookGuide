@@ -99,3 +99,11 @@ else {
 	elem.innerHTML = "Showing all Books"
 }
 }
+
+//What to do when contact form is Filled
+function contact() {
+	name = document.getElementById('name').value
+	content = document.getElementById('content').value
+	window.open("mailto:shuchir.jain@gmail.com?subject=BookGuide Contact Form Filled&body=Sender: "+name+"\n\n\nContent:\n"+content)
+	document.getElementById('contactform').submit()
+}

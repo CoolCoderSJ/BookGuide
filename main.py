@@ -14,9 +14,8 @@ from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtGui
 from threading import Timer
+import webbrowser
 
-#Import used for sending emails from flask
-from flask_mail import Mail, Message
 import re
 
 #Import modules used for the logger
@@ -32,15 +31,8 @@ app = Flask(__name__)
 #Secret Key for signing cookies
 app.secret_key = '36b4610b69d1acc500fcc8557a3070846f1241c08c37e0d81b33abdf0afb2f0f'
 #Define App Configuration
-app.config['MAIL_SERVER'] ='smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'prachijain.test@gmail.com'
-app.config['MAIL_PASSWORD'] = 'shuchir123'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
 app.config["ERROR_LOG_PATH"] = "logs/BookGuide.log"
-#Define mail app
-mail = Mail(app)
+
 
 # Only set up a file handler if we know where to put the logs
 if app.config.get("ERROR_LOG_PATH"):
@@ -58,6 +50,27 @@ if app.config.get("ERROR_LOG_PATH"):
 
 	file_handler.setFormatter(file_formatter)
 	app.logger.addHandler(file_handler)
+
+#Define the window object
+def ui(location):
+	#Create window object
+	qt_app = QApplication(sys.argv)
+	#Load Web Engine to show localhost page
+	web = QWebEngineView()
+	#Set window title
+	web.setWindowTitle("BookGuide")
+	#Size the window
+	web.resize(900, 800)
+	#Set the window icon as the brand logo
+	scriptDir = os.path.dirname(os.path.realpath(__file__))
+	web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/images/brandlogo.png'))
+	#Magnify the window just a bit
+	web.setZoomFactor(1.2)
+	#Load given URL
+	web.load(QUrl(location))
+	#Show the window object
+	web.show()
+	sys.exit(qt_app.exec_())
 
 #Before any request is made
 @app.before_request
@@ -132,7 +145,7 @@ def index(): #Define what happens when Homepage is visited.
 		ficsearch = "" #Keep query blank otherwise
 
 	if i.get("star"): #If star rating sort option is enabled
-		star = "reviews.rating >= "+i.get("star") #Create query for sort
+		star = "books.avg >= "+i.get("star") #Create query for sort
 	else:
 		star = "" #Keep query blank otherwise
 	print("B")
@@ -217,25 +230,7 @@ def index(): #Define what happens when Homepage is visited.
 	avgrevs = {}
 
 	for book in books:
-		db = conn.cursor()
-		#Make a JOIN query to get all of a book's reviews next to each book's details
-		review_list = db.execute("SELECT * FROM books JOIN reviews ON books.id = reviews.book_id").fetchall()
-		db.close()
-		stars_total = 0
-		num_of_stars = 0
-		#Loop through each star to add them and calculate the average
-		for i in review_list:
-			if i[12]: #If there is a star review
-				#If the book_id value of the currently iterating review matches the id of the currently iterating book, and the review is not 0
-				if int(i[8]) == int(book[0]) and i[12] != 0:
-					print(i[12])
-					stars_total = stars_total + i[12] #Add the value of the star to the total
-					num_of_stars = num_of_stars + 1 #Add one to the number of stars that have a valid star rating
-		if num_of_stars == 0: #If no valid star ratings were found
-			avg = 0 #Set the average as 0
-		else:
-			#else, divide the total by num of stars to get avg
-			avg = stars_total/num_of_stars
+		avg = book[7]
 		#add an entry to the dictionary. The key is the book id and the value is a list that has the exact average as well as the rounded average
 		avgrevs[book[0]] = [float(avg), round(float(avg))]
 
@@ -343,7 +338,7 @@ def add(): #Define what happens when a book is added
 				sub = request.form['genre-subcategory-fic']
 			elif request.form['genre-category'] == "nonfiction":
 				sub = request.form['genre-subcategory-nonfic']
-			db.execute(f"INSERT into books (book_title, book_description, author, grade, image, genre_id) VALUES ('{request.form['title']}', '{request.form['desc']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}')")
+			db.execute(f"INSERT into books (book_title, book_description, author, grade, image, genre_id, avg) VALUES ('{request.form['title']}', '{request.form['desc']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}', 0)")
 			conn.commit()
 		except Exception as err:
 			app.logger.error(f"Error encountered while adding info to database - {err}")
@@ -357,21 +352,6 @@ def add(): #Define what happens when a book is added
 				qr = db.execute('SELECT * from books WHERE book_title == \''+bookTitle+"'").fetchall() #Using the submitted title, get the book info from database
 				#results = list(qr) #Convert the request to a list so that we can do operations with it
 				bookId = int(qr[0][0]) #Get the book ID from the database response
-				# bookGrade = int(qr[0][-1]) #Get the book grade from the database response
-				# reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get all reviews that were submitted for this book
-				# #reviews = list(qr2) #Convert to list for operations
-				# avg_rating1 = 0 #The total star rating. This value will be updated later
-				# avg_rating2 = 0 #Number of reviews that have stars
-				# avg = 0 #Average star rating
-				# for review in reviews: #For each review in the given reviews, do the following -
-				# 	if review['rating'] != None: #If there is a star rating submitted, do the following -
-				# 		avg_rating1 += review['rating'] #Add the star to the total stars
-				# 		avg_rating2 += 1 #Add one to the total number of reviews that have stars
-				# if avg_rating2 == 0: #If there were no reviews with stars, set the average to 0.
-				# 	avg = 0
-				# else: #If there were star ratings, do the following -
-				# 	avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
-				# bookIdstr =str(bookId) #Convert BookID to string for later use
 				# #Show the individual page with all of the collected values
 				return redirect("/book_details/"+str(bookId))
 			else: #If user does not want to go to the home page then -
@@ -392,49 +372,42 @@ def new(): #Define what happens when user clicks the "Add a book" button
 
 @app.route('/book_details/<id>')
 def book_details(id): #Define what happens when user wants to see individual page
-	conn = sqlite3.connect("database.db")
-	db = conn.cursor()
-	if request.method == 'GET':
+	try:
+		conn = sqlite3.connect("database.db")
 		db = conn.cursor()
-		book = db.execute("SELECT * from books").fetchall() #Get all books from database from the database
-		db.close()
-		i = request.form #Get URL parameters, set bookId to None by default in case none is given
-		bookId = int(id) #Convert bookId to integer
-		db = conn.cursor()
-		qr = db.execute('SELECT * from books WHERE id == '+str(bookId)).fetchall() #Get book details from database using the ID to get more details.
-		db.close()
-		bookTitle = qr[0][1] #Get the book title from the list
-		bookDesc = qr[0][2] #Get the book description from the list
-		bookAuthor = qr[0][4] #Get the book author from the list
-		bookGrade = qr[0][5] #Get the book grade from the list.
-		db = conn.cursor()
-		reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get all reviews for the selected book.
-		#reviews = list(qr2) #Convert to list for later operations
-		avg_rating1 = 0 #The total star rating. This value will be updated later
-		avg_rating2 = 0 #Number of reviews that have stars
-		avg = 0 #Average star rating
-		for review in reviews: #For each review in the given reviews, do the following -
-			if review[-1] != 0: #If there is a star rating submitted, do the following -
-				avg_rating1 += review[-1] #Add the star to the total stars
-				avg_rating2 += 1 #Add one to the total number of reviews that have stars
-		if avg_rating2 == 0: #If there were no reviews with stars, set the average to 0.
-			avg = 0
-		else: #If there were star ratings, do the following -
-			avg = avg_rating1/avg_rating2 #Divide total by num of reviews with stars
-		bookIdstr =str(bookId) #Convert BookID to string for later use
-		#Show the individual page with all of the collected values
-		#Get image filepath
-		image = "http://localhost:5000/"+qr[0][3]
-		db = conn.cursor()
-		#Make genre list
-		genre_list = db.execute("SELECT * FROM books JOIN genres ON books.genre_id = genres.id").fetchall()
-		db.close()
-		genres = {}
-		for genre in genre_list:
-			genres[genre[0]] = [genre[-2], genre[-1]]
-		bookGenre = genres[bookId][0]
-		#Render te book's individual page
-		return render_template("book_details.html", book=book, bookId=bookId, bookTitle=bookTitle.title(), bookDesc=bookDesc, bookAuthor=bookAuthor.title(), bookGrade=bookGrade, reviews=reviews, avg=avg, db=db, bookIdstr=bookIdstr, image=image, bookGenre=bookGenre)
+		if request.method == 'GET':
+			db = conn.cursor()
+			book = db.execute("SELECT * from books").fetchall() #Get all books from database from the database
+			db.close()
+			i = request.form #Get URL parameters, set bookId to None by default in case none is given
+			bookId = int(id) #Convert bookId to integer
+			db = conn.cursor()
+			qr = db.execute('SELECT * from books WHERE id == '+str(bookId)).fetchall() #Get book details from database using the ID to get more details.
+			db.close()
+			bookTitle = qr[0][1] #Get the book title from the list
+			bookDesc = qr[0][2] #Get the book description from the list
+			bookAuthor = qr[0][4] #Get the book author from the list
+			bookGrade = qr[0][5] #Get the book grade from the list.
+			avg = qr[0][7] #Get the average rating from the list.
+			bookIdstr =str(bookId) #Convert BookID to string for later use
+			#Show the individual page with all of the collected values
+			#Get image filepath
+			image = "http://localhost:5000/"+qr[0][3]
+			db = conn.cursor()
+			#Make genre list
+			genre_list = db.execute("SELECT * FROM books JOIN genres ON books.genre_id = genres.id").fetchall()
+			db.close()
+			genres = {}
+			for genre in genre_list:
+				genres[genre[0]] = [genre[-2], genre[-1]]
+			bookGenre = genres[bookId][0]
+			db = conn.cursor()
+			reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get reviews for specific book
+			db.close()
+			#Render te book's individual page
+			return render_template("book_details.html", book=book, bookId=bookId, bookTitle=bookTitle.title(), bookDesc=bookDesc, bookAuthor=bookAuthor.title(), bookGrade=bookGrade, avg=avg, db=db, bookIdstr=bookIdstr, image=image, bookGenre=bookGenre, reviews=reviews)
+	except Exception as err:
+		app.logger.error(f"Error while seeing individual book page : {err}")
 
 @app.route('/review', methods=["POST"])
 def review(): #Define what happens when a review is submitted
@@ -446,12 +419,15 @@ def review(): #Define what happens when a review is submitted
 		i = request.form #Get user input
 		if i['review'] == "" and i['stars'] == '0':
 			flash("Please enter either a text description or fill in the stars.")
-			return redirect('/book_details/'+i['bookId'], code=303)
+			return redirect('/book_details/'+str(i['bookId']), code=303)
 		else:
 			bookId = int(i['bookId']) #Get bookId (Hidden input)
 			Desc = i['review'] #Get text review
 			name = i['name'] #Get reviewer name
 			try:
+				db = conn.cursor()
+				reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get reviews for specific book
+				db.close()
 				db = conn.cursor()
 				qr = db.execute("SELECT * from books WHERE id = '"+str(bookId)+"'").fetchall() #Get book details for specific book from database
 				db.close()
@@ -459,15 +435,20 @@ def review(): #Define what happens when a review is submitted
 				bookDesc = qr[0][2] #Get the book description from the list
 				bookAuthor = qr[0][4] #Get the book author from the list
 				bookGrade = qr[0][5] #Get the book grade from the list.
-				stars = i['stars'] #Get stars value
+				avg = float(qr[0][7]) #Get the average raing from the list.
+				stars = int(i['stars']) #Get stars value
+				if int(stars) != 0:
+					num_of_reviews = len(reviews)
+					avg = round(((avg * num_of_reviews) + stars)/(num_of_reviews+1), 1) #recalculate avg
+				db = conn.cursor()
+				qr = db.execute(f"UPDATE books SET avg = {avg} WHERE id = {bookId}")
+				conn.commit()
+				db.close()
 				db = conn.cursor()
 				db.execute(f"INSERT into reviews (book_id, name, description, rating) VALUES ('{i['bookId']}',  '{i['name']}', '{i['review']}', '{i['stars']}')") #Insert text review, reviewer name, bookId, and star rating into datbase
 				conn.commit()
 				db.close()
 				db = conn.cursor()
-				reviews = db.execute('SELECT * from reviews WHERE book_id == '+str(bookId)).fetchall() #Get reviews for specific book
-				db.close()
-				#reviews = list(qr2) #Convert to list for operations
 				bookId2 = str(bookId)
 				return redirect('/book_details/'+bookId2, code=303) #Reload the individual page/reviews
 			except Exception as err:
@@ -478,40 +459,10 @@ def about():
 	#If about page is selected, render about page
 	return render_template("about.html")
 
-@app.route("/contact", methods=["GET", "POST"])
+@app.route("/contact")
 def contact():
-	if request.method == "GET":
-		#If contact page is selected, render contact page
-		return render_template("contact.html")
-	elif request.method == "POST":
-		#If the form is submitted, email me the contact form boxes
-		msg = Message("BookGuide Contact Form Filled", sender="prachijain.test@gmail.com", recipients=['prachijain.test@gmail.com'])
-		msg.body = f"SENDER: {request.form['name']}\n\nEMAIL: {request.form['email']}\n\n\nCONTENT:\n{request.form['content']}"
-		mail.send(msg)
-		#Show user success message and render contact page
-		flash("Successfully Submitted!")
-		return redirect("/contact", code=303)
+	return render_template("contact.html")
 
-#Define the window object
-def ui(location):
-	#Create window object
-	qt_app = QApplication(sys.argv)
-	#Load Web Engine to show localhost page
-	web = QWebEngineView()
-	#Set window title
-	web.setWindowTitle("BookGuide")
-	#Size the window
-	web.resize(900, 800)
-	#Set the window icon as the brand logo
-	scriptDir = os.path.dirname(os.path.realpath(__file__))
-	web.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'static/images/brandlogo.png'))
-	#Magnify the window just a bit
-	web.setZoomFactor(1.2)
-	#Load given URL
-	web.load(QUrl(location))
-	#Show the window object
-	web.show()
-	sys.exit(qt_app.exec_())
 
 # if __name__ == "__main__":
 	#Show the window with the localhost:5000 url
