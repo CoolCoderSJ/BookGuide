@@ -22,7 +22,7 @@
 	<script src="static/js/my_script.js"></script>
 	</head>
 
-	<body class="body" onload="advanced_search_toggle()">
+	<body class="body">
 
 
 	<!-- Set the navigation bar on top -->
@@ -41,23 +41,20 @@
 				<a class="nav-link" href="/new">Add book</a>
 				<!-- Advanced Search icon and search bar -->
 				<input id="searchbar" type="text" class="searchbar form-control bg-dark" onkeyup="search(document.getElementById('search_term').value, document.getElementById('searchbar').value.toUpperCase())" placeholder="Search...">
-				<button type="button" class="collapsible bg-dark"><span class="material-icons">
-				manage_search
-				</span></button>
+				<!-- Show a dropdown that will switch the search context -->
+				<div class="content">
+					<select class="custom-select" id="search_term">
+						<option value="title" selected>What to search...</option>
+						<option value="title">Book Titles</option>
+						<option value="desc">Book Descriptions</option>
+						<option value="author">Book Authors</option>
+					</select>
+				</div>
 			</form>
 		</div>
 
 	</nav>
 
-	<!-- Show a dropdown that will switch the search context -->
-	<div class="content">
-		<select class="custom-select" id="search_term">
-			<option value="title">What to search...</option>
-			<option value="title">Book Titles</option>
-			<option value="desc">Book Descriptions</option>
-			<option value="author">Book Authors</option>
-		</select>
-	</div>
 	<br>
 	<br>
 	<!--set the banner displayed on the homepage-->
@@ -71,7 +68,7 @@
 	<!-- Set the filter bar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="/"></a>
 		<form class="form-inline my-2 my-lg-0" method="get" action="/" id="filterform">
-			<select class="custom-select filter" id="grade_search" name="grade">
+			<select class="custom-select filter" id="grade_search" name="grade" onchange="refilter()">
 				<option value="">All Grades...</option>
 				<option value="1">Grades 1 and up</option>
 				<option value="2">Grades 2 and up</option>
@@ -86,18 +83,18 @@
 				<option value="11">Grades 11 and up</option>
 				<option value="12">Grades 12 and up</option>
 			</select>
-			<select class="custom-select filter" id="genre_search" name="genre">
+			<select class="custom-select filter" id="genre_search" name="genre" onchange="refilter()">
 				<option value="">All Genres...</option>
 				{% for genre in genre2 %}
 					<option value="{{ genre[1] }}" name="genre[0]">{{ genre[1] }}</option>
 				{% endfor %}
 			</select>
-			<select class="custom-select filter" id="ficsearch" name="ficsearch">
+			<select class="custom-select filter" id="ficsearch" name="ficsearch" onchange="refilter()">
 				<option value="">Fiction or Nonfiction...</option>
 				<option value="fiction">Fiction</option>
 				<option value="nonfiction">Nonfiction</option>
 			</select>
-			<select class="custom-select filter" id="starsearch" name="star">
+			<select class="custom-select filter" id="starsearch" name="star" onchange="refilter()">
 				<option value="">All Star Ratings...</option>
 				<option value="1">Rated 1 Star and higher</option>
 				<option value="2">Rated 2 Stars and higher</option>
@@ -105,13 +102,13 @@
 				<option value="4">Rated 4 Stars and higher</option>
 				<option value="5">Rated 5 Stars and higher</option>
 			</select>
-			<select class="custom-select filter" id="sort" name="sort">
+			<select class="custom-select filter" id="sort" name="sort" onchange="refilter()">
 				<option value="new">Sort Options...</option>
 				<option value="new">Newest to Oldest</option>
 				<option value="old">Oldest to Newest</option>
 				<option value="abc">Sorted Alphabetically</option>
 			</select>
-			<button type="submit" class="btn btn-link nav-link">{{ filtertext }}</button>
+			<button id="filtertext" type="submit" class="btn btn-link nav-link">{{ filtertext }}</button>
 		</form>
 	</nav>
 	<!-- Show the filter breadcrumb as well as the found books count -->

@@ -53,6 +53,14 @@
    text-overflow: ellipsis;
 }
 
+/*If the description/author of the books are too long, then cut off the rest and add three dots (known as an ellipsis) */
+.title {
+   width: 300px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
 /*Set a container for all of the images */
 .imgcontainer {
   /*Set the width and height */
@@ -135,7 +143,6 @@ body {
 
 /* Style the collapsible content. Note: hidden by default */
 .content {
-  display: none;
   overflow: hidden;
 }
 

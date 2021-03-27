@@ -46,23 +46,6 @@ jQuery(document).ready(function ($) { //Again, when the oage is ready, do the fo
 
 });
 
-// Add a listener to the advanced search button and toggle the menu when clicked
-function advanced_search_toggle() {
-  var coll = document.getElementsByClassName("collapsible");
-  var i;
-
-  for (i = 0; i < coll.length; i++) {
-	coll[i].addEventListener("click", function() {
-	  this.classList.toggle("active2");
-	  var content = document.getElementsByClassName("content")[0];
-	  if (content.style.display === "block") {
-		content.style.display = "none";
-	  } else {
-		content.style.display = "block";
-	  }
-	});
-  }
-}
 
 // Function for searching
 function search(field, filter) {
@@ -104,4 +87,21 @@ else {
 function sendMail() {
 	document.getElementById('contactform').action="mailto:shuchir.jain@gmail.com?subject=BookGuide Contact Form&body=Sender: "+document.getElementById('name').value+"%0d%0a%0d%0a%0d%0aContent:%0d%0a"+document.getElementById('content').value;
 	document.getElementById('contactform').submit();
+}
+
+//Change filtertext (Clear Filter/Refilter) if a filter is reselected
+function refilter() {
+	grade_search = document.getElementById('grade_search')
+	genre_search = document.getElementById('genre_search')
+	ficsearch = document.getElementById('ficsearch')
+	starsearch = document.getElementById('starsearch')
+	sort = document.getElementById('sort')
+	if (grade_search.value != "" || genre_search.value != "" || ficsearch.value != "" || starsearch.value != "" || sort.value != "new") {
+		if (document.getElementById('filtertext').innerHTML === "Clear Filters") {
+		document.getElementById('filtertext').innerHTML = "Refilter"
+	}
+	}
+	else {
+		document.getElementById('filtertext').innerHTML = "Clear Filters"
+	}
 }
