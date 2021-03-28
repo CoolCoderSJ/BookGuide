@@ -135,7 +135,7 @@ def index(): #Define what happens when Homepage is visited.
 		genre = "" #Keep query blank otherwise
 
 	if i.get("grade"): #If grade sort option is enabled
-		grade = "books.grade >= "+i.get("grade") #Create query for sort
+		grade = "books.grade <= "+i.get("grade") #Create query for sort
 	else:
 		grade = "" #Keep query blank otherwise
 
@@ -338,7 +338,7 @@ def add(): #Define what happens when a book is added
 				sub = request.form['genre-subcategory-fic']
 			elif request.form['genre-category'] == "nonfiction":
 				sub = request.form['genre-subcategory-nonfic']
-			db.execute(f"INSERT into books (book_title, book_description, author, grade, image, genre_id, avg) VALUES ('{request.form['title']}', '{request.form['desc']}', '{request.form['author']}', {request.form['grade']}, '{myfilepath}', '{sub}', 0)")
+			db.execute(f"INSERT into books (book_title, book_description, author, grade, image, genre_id, avg) VALUES (?, ?, ?, ?, ?, ?, ?)", (f"""{request.form['title']}""", f"""{request.form['desc']}""", f"""{request.form['author']}""", f"""{request.form['grade']}""", f"""{myfilepath}""", f"""{sub}""", 0))
 			conn.commit()
 		except Exception as err:
 			app.logger.error(f"Error encountered while adding info to database - {err}")
@@ -388,7 +388,8 @@ def book_details(id): #Define what happens when user wants to see individual pag
 			bookDesc = qr[0][2] #Get the book description from the list
 			bookAuthor = qr[0][4] #Get the book author from the list
 			bookGrade = qr[0][5] #Get the book grade from the list.
-			avg = qr[0][7] #Get the average rating from the list.
+			avg = float(qr[0][7]) #Get the average rating from the list.
+			print(avg)
 			bookIdstr =str(bookId) #Convert BookID to string for later use
 			#Show the individual page with all of the collected values
 			#Get image filepath
@@ -436,7 +437,7 @@ def review(): #Define what happens when a review is submitted
 				bookAuthor = qr[0][4] #Get the book author from the list
 				bookGrade = qr[0][5] #Get the book grade from the list.
 				avg = float(qr[0][7]) #Get the average raing from the list.
-				stars = int(i['stars']) #Get stars value
+				stars = float(i['stars']) #Get stars value
 				if int(stars) != 0:
 					num_of_reviews = len(reviews)
 					avg = round(((avg * num_of_reviews) + stars)/(num_of_reviews+1), 1) #recalculate avg
@@ -445,7 +446,7 @@ def review(): #Define what happens when a review is submitted
 				conn.commit()
 				db.close()
 				db = conn.cursor()
-				db.execute(f"INSERT into reviews (book_id, name, description, rating) VALUES ('{i['bookId']}',  '{i['name']}', '{i['review']}', '{i['stars']}')") #Insert text review, reviewer name, bookId, and star rating into datbase
+				db.execute(f"INSERT into reviews (book_id, name, description, rating) VALUES (?, ?, ?, ?)", (f"""{i['bookId']}""",  f"""{i['name']}""", f"""{i['review']}""", f"""{i['stars']}""")) #Insert text review, reviewer name, bookId, and star rating into datbase
 				conn.commit()
 				db.close()
 				db = conn.cursor()
