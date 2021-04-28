@@ -49,6 +49,7 @@ jQuery(document).ready(function ($) { //Again, when the oage is ready, do the fo
 
 // Function for searching
 function search(field, filter) {
+	console.log(filter)
   // Declare variables
   var ul, li, a, i, txtValue;
   ul = document.getElementById("container");

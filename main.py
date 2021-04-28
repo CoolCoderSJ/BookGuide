@@ -300,17 +300,41 @@ def add(): #Define what happens when a book is added
 		try:
 			for book in books:
 				#If book title is found in database, flash a message to the user and prevent database insert
-				if book[1].lower() == i['title'].lower():
+				if book[1].lower() == i['title'].lower() and book[4].lower() == i['author'].lower():
 					flash("This book already exists.")
-					return redirect("/new")
+					i = request.form
+					fields = {"title":"", "desc":"", "author":"", "grade":"", "genre-category":"", "genre-subcategory-fic":"", "genre-subcategory-nonfic":"", "myfile":"", "revnext":""}
+					for field in fields:
+						try:
+							if i.get(field) != "" and i.get(field) != None:
+								fields[field] = i.get(field)
+						except:
+							pass
+					return redirect(f"/new?title={fields['title']}&desc={fields['desc']}&author={fields['author']}&grade={fields['grade']}&genre_cat={fields['genre-category']}&genre_fic={fields['genre-subcategory-fic']}&genre_nonfic={fields['genre-subcategory-nonfic']}&revnext={fields['revnext']}&err=title")
 			#If a genre is not selected, flash a message to the user and prevent database insert
 			if i['genre-subcategory-fic'] == '' and i['genre-subcategory-nonfic'] == '':
 				flash("Please select a genre.")
-				return redirect("/new")
+				i = request.form
+				fields = {"title":"", "desc":"", "author":"", "grade":"", "genre-category":"", "genre-subcategory-fic":"", "genre-subcategory-nonfic":"", "myfile":"", "revnext":""}
+				for field in fields:
+					try:
+						if i.get(field) != "" and i.get(field) != None:
+							fields[field] = i.get(field)
+					except:
+						pass
+				return redirect(f"/new?title={fields['title']}&desc={fields['desc']}&author={fields['author']}&grade={fields['grade']}&genre_cat={fields['genre-category']}&revnext={fields['revnext']}")
 			#If user selects genre from fic and nonfic dropdowns, flash a message to the user and prevent database insert
 			if i['genre-subcategory-fic'] != "" and i['genre-subcategory-nonfic'] != "":
 				flash("Please select a genre from only one category.")
-				return redirect("/new")
+				i = request.form
+				fields = {"title":"", "desc":"", "author":"", "grade":"", "genre-category":"", "genre-subcategory-fic":"", "genre-subcategory-nonfic":"", "myfile":"", "revnext":""}
+				for field in fields:
+					try:
+						if i.get(field) != "" and i.get(field) != None:
+							fields[field] = i.get(field)
+					except:
+						pass
+				return redirect(f"/new?title={fields['title']}&desc={fields['desc']}&author={fields['author']}&grade={fields['grade']}&genre_cat={fields['genre-category']}&revnext={fields['revnext']}")
 		except Exception as err:
 			app.logger.error(f"Error encountered while flashing messages to user - {err}")
 
@@ -367,7 +391,12 @@ def new(): #Define what happens when user clicks the "Add a book" button
 		book = db.execute("SELECT * from books").fetchall() #Get all books from database (Used to make sure book doesn't already exist)
 		fics = db.execute("SELECT * from genres WHERE type = 'fiction'").fetchall()
 		nonfics = db.execute("SELECT * from genres WHERE type = 'nonfiction'").fetchall()
-		return render_template("new.html", fics=fics, nonfics=nonfics) #Pass the books, db object for operations, and string object for operations to the new book form and show form.
+		i = request.args
+		fields = {"title":"", "desc":"", "author":"", "grade":"", "genre_cat":"", "genre_fic":"", "genre_nonfic":"", "img":"", "revnext":"", "err":""}
+		for field in fields:
+			if i.get(field) != "" and i.get(field) != None:
+				fields[field] = i.get(field)
+		return render_template("new.html", fics=fics, nonfics=nonfics, title=fields['title'], desc=fields['desc'], author=fields['author'], grade=fields['grade'], genre_cat=fields['genre_cat'], genre_fic=fields['genre_fic'], genre_nonfic=fields['genre_nonfic'], img=fields['img'], revnext=fields['revnext'], err=fields['err']) #Pass the books, db object for operations, and string object for operations to the new book form and show form.
 
 
 @app.route('/book_details/<id>')
